@@ -17,13 +17,13 @@ impl State {
 
 /// A transition in the sentence break state machine, which consists of a new state and an action to take.
 #[derive(Clone, Copy)]
-pub struct Transition(pub State, pub Action);
+pub(crate) struct Transition(pub(crate) State, pub(crate) Action);
 
 /// A row is a mapping from property values to transitions.
 type Row = [Transition; SentenceBreakProperty::NUM_VARIANTS];
 
 /// Defines the state machine transitions. Constructed at compile time.
-pub const TRANSITION_TABLE: [Row; State::NUM_VARIANTS] = [
+pub(crate) const TRANSITION_TABLE: [Row; State::NUM_VARIANTS] = [
     start_of_text_transitions(),
     any_transitions(),
     cr_transitions(),

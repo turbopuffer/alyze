@@ -152,7 +152,7 @@ const SENTENCE_BREAK_PROP: CodePointMapDataBorrowed<'static, SentenceBreak> =
     CodePointMapData::<SentenceBreak>::new();
 
 /// Uses the icu_properties data to look up the Sentence_Break property for a given character.
-pub fn lookup_sentence_break_property(c: char) -> SentenceBreakProperty {
+pub(crate) fn lookup_sentence_break_property(c: char) -> SentenceBreakProperty {
     match SENTENCE_BREAK_PROP.get(c) {
         SentenceBreak::Other => SentenceBreakProperty::Other,
         SentenceBreak::ATerm => SentenceBreakProperty::ATerm,

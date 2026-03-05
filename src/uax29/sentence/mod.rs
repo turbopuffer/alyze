@@ -6,6 +6,7 @@ use properties::{ASCII_SENTENCE_BREAK_PROP, lookup_sentence_break_property};
 use transitions::{State, TRANSITION_TABLE, Transition};
 
 #[derive(Default)]
+#[non_exhaustive]
 pub struct Options {}
 
 pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {

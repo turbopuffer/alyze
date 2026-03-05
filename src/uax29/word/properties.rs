@@ -166,7 +166,7 @@ const EXT_PICT: CodePointSetDataBorrowed<'static> = CodePointSetData::new::<Exte
 
 /// Helper function to look up the Word_Break property for a given character using the pre-computed dictionary.
 #[inline(never)]
-pub fn lookup_word_break_property_from_dictionary(c: char) -> WordBreakProperty {
+pub(crate) fn lookup_word_break_property_from_dictionary(c: char) -> WordBreakProperty {
     match WORD_BREAK_PROP.get(c) {
         WordBreak::ALetter => WordBreakProperty::ALetter,
         WordBreak::Format => WordBreakProperty::Format,

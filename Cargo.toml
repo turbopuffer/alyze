@@ -2,6 +2,13 @@
 name = "alyze"
 version = "0.1.0"
 edition = "2024"
+rust-version = "1.85"
+description = "High-performance text analysis for full-text search"
+license = "MIT"
+repository = "https://github.com/turbopuffer/alyze"
+keywords = ["tokenizer", "unicode", "segmentation", "analysis", "nlp"]
+categories = ["text-processing", "internationalization"]
+exclude = ["testdata/", "benches/"]
 
 [dependencies]
 icu_properties = "2.1.2"

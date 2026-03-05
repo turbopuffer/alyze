@@ -37,7 +37,7 @@ pub(crate) use break_property_enum;
 /// an action.
 #[derive(Clone, Copy)]
 #[repr(u8)]
-pub enum Action {
+pub(crate) enum Action {
     Break,
     NoBreak,
 

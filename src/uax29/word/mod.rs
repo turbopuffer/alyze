@@ -7,6 +7,7 @@ use transitions::{State, TABLE, Transition};
 
 /// For backwards compatibility, require caller to pass in options struct.
 #[derive(Default, Clone)]
+#[non_exhaustive]
 pub struct Options {}
 
 /// A tokenizer that implements UAX #29 word boundary rules, using a deterministic finite automaton

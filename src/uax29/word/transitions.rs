@@ -31,13 +31,13 @@ impl State {
 ///
 /// Note: State needs to be ignored if Action is Transparent.
 #[derive(Clone, Copy)]
-pub struct Transition(pub State, pub Action);
+pub(crate) struct Transition(pub(crate) State, pub(crate) Action);
 
 /// A row is a mapping from property values to transitions.
 type Row = [Transition; WordBreakProperty::NUM_VARIANTS];
 
 /// The all-important transition table, which defines the state machine.
-pub const TABLE: [Row; State::NUM_VARIANTS] = [
+pub(crate) const TABLE: [Row; State::NUM_VARIANTS] = [
     start_of_text_transitions(),
     any_transitions(),
     cr_transitions(),
