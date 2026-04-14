@@ -25,8 +25,7 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
             let c = text[pos..].chars().next().unwrap();
             (lookup_sentence_break_property(c), c.len_utf8())
         };
-        let Transition(next_state, action) =
-            TRANSITION_TABLE[state as usize][prop as usize];
+        let Transition(next_state, action) = TRANSITION_TABLE[state as usize][prop as usize];
         match action {
             Action::Break => {
                 state = next_state;
@@ -136,10 +135,10 @@ mod tests {
 
         // SB8a: SATerm Close* Sp* × (SContinue | SATerm)
         // Don't break before continuation punctuation after sentence terminators.
-        assert_breaks(".,", vec![0, 2]);   // ATerm × SContinue
-        assert_breaks("..", vec![0, 2]);   // ATerm × ATerm
-        assert_breaks("!,", vec![0, 2]);   // STerm × SContinue
-        assert_breaks("!.", vec![0, 2]);   // STerm × ATerm
+        assert_breaks(".,", vec![0, 2]); // ATerm × SContinue
+        assert_breaks("..", vec![0, 2]); // ATerm × ATerm
+        assert_breaks("!,", vec![0, 2]); // STerm × SContinue
+        assert_breaks("!.", vec![0, 2]); // STerm × ATerm
 
         // SB9/SB10/SB11: Break after sentence terminators,
         // but include trailing Close, Sp, and ParaSep in the sentence.

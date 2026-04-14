@@ -193,7 +193,9 @@ pub(crate) fn lookup_word_break_property_from_dictionary(c: char) -> WordBreakPr
 
 #[cfg(test)]
 mod tests {
-    use super::{ASCII_WORD_BREAK_PROP, WordBreakProperty, lookup_word_break_property_from_dictionary};
+    use super::{
+        ASCII_WORD_BREAK_PROP, WordBreakProperty, lookup_word_break_property_from_dictionary,
+    };
 
     #[test]
     fn test_ascii_table_correct() {

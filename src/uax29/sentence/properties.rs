@@ -175,9 +175,7 @@ pub(crate) fn lookup_sentence_break_property(c: char) -> SentenceBreakProperty {
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        ASCII_SENTENCE_BREAK_PROP, SentenceBreakProperty, lookup_sentence_break_property,
-    };
+    use super::{ASCII_SENTENCE_BREAK_PROP, SentenceBreakProperty, lookup_sentence_break_property};
 
     #[test]
     fn test_ascii_table_correct() {

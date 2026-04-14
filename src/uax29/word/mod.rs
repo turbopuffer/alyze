@@ -2,7 +2,9 @@ pub(crate) mod properties;
 pub(crate) mod transitions;
 
 use crate::uax29::Action;
-use properties::{ASCII_WORD_BREAK_PROP, WordBreakProperty, lookup_word_break_property_from_dictionary};
+use properties::{
+    ASCII_WORD_BREAK_PROP, WordBreakProperty, lookup_word_break_property_from_dictionary,
+};
 use transitions::{State, TABLE, Transition};
 
 /// For backwards compatibility, require caller to pass in options struct.
@@ -206,7 +208,6 @@ mod tests {
         assert_breaks("a   c", vec![0, 1, 4, 5]);
 
         // Do not break letters across certain punctuation, such as within "e.g." or "example.com".
-        // TODO make sure this is the right breakpoints for "e.g."
         assert_breaks("e.g. hello", vec![0, 3, 4, 5, 10]);
         assert_breaks("example.com", vec![0, 11]);
         assert_breaks("won't", vec![0, 5]);
