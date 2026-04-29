@@ -1,4 +1,4 @@
-use tpuf_icu_properties_211::{CodePointMapData, CodePointMapDataBorrowed, props::SentenceBreak};
+use crate::icu::{CodePointMapData, CodePointMapDataBorrowed, props::SentenceBreak};
 
 use crate::uax29::break_property_enum;
 

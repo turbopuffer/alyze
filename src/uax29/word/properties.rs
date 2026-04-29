@@ -1,4 +1,4 @@
-use tpuf_icu_properties_211::{
+use crate::icu::{
     CodePointMapData, CodePointMapDataBorrowed, CodePointSetData, CodePointSetDataBorrowed,
     props::{ExtendedPictographic, WordBreak},
 };
