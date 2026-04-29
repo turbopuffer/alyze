@@ -11,7 +11,7 @@ categories = ["text-processing", "internationalization"]
 exclude = ["testdata/", "benches/"]
 
 [dependencies]
-icu_properties = "2.1.2"
+tpuf_icu_properties_211 = "7"
 
 [dev-dependencies]
 criterion = "0.8.2"

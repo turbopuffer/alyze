@@ -1,4 +1,4 @@
-use icu_properties::{
+use tpuf_icu_properties_211::{
     CodePointMapData, CodePointMapDataBorrowed, CodePointSetData, CodePointSetDataBorrowed,
     props::{ExtendedPictographic, WordBreak},
 };
