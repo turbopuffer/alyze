@@ -4,7 +4,7 @@ use crate::uax29::{Action, state_enum, word::properties::WordBreakProperty};
 // an implementation detail of UAX#29, not documented in the spec.
 state_enum! {
     StartOfText, Any, CR, ALetter, Numeric, HLetter, Katakana,
-    ExtendNumLet, WSegSpace, AHLetterMid, Newline, RIOdd, NumericMid, HLetterDQ,
+    ExtendNumLet, WSegSpace, AHLetterMid, Newline, RIOdd, NumericMid, HLetterDQ, HLetterSQ,
 }
 
 impl State {
@@ -22,7 +22,8 @@ impl State {
             | State::ExtendNumLet
             | State::WSegSpace
             | State::RIOdd
-            | State::Newline => false,
+            | State::Newline
+            | State::HLetterSQ => false,
         }
     }
 }
@@ -52,6 +53,7 @@ pub(crate) const TABLE: [Row; State::NUM_VARIANTS] = [
     ri_odd_transitions(),
     numeric_mid_transitions(),
     hletter_dq_transitions(),
+    hletter_sq_transitions(),
 ];
 
 const fn default_all_break() -> Row {
@@ -173,10 +175,9 @@ const fn hletter_transitions() -> Row {
     // WB6: AHLetter	×	(MidLetter | MidNumLetQ) AHLetter
     row[WordBreakProperty::MidLetter as usize] = nb(State::AHLetterMid);
     row[WordBreakProperty::MidNumLet as usize] = nb(State::AHLetterMid);
-    row[WordBreakProperty::SingleQuote as usize] = nb(State::AHLetterMid);
 
     // WB7a: Hebrew_Letter × Single_Quote
-    row[WordBreakProperty::SingleQuote as usize] = nb(State::Any);
+    row[WordBreakProperty::SingleQuote as usize] = nb(State::HLetterSQ);
 
     // WB7b: Hebrew_Letter × Double_Quote Hebrew_Letter
     row[WordBreakProperty::DoubleQuote as usize] = nb(State::HLetterDQ);
@@ -270,6 +271,14 @@ const fn numeric_mid_transitions() -> Row {
 // Hebrew_Letter Double_Quote × Hebrew_Letter
 const fn hletter_dq_transitions() -> Row {
     let mut row = default_all_deferred();
+    row[WordBreakProperty::HebrewLetter as usize] = nb(State::HLetter);
+    row
+}
+
+// Helper state for handling WB7a plus WB7 after Hebrew_Letter × Single_Quote.
+const fn hletter_sq_transitions() -> Row {
+    let mut row = default_all_break();
+    row[WordBreakProperty::ALetter as usize] = nb(State::ALetter);
     row[WordBreakProperty::HebrewLetter as usize] = nb(State::HLetter);
     row
 }

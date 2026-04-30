@@ -220,6 +220,17 @@ mod tests {
         assert_breaks("can'", vec![0, 3, 4]);
         assert_breaks("can' hi", vec![0, 3, 4, 5, 7]);
 
+        // WB7a and WB6/WB7 with Hebrew_Letter and Single_Quote.
+        assert_breaks("א'", vec![0, "א'".len()]);
+        assert_breaks("א'א", vec![0, "א'א".len()]);
+        assert_breaks("א'\u{2060}א", vec![0, "א'\u{2060}א".len()]);
+        assert_breaks("א'a", vec![0, "א'a".len()]);
+        assert_breaks("הצ'קרות", vec![0, "הצ'קרות".len()]);
+        assert_breaks(
+            "לייף אנרג'י",
+            vec![0, "לייף".len(), "לייף ".len(), "לייף אנרג'י".len()],
+        );
+
         // WB3c: ZWJ × Extended_Pictographic (emoji ZWJ sequences)
         assert_breaks("👨\u{200D}👩", vec![0, 11]);
         assert_breaks("👨👩", vec![0, 4, 8]);
