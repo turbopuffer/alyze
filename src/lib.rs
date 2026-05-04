@@ -4,7 +4,7 @@
 //!
 //! ```
 //! let mut breaks = Vec::new();
-//! alyze::uax29::word::tokenize("Hello, world!", Default::default(), |bp| {
+//! alyze::uax29::word::tokenize("Hello, world!", Default::default(), |bp, _| {
 //!     breaks.push(bp);
 //!     true // return false to stop tokenization early
 //! });
