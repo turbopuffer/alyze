@@ -1,6 +1,6 @@
 use tpuf_icu_properties_211::{
     CodePointMapData, CodePointMapDataBorrowed, CodePointSetData, CodePointSetDataBorrowed,
-    props::{ExtendedPictographic, WordBreak},
+    props::{ExtendedPictographic, GeneralCategory, Ideographic, Script, WordBreak},
 };
 
 use crate::uax29::break_property_enum;
@@ -163,6 +163,74 @@ impl WordBreakProperty {
 const WORD_BREAK_PROP: CodePointMapDataBorrowed<'static, WordBreak> =
     CodePointMapData::<WordBreak>::new();
 const EXT_PICT: CodePointSetDataBorrowed<'static> = CodePointSetData::new::<ExtendedPictographic>();
+
+/// Lazily-built union of every codepoint whose "strict" word-like check returns true:
+/// `ExtendedPictographic ∪ Ideographic ∪ {c | Script(c) ∉ {Common,Inherited,Unknown}} ∪
+/// {c | GeneralCategory(c) == OtherNumber}`.
+///
+/// Stored as a sorted slice of inclusive `(start, end)` ranges so `is_word_like_strict` is a
+/// single binary search per char instead of up to four ICU trie lookups. Built on first use.
+static WORD_LIKE_STRICT_RANGES: std::sync::OnceLock<Box<[(u32, u32)]>> = std::sync::OnceLock::new();
+
+fn word_like_strict_ranges() -> &'static [(u32, u32)] {
+    WORD_LIKE_STRICT_RANGES.get_or_init(|| {
+        let ideographic = CodePointSetData::new::<Ideographic>();
+        let script = CodePointMapData::<Script>::new();
+        let gc = CodePointMapData::<GeneralCategory>::new();
+
+        let mut ranges: Vec<(u32, u32)> = Vec::new();
+        for r in EXT_PICT.iter_ranges() {
+            ranges.push((*r.start(), *r.end()));
+        }
+        for r in ideographic.iter_ranges() {
+            ranges.push((*r.start(), *r.end()));
+        }
+        for r in script.iter_ranges_mapped(|s| {
+            !matches!(s, Script::Common | Script::Inherited | Script::Unknown)
+        }) {
+            if r.value {
+                ranges.push((*r.range.start(), *r.range.end()));
+            }
+        }
+        for r in gc.iter_ranges_for_value(GeneralCategory::OtherNumber) {
+            ranges.push((*r.start(), *r.end()));
+        }
+
+        // Sort + merge adjacent/overlapping ranges so binary search has clean buckets.
+        ranges.sort_unstable();
+        let mut merged: Vec<(u32, u32)> = Vec::with_capacity(ranges.len());
+        for (s, e) in ranges {
+            if let Some(last) = merged.last_mut() {
+                if s <= last.1.saturating_add(1) {
+                    last.1 = last.1.max(e);
+                    continue;
+                }
+            }
+            merged.push((s, e));
+        }
+        merged.into_boxed_slice()
+    })
+}
+
+/// "Strict" word-like check for chars whose `WordBreakProperty` alone didn't classify them as
+/// word-like. Mirrors the residual conditions of turbopuffer's `is_word_like_token_char` /
+/// `should_include_token_span` for non-ASCII chars not already covered by `ALetter` /
+/// `HebrewLetter` / `Numeric`.
+#[inline]
+pub(crate) fn is_word_like_strict(c: char) -> bool {
+    let cp = c as u32;
+    word_like_strict_ranges()
+        .binary_search_by(|&(s, e)| {
+            if cp < s {
+                std::cmp::Ordering::Greater
+            } else if cp > e {
+                std::cmp::Ordering::Less
+            } else {
+                std::cmp::Ordering::Equal
+            }
+        })
+        .is_ok()
+}
 
 /// Helper function to look up the Word_Break property for a given character using the pre-computed dictionary.
 #[inline(never)]

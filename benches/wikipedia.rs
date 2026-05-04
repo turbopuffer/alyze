@@ -37,6 +37,25 @@ pub fn wikipedia_benchmark(c: &mut Criterion) {
         })
     });
 
+    // When `props` is unused, LLVM will optimize it away (which is amazing!), but we also want
+    // to benchmark the cost of computing and using this word-like property.
+    group.bench_function("word break + word_like", |b| {
+        b.iter(|| {
+            let mut count = 0;
+            let mut word_like = 0;
+            for text in &texts {
+                uax29::word::tokenize(text, uax29::word::Options::default(), |_, props| {
+                    count += 1;
+                    if props.is_word_like() {
+                        word_like += 1;
+                    }
+                    true
+                });
+            }
+            std::hint::black_box((&count, &word_like));
+        })
+    });
+
     group.bench_function("sentence break", |b| {
         b.iter(|| {
             let mut count = 0;
