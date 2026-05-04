@@ -237,15 +237,6 @@ const ASCII_BYTE_INFO: [u8; 128] = {
     t
 };
 
-#[unsafe(no_mangle)]
-#[inline(never)]
-pub fn _asm_probe(text: &str, out: &mut Vec<usize>) {
-    tokenize(text, Options::default(), |bp, _| {
-        out.push(bp);
-        true
-    });
-}
-
 #[cfg(test)]
 mod tests {
     use super::{Options, tokenize};
