@@ -15,7 +15,7 @@ pub struct Options {}
 
 /// For a given span, extracts info from the DFA state to provide useful information upstream, e.g.
 /// whether the span was "word-like", ascii, etc
-#[derive(Copy, Clone, Default)]
+#[derive(Copy, Clone, Default, Debug, Eq, PartialEq)]
 pub struct TokenProperties(u8);
 
 impl TokenProperties {
