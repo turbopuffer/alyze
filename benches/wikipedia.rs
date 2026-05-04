@@ -28,7 +28,7 @@ pub fn wikipedia_benchmark(c: &mut Criterion) {
         b.iter(|| {
             let mut count = 0;
             for text in &texts {
-                uax29::word::tokenize(text, uax29::word::Options::default(), |_| {
+                uax29::word::tokenize(text, uax29::word::Options::default(), |_, _| {
                     count += 1;
                     true
                 });

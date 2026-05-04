@@ -12,10 +12,44 @@ use transitions::{State, TABLE, Transition};
 #[non_exhaustive]
 pub struct Options {}
 
+/// For a given span, extracts info from the DFA state to provide useful information upstream, e.g.
+/// whether the span was "word-like", ascii, etc
+#[derive(Copy, Clone, Default)]
+pub struct TokenProperties(u8);
+
+impl TokenProperties {
+    const WORD_LIKE_MASK: u8 = 0b0000_0001;
+    // Stored disjunctively: a single non-ASCII char in the span sets this bit.
+    // `is_ascii()` returns true when the bit is unset (vacuously true for the empty span).
+    const NON_ASCII_MASK: u8 = 0b0000_0010;
+
+    /// Tokenizer-internal: contribution from a single non-ASCII char.
+    pub(crate) const NON_ASCII: Self = Self(Self::NON_ASCII_MASK);
+
+    pub fn is_word_like(&self) -> bool {
+        self.0 & Self::WORD_LIKE_MASK != 0
+    }
+
+    pub fn is_ascii(&self) -> bool {
+        self.0 & Self::NON_ASCII_MASK == 0
+    }
+}
+
+impl std::ops::BitOrAssign for TokenProperties {
+    #[inline]
+    fn bitor_assign(&mut self, rhs: Self) {
+        self.0 |= rhs.0;
+    }
+}
+
 /// A tokenizer that implements UAX #29 word boundary rules, using a deterministic finite automaton
 /// (DFA) to efficiently determine word boundaries in Unicode text. Includes a number of fast-paths
 /// for common cases, e.g. ASCII.
-pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usize) -> bool) {
+pub fn tokenize(
+    text: &str,
+    _options: Options,
+    mut on_breakpoint: impl FnMut(usize, TokenProperties) -> bool,
+) {
     if text.is_empty() {
         return;
     }
@@ -34,6 +68,10 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
     // 'a 🛑' -> break (ALetter -> Other)
     // 'a ZWJ 🛑' -> no break (WB4)
     let mut last_was_zwj = false;
+
+    // Maintain properties of the current token, which are reset on each break and can be used by the caller
+    // to more efficiently determine what type of token was just emitted, e.g. whether it's "word-like" or ascii.
+    let mut token_props = TokenProperties::default();
 
     while pos < text.len() {
         // Fast path for ASCII, e.g. skip DFA all together when possible.
@@ -59,15 +97,25 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
         }
 
         // Fast path for ASCII, e.g. avoid chars().next(), and lookup word property from table.
+        // `char_props` is this char's contribution to the enclosing token's properties; it's
+        // applied to `token_props` per-arm below, since `Action::Break` treats the breaking char
+        // as the first char of the *next* token (the contribution lands there, not in the token
+        // being emitted).
         let b = bytes[pos];
-        let (c, prop, char_len) = if b < 0x80 {
-            (b as char, ASCII_WORD_BREAK_PROP[b as usize], 1usize)
+        let (c, prop, char_len, char_props) = if b < 0x80 {
+            (
+                b as char,
+                ASCII_WORD_BREAK_PROP[b as usize],
+                1usize,
+                TokenProperties::default(),
+            )
         } else {
             let c = text[pos..].chars().next().unwrap();
             (
                 c,
                 lookup_word_break_property_from_dictionary(c),
                 c.len_utf8(),
+                TokenProperties::NON_ASCII,
             )
         };
 
@@ -81,14 +129,18 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
                 if last_was_zwj {
                     last_was_zwj = false;
                     if WordBreakProperty::is_ext_pictographic(c) {
-                        continue; // transparent
+                        // Transparent: char joins the in-progress token instead of breaking.
+                        token_props |= char_props;
+                        continue;
                     }
                 }
                 last_was_zwj = prop == WordBreakProperty::ZWJ;
                 state = next_state;
-                if !on_breakpoint(boundary) {
+                if !on_breakpoint(boundary, std::mem::take(&mut token_props)) {
                     return;
                 }
+                // Breaking char starts the next token; apply its contribution after the take.
+                token_props |= char_props;
                 continue;
             }
             Action::NoBreak => {
@@ -102,14 +154,15 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
                 }
                 state = next_state;
                 pos += char_len;
+                token_props |= char_props;
             }
             Action::DeferredBreak => {
                 last_was_zwj = false;
                 let boundary = deferred_break_pos.take().unwrap();
                 state = next_state;
-                // Notably, we don't advance `pos` here, current char re-examined
-                // after the next call to `next()`.
-                if !on_breakpoint(boundary) {
+                // Notably, we don't advance `pos` here; the current char is re-examined on the
+                // next iteration and will accumulate its props then — don't apply char_props here.
+                if !on_breakpoint(boundary, std::mem::take(&mut token_props)) {
                     return;
                 }
                 continue;
@@ -118,6 +171,7 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
                 last_was_zwj = prop == WordBreakProperty::ZWJ;
                 // State doesn't change, but we still consume the character.
                 pos += char_len;
+                token_props |= char_props;
             }
         }
     }
@@ -125,13 +179,13 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
     // Deferred state at EOT - defer failed
     if state.is_deferred() {
         let breakpoint = deferred_break_pos.take().unwrap();
-        if !on_breakpoint(breakpoint) {
+        if !on_breakpoint(breakpoint, std::mem::take(&mut token_props)) {
             return;
         }
     }
 
     // WB2: Any ÷ eot — emit final segment
-    _ = on_breakpoint(text.len());
+    _ = on_breakpoint(text.len(), token_props);
 }
 
 // Lookup table for ASCII characters, which can be processed without the DFA.
@@ -161,7 +215,7 @@ mod tests {
     fn test_word_break_against_uax29_tests() {
         let (passed, failed) =
             test_against_uax29_break_tests("testdata/WordBreakTest.txt", |s, breakpoints| {
-                tokenize(s, Options::default(), |bp| {
+                tokenize(s, Options::default(), |bp, _props| {
                     breakpoints.push(bp);
                     true
                 });
@@ -179,7 +233,7 @@ mod tests {
     fn tokenizer_sanity() {
         fn assert_breaks(s: &str, expected: Vec<usize>) {
             let mut breakpoints = Vec::new();
-            tokenize(s, Options::default(), |bp| {
+            tokenize(s, Options::default(), |bp, _props| {
                 breakpoints.push(bp);
                 true
             });
@@ -255,5 +309,27 @@ mod tests {
 
         // Circled letters
         assert_breaks("\u{200d}Ⓜ", vec![0, 6]);
+    }
+
+    #[test]
+    fn tokenizer_properties_sanity() {
+        // Each emit reports properties of the span just closed; the leading boundary at 0 has
+        // no preceding span, so it carries default props.
+        fn assert_props(s: &str, expected: Vec<(usize, bool)>) {
+            let mut got: Vec<(usize, bool)> = Vec::new();
+            tokenize(s, Options::default(), |bp, props| {
+                got.push((bp, props.is_ascii()));
+                true
+            });
+            assert_eq!(got, expected, "input: {:?}", s);
+        }
+
+        // Leading boundary at 0 is vacuously is_ascii=true.
+        assert_props("hello", vec![(0, true), (5, true)]);
+        assert_props("🛑", vec![(0, true), (4, false)]);
+
+        // The sharp case: the breaking char is non-ASCII but starts the *next* token, so "ab"
+        // must still report is_ascii=true and "🛑" must report is_ascii=false.
+        assert_props("ab🛑", vec![(0, true), (2, true), (6, false)]);
     }
 }
