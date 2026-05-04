@@ -26,25 +26,27 @@ pub fn wikipedia_benchmark(c: &mut Criterion) {
 
     group.bench_function("word break", |b| {
         b.iter(|| {
-            let mut breakpoints = Vec::new();
+            let mut count = 0;
             for text in &texts {
-                uax29::word::tokenize(text, &mut breakpoints, uax29::word::Options::default());
+                uax29::word::tokenize(text, uax29::word::Options::default(), |_| {
+                    count += 1;
+                    true
+                });
             }
-            std::hint::black_box(&breakpoints);
+            std::hint::black_box(&count);
         })
     });
 
     group.bench_function("sentence break", |b| {
         b.iter(|| {
-            let mut breakpoints = Vec::new();
+            let mut count = 0;
             for text in &texts {
-                uax29::sentence::tokenize(
-                    text,
-                    &mut breakpoints,
-                    uax29::sentence::Options::default(),
-                );
+                uax29::sentence::tokenize(text, uax29::sentence::Options::default(), |_| {
+                    count += 1;
+                    true
+                });
             }
-            std::hint::black_box(&breakpoints);
+            std::hint::black_box(&count);
         })
     });
 

@@ -15,7 +15,7 @@ pub struct Options {}
 /// A tokenizer that implements UAX #29 word boundary rules, using a deterministic finite automaton
 /// (DFA) to efficiently determine word boundaries in Unicode text. Includes a number of fast-paths
 /// for common cases, e.g. ASCII.
-pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
+pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usize) -> bool) {
     if text.is_empty() {
         return;
     }
@@ -86,7 +86,9 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
                 }
                 last_was_zwj = prop == WordBreakProperty::ZWJ;
                 state = next_state;
-                breakpoints.push(boundary);
+                if !on_breakpoint(boundary) {
+                    return;
+                }
                 continue;
             }
             Action::NoBreak => {
@@ -107,7 +109,9 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
                 state = next_state;
                 // Notably, we don't advance `pos` here, current char re-examined
                 // after the next call to `next()`.
-                breakpoints.push(boundary);
+                if !on_breakpoint(boundary) {
+                    return;
+                }
                 continue;
             }
             Action::Transparent => {
@@ -120,11 +124,14 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
 
     // Deferred state at EOT - defer failed
     if state.is_deferred() {
-        breakpoints.push(deferred_break_pos.take().unwrap());
+        let breakpoint = deferred_break_pos.take().unwrap();
+        if !on_breakpoint(breakpoint) {
+            return;
+        }
     }
 
     // WB2: Any ÷ eot — emit final segment
-    breakpoints.push(text.len());
+    _ = on_breakpoint(text.len());
 }
 
 // Lookup table for ASCII characters, which can be processed without the DFA.
@@ -154,7 +161,10 @@ mod tests {
     fn test_word_break_against_uax29_tests() {
         let (passed, failed) =
             test_against_uax29_break_tests("testdata/WordBreakTest.txt", |s, breakpoints| {
-                tokenize(s, breakpoints, Options::default())
+                tokenize(s, Options::default(), |bp| {
+                    breakpoints.push(bp);
+                    true
+                });
             });
         assert_eq!(
             (1944, 0),
@@ -169,7 +179,10 @@ mod tests {
     fn tokenizer_sanity() {
         fn assert_breaks(s: &str, expected: Vec<usize>) {
             let mut breakpoints = Vec::new();
-            tokenize(s, &mut breakpoints, Options::default());
+            tokenize(s, Options::default(), |bp| {
+                breakpoints.push(bp);
+                true
+            });
             assert_eq!(breakpoints, expected, "input: {:?}", s);
         }
 

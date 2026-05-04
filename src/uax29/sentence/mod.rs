@@ -9,7 +9,7 @@ use transitions::{State, TRANSITION_TABLE, Transition};
 #[non_exhaustive]
 pub struct Options {}
 
-pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
+pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usize) -> bool) {
     if text.is_empty() {
         return;
     }
@@ -29,7 +29,9 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
         match action {
             Action::Break => {
                 state = next_state;
-                breakpoints.push(pos);
+                if !on_breakpoint(pos) {
+                    return;
+                }
                 pos += char_len;
                 continue;
             }
@@ -52,7 +54,9 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
                 let boundary = deferred_break_pos.take().unwrap();
                 state = next_state;
                 // Don't advance pos — re-examine current char in new state.
-                breakpoints.push(boundary);
+                if !on_breakpoint(boundary) {
+                    return;
+                }
                 continue;
             }
         }
@@ -60,11 +64,13 @@ pub fn tokenize(text: &str, breakpoints: &mut Vec<usize>, _options: Options) {
 
     // Deferred state at EOT — defer failed, confirm break
     if state.is_deferred() {
-        breakpoints.push(deferred_break_pos.take().unwrap());
+        if !on_breakpoint(deferred_break_pos.unwrap()) {
+            return;
+        }
     }
 
     // SB2: Any	÷ eot (break at end of text)
-    breakpoints.push(text.len());
+    _ = on_breakpoint(text.len());
 }
 
 #[cfg(test)]
@@ -76,7 +82,10 @@ mod tests {
     fn test_sentence_break_against_uax29_tests() {
         let (passed, failed) =
             test_against_uax29_break_tests("testdata/SentenceBreakTest.txt", |s, breakpoints| {
-                tokenize(s, breakpoints, Options::default())
+                tokenize(s, Options::default(), |bp| {
+                    breakpoints.push(bp);
+                    true
+                });
             });
         assert_eq!(
             (512, 0),
@@ -91,7 +100,10 @@ mod tests {
     fn tokenizer_sanity() {
         fn assert_breaks(s: &str, expected: Vec<usize>) {
             let mut breakpoints = Vec::new();
-            tokenize(s, &mut breakpoints, Options::default());
+            tokenize(s, Options::default(), |bp| {
+                breakpoints.push(bp);
+                true
+            });
             assert_eq!(breakpoints, expected, "input: {:?}", s);
         }
 

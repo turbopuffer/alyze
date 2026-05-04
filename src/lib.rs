@@ -4,7 +4,10 @@
 //!
 //! ```
 //! let mut breaks = Vec::new();
-//! alyze::uax29::word::tokenize("Hello, world!", &mut breaks, Default::default());
+//! alyze::uax29::word::tokenize("Hello, world!", Default::default(), |bp| {
+//!     breaks.push(bp);
+//!     true // return false to stop tokenization early
+//! });
 //! assert_eq!(breaks, vec![0, 5, 6, 7, 12, 13]);
 //! ```
 
