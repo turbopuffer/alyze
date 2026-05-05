@@ -80,6 +80,13 @@ pub fn tokenize(
     // to more efficiently determine what type of token was just emitted, e.g. whether it's "word-like" or ascii.
     let mut token_props = TokenProperties::default();
 
+    // Properties of chars consumed while in a deferred state. Held aside from `token_props`
+    // because we don't yet know which token they belong to: if the deferred state resolves
+    // via `DeferredBreak`, these chars start the *next* token (so their contribution must
+    // not leak into the in-progress one); if it resolves via `NoBreak` exiting deferred,
+    // they fold into the current token. Tracked by `deferred_break_pos.is_some()`.
+    let mut deferred_props = TokenProperties::default();
+
     while pos < text.len() {
         // Fast path for ASCII, e.g. skip DFA all together when possible.
         // Roughly a ~2x speedup on English Wikipedia.
@@ -166,12 +173,16 @@ pub fn tokenize(
                     if deferred_break_pos.is_none() {
                         deferred_break_pos = Some(pos);
                     }
+                    deferred_props |= char_props;
                 } else {
-                    deferred_break_pos = None;
+                    if deferred_break_pos.take().is_some() {
+                        // Word resumed: deferred chars belong to the in-progress token.
+                        token_props |= std::mem::take(&mut deferred_props);
+                    }
+                    token_props |= char_props;
                 }
                 state = next_state;
                 pos += char_len;
-                token_props |= char_props;
             }
             Action::DeferredBreak => {
                 last_was_zwj = false;
@@ -182,13 +193,19 @@ pub fn tokenize(
                 if !on_breakpoint(boundary, std::mem::take(&mut token_props)) {
                     return;
                 }
+                // Deferred chars start the next token.
+                token_props |= std::mem::take(&mut deferred_props);
                 continue;
             }
             Action::Transparent => {
                 last_was_zwj = prop == WordBreakProperty::ZWJ;
                 // State doesn't change, but we still consume the character.
                 pos += char_len;
-                token_props |= char_props;
+                if deferred_break_pos.is_some() {
+                    deferred_props |= char_props;
+                } else {
+                    token_props |= char_props;
+                }
             }
         }
     }
@@ -199,6 +216,8 @@ pub fn tokenize(
         if !on_breakpoint(breakpoint, std::mem::take(&mut token_props)) {
             return;
         }
+        // Deferred chars become the trailing token.
+        token_props |= std::mem::take(&mut deferred_props);
     }
 
     // WB2: Any ÷ eot — emit final segment
@@ -333,6 +352,35 @@ mod tests {
             vec![0, "לייף".len(), "לייף ".len(), "לייף אנרג'י".len()],
         );
 
+        // WB7b/WB7c: Hebrew_Letter × Double_Quote × Hebrew_Letter (gershayim acronyms
+        // like צה״ל). With letters on both sides the gershayim is absorbed into the
+        // word; with whitespace on either side it must emit as its own standalone
+        // token (UAX #29 prescribes a break — no MidLetter/DoubleQuote rule applies).
+        assert_breaks("צה\u{05F4}ל", vec![0, "צה\u{05F4}ל".len()]);
+        // Closing gershayim followed by space: standalone token.
+        assert_breaks(
+            "אקספרס\u{05F4} מהיום",
+            vec![
+                0,
+                "אקספרס".len(),
+                "אקספרס\u{05F4}".len(),
+                "אקספרס\u{05F4} ".len(),
+                "אקספרס\u{05F4} מהיום".len(),
+            ],
+        );
+        // Full quoted-word pattern: both opening and closing gershayim are standalone.
+        assert_breaks(
+            "\u{05F4}אקספרס\u{05F4} מהיום",
+            vec![
+                0,
+                "\u{05F4}".len(),
+                "\u{05F4}אקספרס".len(),
+                "\u{05F4}אקספרס\u{05F4}".len(),
+                "\u{05F4}אקספרס\u{05F4} ".len(),
+                "\u{05F4}אקספרס\u{05F4} מהיום".len(),
+            ],
+        );
+
         // WB3c: ZWJ × Extended_Pictographic (emoji ZWJ sequences)
         assert_breaks("👨\u{200D}👩", vec![0, 11]);
         assert_breaks("👨👩", vec![0, 4, 8]);
@@ -422,5 +470,43 @@ mod tests {
         // Locks in why we can't just OR `WordBreakProperty::Katakana → WORD_LIKE`; we need to
         // additionally check the char's Script.
         assert_word_like("ー", vec![(0, false), (3, false)]);
+
+        // HEBREW PUNCTUATION GERSHAYIM (U+05F4): WordBreak=DoubleQuote (not word-like via
+        // cheap path), Script=Hebrew (word-like via strict). Standalone token is word-like.
+        assert_word_like("\u{05F4}", vec![(0, false), ("\u{05F4}".len(), true)]);
+    }
+
+    /// A deferred break must not strand the deferred char's properties on the preceding
+    /// token. For `אקספרס״ `, the closing gershayim emerges as a standalone token via
+    /// `DeferredBreak` from `HLetterDQ`; its `WORD_LIKE` bit (via Script=Hebrew) belongs
+    /// to that standalone token, not to the Hebrew word that precedes it.
+    #[test]
+    fn deferred_break_does_not_misattribute_props() {
+        let s = "אקספרס\u{05F4} ";
+        assert_word_like(
+            s,
+            vec![
+                (0, false),
+                ("אקספרס".len(), true),         // אקספרס (Hebrew letters)
+                ("אקספרס\u{05F4}".len(), true), // ״ standalone — Script=Hebrew
+                (s.len(), false),               // trailing space
+            ],
+        );
+
+        // Same shape with Hebrew word after the space — the four-quote pattern from
+        // real Common Crawl docs (`״אקספרס״ מהיום …`). All four standalone gershayim
+        // tokens must be word-like; the asymmetry-bug case is the trailing one.
+        let s = "\u{05F4}אקספרס\u{05F4} מהיום";
+        assert_word_like(
+            s,
+            vec![
+                (0, false),
+                ("\u{05F4}".len(), true),                          // leading ״
+                ("\u{05F4}אקספרס".len(), true),                    // אקספרס
+                ("\u{05F4}אקספרס\u{05F4}".len(), true),            // trailing ״
+                ("\u{05F4}אקספרס\u{05F4} ".len(), false),          // space
+                (s.len(), true),                                   // מהיום
+            ],
+        );
     }
 }
