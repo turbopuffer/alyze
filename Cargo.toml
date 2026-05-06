@@ -10,8 +10,14 @@ keywords = ["tokenizer", "unicode", "segmentation", "analysis", "nlp"]
 categories = ["text-processing", "internationalization"]
 exclude = ["testdata/", "benches/"]
 
+[features]
+default = ["icu-properties"]
+icu-properties = ["dep:icu_properties"]
+tpuf-vendored = ["dep:tpuf_icu_properties_211"]
+
 [dependencies]
-tpuf_icu_properties_211 = "7"
+icu_properties = { version = "2.1.2", optional = true }
+tpuf_icu_properties_211 = { version = "7", optional = true }
 
 [dev-dependencies]
 criterion = "0.8.2"

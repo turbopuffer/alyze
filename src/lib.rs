@@ -11,4 +11,10 @@
 //! assert_eq!(breaks, vec![0, 5, 6, 7, 12, 13]);
 //! ```
 
+#[cfg(not(feature = "tpuf-vendored"))]
+extern crate icu_properties as icu;
+
+#[cfg(feature = "tpuf-vendored")]
+extern crate tpuf_icu_properties_211 as icu;
+
 pub mod uax29;
