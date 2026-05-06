@@ -20,19 +20,23 @@ pub struct TokenProperties(u8);
 
 impl TokenProperties {
     const WORD_LIKE_MASK: u8 = 0b0000_0001;
-    // Stored disjunctively: a single non-ASCII char in the span sets this bit.
-    // `is_ascii()` returns true when the bit is unset (vacuously true for the empty span).
     const NON_ASCII_MASK: u8 = 0b0000_0010;
 
-    /// Tokenizer-internal: contribution from a single non-ASCII char.
     pub(crate) const NON_ASCII: Self = Self(Self::NON_ASCII_MASK);
-    /// Tokenizer-internal: contribution from a single word-like char.
     pub(crate) const WORD_LIKE: Self = Self(Self::WORD_LIKE_MASK);
 
+    // A token is "word-like" if it contains any char that is:
+    // - ALetter, HebrewLetter, or Numeric (this is a fast-path from our DFA WordBreakProperty lookup)
+    // - Ideographic or Extended_Pictographic (e.g. CJK chars, emoji)
+    // - Other_Number general category (⑦, ², ¼)
+    // - A character whose Script is something meaningful (e.g. belonging to a real writing system),
+    //   as opposed to Script=Common/Inherited/Unknown (e.g. punctuation, symbols, emoji modifiers).
     pub fn is_word_like(&self) -> bool {
         self.0 & Self::WORD_LIKE_MASK != 0
     }
 
+    // Stored disjunctively: a single non-ASCII char in the span sets this bit.
+    // `is_ascii()` returns true when the bit is unset (vacuously true for the empty span).
     pub fn is_ascii(&self) -> bool {
         self.0 & Self::NON_ASCII_MASK == 0
     }

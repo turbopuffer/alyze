@@ -172,6 +172,7 @@ const EXT_PICT: CodePointSetDataBorrowed<'static> = CodePointSetData::new::<Exte
 /// single binary search per char instead of up to four ICU trie lookups. Built on first use.
 static WORD_LIKE_STRICT_RANGES: std::sync::OnceLock<Box<[(u32, u32)]>> = std::sync::OnceLock::new();
 
+// See `TokenProperties::is_word_like()` for a detailed explanation of this.
 fn word_like_strict_ranges() -> &'static [(u32, u32)] {
     WORD_LIKE_STRICT_RANGES.get_or_init(|| {
         let ideographic = CodePointSetData::new::<Ideographic>();
@@ -185,6 +186,10 @@ fn word_like_strict_ranges() -> &'static [(u32, u32)] {
         for r in ideographic.iter_ranges() {
             ranges.push((*r.start(), *r.end()));
         }
+
+        // r.value is true for any range where the script is not Common/Inherited/Unknown.
+        // E.g. r.value=true when Script is a reasonable writing system (Greek, Thai, Cyrillic, etc.)
+        // This operates similar to Rust's .iter().map().filter().
         for r in script.iter_ranges_mapped(|s| {
             !matches!(s, Script::Common | Script::Inherited | Script::Unknown)
         }) {
@@ -192,6 +197,7 @@ fn word_like_strict_ranges() -> &'static [(u32, u32)] {
                 ranges.push((*r.range.start(), *r.range.end()));
             }
         }
+
         for r in gc.iter_ranges_for_value(GeneralCategory::OtherNumber) {
             ranges.push((*r.start(), *r.end()));
         }
