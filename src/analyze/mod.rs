@@ -107,7 +107,7 @@ impl Into<rust_stemmers::Algorithm> for StemmingLanguage {
 /// A buffer that should be reused across multiple analyze() invocations
 /// to avoid unnecessary allocations. Contents are opaque and internal to
 /// the implementation.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct ReusableBuffer {
     a: String,
     b: String,
@@ -115,6 +115,14 @@ pub struct ReusableBuffer {
 }
 
 impl ReusableBuffer {
+    pub fn new() -> Self {
+        Self {
+            a: String::new(),
+            b: String::new(),
+            stemming_cache: StemmingCache::new_with_capacity(32_000),
+        }
+    }
+
     pub fn stemming_cache(&mut self) -> &mut StemmingCache {
         &mut self.stemming_cache
     }

@@ -4,7 +4,7 @@ use ahash::AHashMap;
 
 /// Keep a small cache of stemmed tokens to avoid repeated stemming of common tokens.
 /// Can yield ~2x throughput improvement for stemmed analysis.
-#[derive(Debug, Clone, Default)]
+#[derive(Debug, Clone)]
 pub struct StemmingCache {
     cache: AHashMap<CachedToken, StemmingCacheEntry>,
 }
@@ -30,6 +30,12 @@ impl StemmingCacheEntry {
 pub type CachedToken = ShortToken<10>;
 
 impl StemmingCache {
+    pub fn new_with_capacity(capacity: usize) -> Self {
+        Self {
+            cache: AHashMap::with_capacity(capacity),
+        }
+    }
+
     pub fn lookup(&self, key: &CachedToken) -> Option<&StemmingCacheEntry> {
         self.cache.get(key)
     }
