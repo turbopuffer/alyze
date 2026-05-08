@@ -1,0 +1,98 @@
+# Kuromoji/IPADIC tokenization test cases (NORMAL mode)
+# Format: input<TAB>token1<TAB>token2<TAB>...
+# Generated from lindera with embedded IPADIC dictionary as reference
+# (with keep_whitespace=true for raw tokenization output).
+#
+# Compound nouns (not decomposed in NORMAL mode)
+関西国際空港	関西国際空港
+成田空港	成田空港
+シニアソフトウェアエンジニア	シニアソフトウェアエンジニア
+コニカミノルタホールディングス	コニカミノルタホールディングス
+# Basic sentence tokenization
+東京都に住んでいる	東京	都	に	住ん	で	いる
+すもももももももものうち	すもも	も	もも	も	もも	の	うち
+多くの学生が試験に落ちた。	多く	の	学生	が	試験	に	落ち	た	。
+日本語の形態素解析	日本語	の	形態素	解析
+私の名前は田中です	私	の	名前	は	田中	です
+今日はいい天気ですね	今日	は	いい	天気	です	ね
+京都大学硬式野球部	京都大	学	硬式	野球	部
+お寿司が食べたい	お	寿司	が	食べ	たい
+猫が好きです	猫	が	好き	です
+新しいアルゴリズム	新しい	アルゴリズム
+この文章はテストです	この	文章	は	テスト	です
+走れメロス	走れ	メロス
+吾輩は猫である	吾輩	は	猫	で	ある
+東京スカイツリー	東京	スカイ	ツリー
+# ASCII / mixed
+Hello World	Hello	 	World
+C++プログラミング	C	++	プログラミング
+1234	1234
+テスト	テスト
+a	a
+# Single characters
+A	A
+1	1
+あ	あ
+ア	ア
+漢	漢
+!	!
+# Numbers and mixed
+3.14	3	.	14
+100万円	100	万	円
+# Mixed scripts
+WiFiルーター	WiFi	ルーター
+iPhone	iPhone
+UTF-8	UTF	-	8
+Rubyプログラマ	Ruby	プログラマ
+OS/2	OS	/	2
+# Longer sentences
+今日は天気がいいので散歩に行きましょう	今日	は	天気	が	いい	ので	散歩	に	行き	ましょ	う
+日本の首都は東京です	日本	の	首都	は	東京	です
+彼女は美しい花を買った	彼女	は	美しい	花	を	買っ	た
+私はプログラマーです	私	は	プログラマー	です
+東京タワーに行きたいです	東京	タワー	に	行き	たい	です
+富士山は日本一高い山です	富士山	は	日本一	高い	山	です
+桜の花が咲いている	桜	の	花	が	咲い	て	いる
+明日の天気はどうですか	明日	の	天気	は	どう	です	か
+# Katakana compounds
+インターネット	インターネット
+プログラミング言語	プログラミング	言語
+コンピュータサイエンス	コンピュータ	サイエンス
+# Greetings
+おはようございます	おはよう	ござい	ます
+ありがとうございます	ありがとう	ござい	ます
+# Punctuation
+「こんにちは」と言った。	「	こんにちは	」	と	言っ	た	。
+東京（とうきょう）	東京	（	とう	きょう	）
+# Kanji numeric
+三百六十五日	三	百	六	十	五	日
+一万円	一	万	円
+# Symbols and mixed
+100%	100	%
+e-mail	e	-	mail
+http://example.com	http	://	example	.	com
+# From Lucene TestJapaneseTokenizer (NORMAL mode)
+これは本ではない	これ	は	本	で	は	ない
+やぼったい	やぼったい
+突き通しゃ	突き通しゃ
+株式会社とアカデミア	株式会社	と	アカデミア
+麻薬の密売は根こそぎ絶やさなければならない	麻薬	の	密売	は	根こそぎ	絶やさ	なけれ	ば	なら	ない
+# From Atilika TokenizerTest
+スペースステーションに行きます。うたがわしい。	スペース	ステーション	に	行き	ます	。	うたがわしい	。
+難しい。。。	難しい	。	。	。
+アティリカ株式会社	アティリカ	株式会社
+＼ｍ	＼	ｍ
+# From kuromoji-rs (fulmicoton)
+御意。 御意〜。	御意	。	 	御意	〜	。
+〜でも喜び	〜	でも	喜び
+後で	後で
+# Note: lindera produces ["ーヶ", "月"] here, but ["ー", "ヶ月"] is equally valid
+# since ヶ月 is a real dictionary suffix meaning "months". Cost difference is marginal.
+ーヶ月	ー	ヶ月
+日本住	日本	住
+ここでは	ここ	で	は
+満々!	満々	!
+# From lindera
+日本語の形態素解析を行うことができます。テスト。	日本語	の	形態素	解析	を	行う	こと	が	でき	ます	。	テスト	。
+寿司が食べたいです。	寿司	が	食べ	たい	です	。
+それはまだ実験段階にあります。	それ	は	まだ	実験	段階	に	あり	ます	。
