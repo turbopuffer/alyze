@@ -11,4 +11,5 @@
 //! assert_eq!(breaks, vec![0, 5, 6, 7, 12, 13]);
 //! ```
 
+pub mod analyze;
 pub mod uax29;

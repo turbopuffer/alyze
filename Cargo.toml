@@ -1,6 +1,6 @@
 [package]
 name = "alyze"
-version = "0.1.2"
+version = "0.1.3"
 edition = "2024"
 rust-version = "1.85"
 description = "High-performance text analysis for full-text search"
@@ -11,6 +11,9 @@ categories = ["text-processing", "internationalization"]
 exclude = ["testdata/", "benches/"]
 
 [dependencies]
+ahash = "0.8.12"
+phf = { version = "0.13.1", features = ["macros"] }
+rust-stemmers = "1.2.0"
 tpuf_icu_properties_211 = "7"
 
 [dev-dependencies]

@@ -9,7 +9,7 @@ use properties::{
 use transitions::{State, TABLE, Transition};
 
 /// For backwards compatibility, require caller to pass in options struct.
-#[derive(Default, Clone)]
+#[derive(Default, Clone, Copy, Debug)]
 #[non_exhaustive]
 pub struct Options {}
 
@@ -501,11 +501,11 @@ mod tests {
             s,
             vec![
                 (0, false),
-                ("\u{05F4}".len(), true),                          // leading ״
-                ("\u{05F4}אקספרס".len(), true),                    // אקספרס
-                ("\u{05F4}אקספרס\u{05F4}".len(), true),            // trailing ״
-                ("\u{05F4}אקספרס\u{05F4} ".len(), false),          // space
-                (s.len(), true),                                   // מהיום
+                ("\u{05F4}".len(), true),                 // leading ״
+                ("\u{05F4}אקספרס".len(), true),           // אקספרס
+                ("\u{05F4}אקספרס\u{05F4}".len(), true),   // trailing ״
+                ("\u{05F4}אקספרס\u{05F4} ".len(), false), // space
+                (s.len(), true),                          // מהיום
             ],
         );
     }
