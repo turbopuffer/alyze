@@ -11,11 +11,13 @@ mod u17_to_lower;
 #[derive(Clone, Copy, Debug)]
 pub struct AnalysisOptions {
     pub tokenizer: TokenizerOptions,
-    pub case_sensitive: bool,
+
+    // Note: These are ordered in the sequence they are applied in
     pub maximum_token_length: Option<usize>,
-    pub ascii_folding: bool,
+    pub case_sensitive: bool,
     pub stopword_removal: Option<StopwordRemoval>,
     pub stemming: Option<StemmingLanguage>,
+    pub ascii_folding: bool,
 }
 
 impl AnalysisOptions {
