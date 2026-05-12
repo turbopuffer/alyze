@@ -1,21 +1,16 @@
 use crate::analyze::{LanguageWithStopwords, stopwords, u17_to_lower::unicode_v17_char_to_lower};
 
+// The maximum byte length of a character, after lowercasing.
+// Verified with `test_max_unicode_lowercased_length`.
+const MAX_LOWERCASED_BYTE_LENGTH: usize = 4;
+
 pub(crate) fn lowercase_chars_in_place(s: &mut String) {
     let original_byte_length = s.len();
 
-    // Compute the number of extra bytes we need to store the lowercased
-    // version of the string. Since lowercasing can result in multiple characters,
-    // it's difficult to pick an easy upper bound, so we'll just compute an
-    // exact one.
-    let required_bytes_for_lowercase = s
-        .chars()
-        .flat_map(|c| unicode_v17_char_to_lower(c))
-        .map(|c| c.len_utf8())
-        .sum::<usize>();
-
-    // Pad the string with enough space for the full lowercased output. Lowercasing
-    // can either expand or shrink in bytes, depending on the character.
-    s.extend(std::iter::repeat('\0').take(required_bytes_for_lowercase));
+    // Pad the string with enough space for the full lowercased output.
+    // Lowercasing will, at most, expand each character to `MAX_LOWERCASED_BYTE_LENGTH` bytes.
+    let additional_scratch = s.chars().count() * MAX_LOWERCASED_BYTE_LENGTH;
+    s.extend(std::iter::repeat('\0').take(additional_scratch));
 
     // Split the string into two parts, the original and lowercased part.
     // We'll read from the original part and write to the lowercased part.
@@ -33,7 +28,10 @@ pub(crate) fn lowercase_chars_in_place(s: &mut String) {
                 dst_idx += lc.encode_utf8(&mut lowercased_bytes[dst_idx..]).len();
             }
         }
-        debug_assert_eq!(dst_idx, required_bytes_for_lowercase);
+        assert!(
+            dst_idx <= additional_scratch,
+            "lowercased output should not exceed reserved space"
+        );
     }
 
     // Truncate the extra bytes we didn't use, then drain the original part.
@@ -1554,5 +1552,69 @@ fn fold_non_ascii_char(c: char) -> Option<&'static str> {
         '\u{FF5E}' // ～  [FULLWIDTH TILDE]
         => Some("~"),
         _ => None
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::analyze::{
+        filters::{MAX_LOWERCASED_BYTE_LENGTH, lowercase_chars_in_place},
+        u17_to_lower::unicode_v17_char_to_lower,
+    };
+
+    #[test]
+    fn test_max_unicode_lowercased_length() {
+        let mut max_lowercased_byte_len = 0;
+        for c in 0..=char::MAX as u32 {
+            if let Some(c) = char::from_u32(c) {
+                let lowercased_byte_length =
+                    unicode_v17_char_to_lower(c).map(|lc| lc.len_utf8()).sum();
+                max_lowercased_byte_len = max_lowercased_byte_len.max(lowercased_byte_length);
+            }
+        }
+        assert_eq!(max_lowercased_byte_len, MAX_LOWERCASED_BYTE_LENGTH);
+    }
+
+    #[test]
+    fn test_lowercase_chars_in_place() {
+        let cases: &[(&str, &str)] = &[
+            ("", ""),
+            ("a", "a"),
+            ("A", "a"),
+            ("Hello, World!", "hello, world!"),
+            ("ABC123xyz!?", "abc123xyz!?"),
+            ("CAFÉ", "café"),
+            ("ÄÖÜß", "äöüß"),
+            ("ΣΟΦΊΑ", "σοφία"),
+            ("МОСКВА", "москва"),
+            ("ẞ", "ß"),
+            ("STRAẞE", "straße"),
+            ("İ", "i\u{0307}"),
+            ("İSTANBUL", "i\u{0307}stanbul"),
+            ("𝐀", "𝐀"),
+            ("𝐇𝐄𝐋𝐋𝐎", "𝐇𝐄𝐋𝐋𝐎"),
+            ("中文测试", "中文测试"),
+            ("日本語", "日本語"),
+            ("🦀🚀✨", "🦀🚀✨"),
+            ("Hello 世界 ÄÖÜ", "hello 世界 äöü"),
+            ("A1 Σ 中 𝐗 İ", "a1 σ 中 𝐗 i\u{0307}"),
+            (
+                "İİİİİİİİİİ",
+                "i\u{0307}i\u{0307}i\u{0307}i\u{0307}i\u{0307}\
+             i\u{0307}i\u{0307}i\u{0307}i\u{0307}i\u{0307}",
+            ),
+            (
+                "THE QUICK BROWN FOX JUMPS OVER THE LAZY DOG 0123456789",
+                "the quick brown fox jumps over the lazy dog 0123456789",
+            ),
+            ("𐐀", "𐐨"),
+            ("𐐂𐐄𐐆", "𐐪𐐬𐐮"),
+        ];
+
+        for (input, expected) in cases {
+            let mut s = input.to_string();
+            lowercase_chars_in_place(&mut s);
+            assert_eq!(&s, *expected, "input: {input:?}");
+        }
     }
 }

@@ -9,7 +9,7 @@ mod stopwords;
 mod u17_to_lower;
 
 #[derive(Clone, Copy, Debug)]
-pub struct Options {
+pub struct AnalysisOptions {
     pub tokenizer: TokenizerOptions,
     pub case_sensitive: bool,
     pub maximum_token_length: Option<usize>,
@@ -18,7 +18,7 @@ pub struct Options {
     pub stemming: Option<StemmingLanguage>,
 }
 
-impl Options {
+impl AnalysisOptions {
     pub fn valid(&self) -> bool {
         if self.stemming.is_some() && self.case_sensitive {
             return false; // stemming requires case insensitivity
@@ -135,11 +135,11 @@ impl ReusableBuffer {
 
 #[derive(Clone, Copy)]
 pub struct Analyzer {
-    options: Options,
+    options: AnalysisOptions,
 }
 
 impl Analyzer {
-    pub fn new(options: Options) -> Self {
+    pub fn new(options: AnalysisOptions) -> Self {
         assert!(options.valid(), "options are invalid");
         Self { options }
     }
