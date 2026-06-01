@@ -1,0 +1,24 @@
+[package]
+name = "alyze-wasm"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "WebAssembly bindings for the alyze text analysis library"
+license = "MIT"
+repository = "https://github.com/turbopuffer/alyze"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+
+[dependencies]
+alyze = { path = ".." }
+wasm-bindgen = "0.2"
+serde = { version = "1", features = ["derive"] }
+serde-wasm-bindgen = "0.6"
+
+# `alyze` pulls in `ahash`, whose default `runtime-rng` feature depends on
+# `getrandom`. On `wasm32-unknown-unknown` getrandom needs an explicit backend.
+# We depend on it directly only to enable the browser (`wasm_js`) backend; it is
+# paired with the `getrandom_backend="wasm_js"` cfg in `.cargo/config.toml`.
+getrandom = { version = "0.3", features = ["wasm_js"] }

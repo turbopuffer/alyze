@@ -1,0 +1,6 @@
+# Enable the browser-backed `getrandom` implementation when building for the
+# web. `alyze` pulls in `ahash`, which seeds its hasher via `getrandom`; on
+# `wasm32-unknown-unknown` that requires selecting a backend explicitly. This is
+# scoped to the wasm target, so native builds of the core crate are unaffected.
+[target.wasm32-unknown-unknown]
+rustflags = ['--cfg', 'getrandom_backend="wasm_js"']

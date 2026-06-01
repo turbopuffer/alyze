@@ -10,6 +10,9 @@ keywords = ["tokenizer", "unicode", "segmentation", "analysis", "nlp"]
 categories = ["text-processing", "internationalization"]
 exclude = ["testdata/", "benches/"]
 
+[workspace]
+members = ["wasm"]
+
 [dependencies]
 ahash = "0.8.12"
 phf = { version = "0.13.1", features = ["macros"] }
