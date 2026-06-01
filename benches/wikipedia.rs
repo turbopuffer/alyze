@@ -4,6 +4,10 @@ use std::{
     path::{Path, PathBuf},
 };
 
+use alyze::analyze::{
+    AnalysisOptions, Analyzer, LanguageWithStopwords, ReusableBuffer, StemmingLanguage,
+    StopwordRemoval, TokenizerOptions,
+};
 use alyze::uax29;
 use criterion::{Criterion, Throughput, criterion_group, criterion_main};
 use parquet::{
@@ -12,7 +16,7 @@ use parquet::{
     schema::types::Type,
 };
 
-criterion_group!(benches, wikipedia_benchmark);
+criterion_group!(benches, wikipedia_benchmark, analysis_benchmark);
 criterion_main!(benches);
 
 pub fn wikipedia_benchmark(c: &mut Criterion) {
@@ -68,6 +72,71 @@ pub fn wikipedia_benchmark(c: &mut Criterion) {
             std::hint::black_box(&count);
         })
     });
+
+    group.finish();
+}
+
+pub fn analysis_benchmark(c: &mut Criterion) {
+    let mut group = c.benchmark_group("analysis");
+
+    let n_bytes = 64 << 20; // 64 MiB
+    let texts = load_n_bytes(n_bytes);
+
+    group.throughput(Throughput::Bytes(n_bytes));
+    group.sample_size(16);
+
+    let base = AnalysisOptions {
+        tokenizer: TokenizerOptions::UAX29Word(uax29::word::Options::default()),
+        maximum_token_length: None,
+        case_sensitive: false,
+        stopword_removal: None,
+        stemming: None,
+        ascii_folding: false,
+    };
+
+    // Each config exercises an additional stage of the analysis pipeline, so the
+    // deltas between rows approximate the marginal cost of each filter.
+    let configs: &[(&str, AnalysisOptions)] = &[
+        ("tokenize only (case sensitive)", AnalysisOptions {
+            case_sensitive: true,
+            ..base
+        }),
+        ("+ lowercase", base),
+        ("+ stopwords", AnalysisOptions {
+            stopword_removal: Some(StopwordRemoval::ForLanguage(LanguageWithStopwords::English)),
+            ..base
+        }),
+        ("+ stemming", AnalysisOptions {
+            stemming: Some(StemmingLanguage::English),
+            ..base
+        }),
+        ("full pipeline", AnalysisOptions {
+            maximum_token_length: Some(40),
+            stopword_removal: Some(StopwordRemoval::ForLanguage(LanguageWithStopwords::English)),
+            stemming: Some(StemmingLanguage::English),
+            ascii_folding: true,
+            ..base
+        }),
+    ];
+
+    for (name, options) in configs {
+        assert!(options.valid(), "invalid options for benchmark '{name}'");
+        let analyzer = Analyzer::new(*options);
+        let mut buffer = ReusableBuffer::new();
+        group.bench_function(*name, |b| {
+            b.iter(|| {
+                let mut count = 0;
+                for text in &texts {
+                    analyzer.analyze(text, &mut buffer, |token| {
+                        count += 1;
+                        std::hint::black_box(&token.text);
+                        true
+                    });
+                }
+                std::hint::black_box(&count);
+            })
+        });
+    }
 
     group.finish();
 }
