@@ -12,4 +12,5 @@
 //! ```
 
 pub mod analyze;
+pub mod features;
 pub mod uax29;
