@@ -187,7 +187,7 @@ impl Analyzer {
 
         let TokenizerOptions::UAX29Word(tokenizer_opts) = self.options.tokenizer;
 
-        for input in inputs {
+        for (input_index, input) in inputs.enumerate() {
             let mut prev = None;
             let input_as_bytes = input.as_bytes();
             uax29::word::tokenize(input, tokenizer_opts, |bp, props| {
@@ -251,6 +251,7 @@ impl Analyzer {
                     text: token_text.as_str(),
                     position,
                     byte_range: prev..bp,
+                    input_index,
                 };
                 callback(token)
             });
@@ -269,9 +270,13 @@ pub struct Token<'a> {
     /// token consumes one position, even if filtered out (e.g. by stopword removal, etc).
     pub position: usize,
 
-    /// Byte range of the token's raw substring in its input (not into `text`, which may be
-    /// normalized): `&input[token.byte_range.clone()]`. Always on UTF-8 char boundaries.
+    /// Byte range of the token's raw substring within its input (not into `text`, which may be
+    /// normalized). Recover with `&inputs[input_index][byte_range]`. Always on UTF-8 boundaries.
     pub byte_range: Range<usize>,
+
+    /// Index of the input (in the `analyze_inputs` iterator) that `byte_range` refers to.
+    /// Always 0 for `analyze`, which takes a single input.
+    pub input_index: usize,
 }
 
 enum InputRefOrBuffered<'input, 'buf> {
@@ -458,19 +463,25 @@ mod tests {
         text: String,
         position: usize,
         byte_range: Range<usize>,
+        input_index: usize,
     }
 
-    fn collect(opts: AnalysisOptions, input: &str) -> Vec<Tok> {
+    fn collect_inputs<'a>(opts: AnalysisOptions, inputs: impl Iterator<Item = &'a str>) -> Vec<Tok> {
         let mut out = Vec::new();
-        Analyzer::new(opts).analyze(input, &mut ReusableBuffer::new(), |t| {
+        Analyzer::new(opts).analyze_inputs(inputs, &mut ReusableBuffer::new(), |t| {
             out.push(Tok {
                 text: t.text.to_string(),
                 position: t.position,
                 byte_range: t.byte_range,
+                input_index: t.input_index,
             });
             true
         });
         out
+    }
+
+    fn collect(opts: AnalysisOptions, input: &str) -> Vec<Tok> {
+        collect_inputs(opts, std::iter::once(input))
     }
 
     fn opts() -> AnalysisOptions {
@@ -523,6 +534,21 @@ mod tests {
         let tokens = collect(o, input);
         assert_eq!(tokens[0].text, "run");
         assert_eq!(&input[tokens[0].byte_range.clone()], "running");
+    }
+
+    #[test]
+    fn input_index_and_byte_range_across_multiple_inputs() {
+        let inputs = ["Hello world", "Foo"];
+        let tokens = collect_inputs(opts(), inputs.iter().copied());
+        // byte_range is relative to each token's own input; input_index identifies it.
+        assert_eq!(tokens[0].input_index, 0);
+        assert_eq!(&inputs[tokens[0].input_index][tokens[0].byte_range.clone()], "Hello");
+        assert_eq!(tokens[1].input_index, 0);
+        assert_eq!(&inputs[tokens[1].input_index][tokens[1].byte_range.clone()], "world");
+        assert_eq!(tokens[2].input_index, 1);
+        assert_eq!(&inputs[tokens[2].input_index][tokens[2].byte_range.clone()], "Foo");
+        // Positions stay monotonic across inputs.
+        assert_eq!([tokens[0].position, tokens[1].position, tokens[2].position], [0, 1, 2]);
     }
 
     #[test]

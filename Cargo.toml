@@ -1,6 +1,6 @@
 [package]
 name = "alyze"
-version = "0.1.4"
+version = "0.1.5"
 edition = "2024"
 rust-version = "1.85"
 description = "High-performance text analysis for full-text search"

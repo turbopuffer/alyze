@@ -2,7 +2,7 @@
 
 ## June 18, 2026
 
-- `analyze`: add `Token::byte_range` to recover a token's raw source substring
+- `analyze`: add `Token::byte_range` and `Token::input_index` to recover a token's raw source substring
 
 ## May 8, 2026
 
