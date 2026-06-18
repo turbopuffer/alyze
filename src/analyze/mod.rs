@@ -1,3 +1,5 @@
+use std::ops::Range;
+
 use crate::{
     analyze::stemming_cache::{CachedToken, StemmingCache, StemmingCacheEntry},
     uax29,
@@ -248,6 +250,7 @@ impl Analyzer {
                 let token = Token {
                     text: token_text.as_str(),
                     position,
+                    byte_range: prev..bp,
                 };
                 callback(token)
             });
@@ -255,8 +258,9 @@ impl Analyzer {
     }
 }
 
+#[non_exhaustive]
 pub struct Token<'a> {
-    /// Text of the token, either sliced from the input string or from the reused
+    /// Normalized text of the token, either sliced from the input string or from the reused
     /// buffer. Only valid for the duration of the callback invocation.
     pub text: &'a str,
 
@@ -264,6 +268,10 @@ pub struct Token<'a> {
     /// token positions are threaded monotonically across all input strings. Every word-like
     /// token consumes one position, even if filtered out (e.g. by stopword removal, etc).
     pub position: usize,
+
+    /// Byte range of the token's raw substring in its input (not into `text`, which may be
+    /// normalized): `&input[token.byte_range.clone()]`. Always on UTF-8 char boundaries.
+    pub byte_range: Range<usize>,
 }
 
 enum InputRefOrBuffered<'input, 'buf> {
@@ -440,3 +448,57 @@ impl InputRefOrBuffered<'_, '_> {
 
 // TODO this has extensive coverage in the turbopuffer repo, but not in the crate itself
 // move some of the test suite in here
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn collect(opts: AnalysisOptions, input: &str) -> Vec<(String, usize, Range<usize>)> {
+        let mut out = Vec::new();
+        Analyzer::new(opts).analyze(input, &mut ReusableBuffer::new(), |t| {
+            out.push((t.text.to_string(), t.position, t.byte_range));
+            true
+        });
+        out
+    }
+
+    fn opts() -> AnalysisOptions {
+        AnalysisOptions {
+            tokenizer: TokenizerOptions::UAX29Word(Default::default()),
+            maximum_token_length: None,
+            case_sensitive: false,
+            stopword_removal: None,
+            stemming: None,
+            ascii_folding: false,
+        }
+    }
+
+    #[test]
+    fn byte_range_recovers_raw_substring_when_normalized() {
+        let input = "Hello WORLD";
+        let tokens = collect(opts(), input);
+        assert_eq!(tokens[0].0, "hello"); // normalized text is lowercased
+        assert_eq!(&input[tokens[0].2.clone()], "Hello"); // raw slice preserved
+        assert_eq!(&input[tokens[1].2.clone()], "WORLD");
+    }
+
+    #[test]
+    fn byte_range_on_multibyte_input() {
+        let input = "café münchen";
+        let tokens = collect(opts(), input);
+        assert_eq!(&input[tokens[0].2.clone()], "café");
+        assert_eq!(&input[tokens[1].2.clone()], "münchen");
+    }
+
+    #[test]
+    fn byte_range_correct_after_filtering() {
+        let mut o = opts();
+        o.stopword_removal = Some(StopwordRemoval::ForLanguage(LanguageWithStopwords::English));
+        let input = "the Quick fox";
+        let tokens = collect(o, input);
+        // "the" is dropped but still consumes position 0.
+        assert_eq!(tokens[0].1, 1);
+        assert_eq!(&input[tokens[0].2.clone()], "Quick");
+        assert_eq!(&input[tokens[1].2.clone()], "fox");
+    }
+}
