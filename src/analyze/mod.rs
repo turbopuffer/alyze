@@ -453,10 +453,21 @@ impl InputRefOrBuffered<'_, '_> {
 mod tests {
     use super::*;
 
-    fn collect(opts: AnalysisOptions, input: &str) -> Vec<(String, usize, Range<usize>)> {
+    /// Owned copy of a `Token`'s fields, so tests can use named access.
+    struct Tok {
+        text: String,
+        position: usize,
+        byte_range: Range<usize>,
+    }
+
+    fn collect(opts: AnalysisOptions, input: &str) -> Vec<Tok> {
         let mut out = Vec::new();
         Analyzer::new(opts).analyze(input, &mut ReusableBuffer::new(), |t| {
-            out.push((t.text.to_string(), t.position, t.byte_range));
+            out.push(Tok {
+                text: t.text.to_string(),
+                position: t.position,
+                byte_range: t.byte_range,
+            });
             true
         });
         out
@@ -477,17 +488,41 @@ mod tests {
     fn byte_range_recovers_raw_substring_when_normalized() {
         let input = "Hello WORLD";
         let tokens = collect(opts(), input);
-        assert_eq!(tokens[0].0, "hello"); // normalized text is lowercased
-        assert_eq!(&input[tokens[0].2.clone()], "Hello"); // raw slice preserved
-        assert_eq!(&input[tokens[1].2.clone()], "WORLD");
+        assert_eq!(tokens[0].text, "hello"); // normalized text is lowercased
+        assert_eq!(&input[tokens[0].byte_range.clone()], "Hello"); // raw slice preserved
+        assert_eq!(&input[tokens[1].byte_range.clone()], "WORLD");
     }
 
     #[test]
-    fn byte_range_on_multibyte_input() {
-        let input = "café münchen";
+    fn byte_range_recovers_raw_when_lowercasing_changes_char() {
+        // Greek capital sigma lowercases to a different code point (Σ → σ/ς);
+        // byte_range still recovers the original capitals.
+        let input = "ΣΟΦΟΣ";
         let tokens = collect(opts(), input);
-        assert_eq!(&input[tokens[0].2.clone()], "café");
-        assert_eq!(&input[tokens[1].2.clone()], "münchen");
+        assert_eq!(tokens[0].text, "σοφοσ");
+        assert_eq!(&input[tokens[0].byte_range.clone()], "ΣΟΦΟΣ");
+    }
+
+    #[test]
+    fn byte_range_recovers_raw_when_ascii_folding_shrinks_bytes() {
+        // "café" (5 bytes) folds to "cafe" (4 bytes); byte_range indexes the
+        // source, not the shorter normalized text.
+        let mut o = opts();
+        o.ascii_folding = true;
+        let input = "café";
+        let tokens = collect(o, input);
+        assert_eq!(tokens[0].text, "cafe");
+        assert_eq!(&input[tokens[0].byte_range.clone()], "café");
+    }
+
+    #[test]
+    fn byte_range_recovers_raw_when_stemming_shrinks_bytes() {
+        let mut o = opts();
+        o.stemming = Some(StemmingLanguage::English);
+        let input = "running";
+        let tokens = collect(o, input);
+        assert_eq!(tokens[0].text, "run");
+        assert_eq!(&input[tokens[0].byte_range.clone()], "running");
     }
 
     #[test]
@@ -497,8 +532,8 @@ mod tests {
         let input = "the Quick fox";
         let tokens = collect(o, input);
         // "the" is dropped but still consumes position 0.
-        assert_eq!(tokens[0].1, 1);
-        assert_eq!(&input[tokens[0].2.clone()], "Quick");
-        assert_eq!(&input[tokens[1].2.clone()], "fox");
+        assert_eq!(tokens[0].position, 1);
+        assert_eq!(&input[tokens[0].byte_range.clone()], "Quick");
+        assert_eq!(&input[tokens[1].byte_range.clone()], "fox");
     }
 }
