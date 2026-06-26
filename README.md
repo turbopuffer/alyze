@@ -33,3 +33,19 @@ so the deltas approximate each filter's marginal cost:
 
 Reproduce with `cargo bench --bench wikipedia` (first run downloads the Wikipedia dataset into
 `.cache/`).
+
+### Text-match features
+
+The companion [`alyze-features`](alyze-features/) crate computes query/document text-match signals
+(e.g. `fieldMatch`, `elementCompleteness`, `elementSimilarity`, `textSimilarity`) for use in a
+second-stage re-ranker, mirroring
+[Vespa's rank features](https://docs.vespa.ai/en/reference/ranking/rank-features.html) so the same
+signals are available client-side. It's a separate, Apache-2.0 crate (see below) and lives in this
+workspace.
+
+### License
+
+`alyze` is MIT licensed. The separate `alyze-features` crate is Apache-2.0 (its features are derived
+from [Vespa](https://github.com/vespa-engine/vespa), Copyright Vespa.ai) — see
+[`alyze-features/`](alyze-features/) for details. With gratitude to the Vespa team for their
+excellent, well-documented work.

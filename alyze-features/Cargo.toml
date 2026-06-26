@@ -1,0 +1,15 @@
+[package]
+name = "alyze-features"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Client-side text-match ranking features, mirroring Vespa's rank features"
+license = "Apache-2.0"
+repository = "https://github.com/turbopuffer/alyze"
+publish = false
+
+# Separate from the MIT-licensed `alyze` crate: the implementations here are derived from Vespa's
+# Apache-2.0 reference implementation, so this crate is Apache-2.0. See src/lib.rs and LICENSE.
+
+[dependencies]
+alyze = { path = ".." }

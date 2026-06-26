@@ -10,8 +10,10 @@ keywords = ["tokenizer", "unicode", "segmentation", "analysis", "nlp"]
 categories = ["text-processing", "internationalization"]
 exclude = ["testdata/", "benches/"]
 
+# `alyze-features` is a separate, Apache-2.0 crate (the rest of `alyze` is MIT). It is a workspace
+# member, lives in this repo, and is not published.
 [workspace]
-members = ["wasm"]
+members = ["wasm", "alyze-features"]
 
 [dependencies]
 ahash = "0.8.12"
