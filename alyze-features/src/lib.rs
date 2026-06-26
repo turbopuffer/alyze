@@ -207,7 +207,11 @@ fn greedy_match(query: &Analyzed, document: &Analyzed) -> Option<SimilarityScore
     for (term, query_positions) in &query.tokens {
         if let Some(document_positions) = document.tokens.get(term) {
             for &idx in query_positions {
-                items.push(Item { idx, positions: document_positions, cursor: 0 });
+                items.push(Item {
+                    idx,
+                    positions: document_positions,
+                    cursor: 0,
+                });
             }
         }
     }
@@ -221,7 +225,10 @@ fn greedy_match(query: &Analyzed, document: &Analyzed) -> Option<SimilarityScore
     fn front(items: &[Item]) -> usize {
         let mut best = 0;
         for i in 1..items.len() {
-            let (pi, pb) = (items[i].positions[items[i].cursor], items[best].positions[items[best].cursor]);
+            let (pi, pb) = (
+                items[i].positions[items[i].cursor],
+                items[best].positions[items[best].cursor],
+            );
             if pi < pb || (pi == pb && items[i].idx < items[best].idx) {
                 best = i;
             }
@@ -271,7 +278,12 @@ fn greedy_match(query: &Analyzed, document: &Analyzed) -> Option<SimilarityScore
     let query_coverage = matched as f64 / query.total_num_tokens() as f64;
     let field_coverage = matches as f64 / field_length as f64;
 
-    Some(SimilarityScores { proximity, order, query_coverage, field_coverage })
+    Some(SimilarityScores {
+        proximity,
+        order,
+        query_coverage,
+        field_coverage,
+    })
 }
 
 /// `matches(field)` — `1.0` if any query term occurs in the field, else `0.0`. This is a boolean
@@ -297,7 +309,10 @@ pub const FIELD_TERM_MATCH_ABSENT_POSITION: f64 = 1_000_000.0;
 
 impl Default for FieldTermMatch {
     fn default() -> Self {
-        Self { first_position: FIELD_TERM_MATCH_ABSENT_POSITION, occurrences: 0.0 }
+        Self {
+            first_position: FIELD_TERM_MATCH_ABSENT_POSITION,
+            occurrences: 0.0,
+        }
     }
 }
 
@@ -307,7 +322,11 @@ impl Default for FieldTermMatch {
 ///
 /// `term_index` is the query term ordinal. An out-of-range index, or a term absent from the field,
 /// returns the absent sentinel position and zero occurrences.
-pub fn field_term_match(query: &Analyzed, document: &Analyzed, term_index: usize) -> FieldTermMatch {
+pub fn field_term_match(
+    query: &Analyzed,
+    document: &Analyzed,
+    term_index: usize,
+) -> FieldTermMatch {
     let Some(term) = query.token_at_position(term_index) else {
         return FieldTermMatch::default();
     };
@@ -341,7 +360,11 @@ pub struct TermStats {
 impl Default for TermStats {
     fn default() -> Self {
         // df/count = 0 yields the neutral significance 0.5; the default weight percent is 100.
-        Self { document_frequency: 0, document_count: 0, weight: 100 }
+        Self {
+            document_frequency: 0,
+            document_count: 0,
+            weight: 100,
+        }
     }
 }
 
@@ -369,8 +392,7 @@ pub fn legacy_significance(document_frequency: u64, document_count: u64) -> f64 
         return 0.5; // corner case: no documents
     }
     // Project the term's document-frequency ratio onto the reference corpus, clamped to [1, N].
-    let frequency =
-        (document_frequency as f64 * N / document_count as f64).clamp(1.0, N);
+    let frequency = (document_frequency as f64 * N / document_count as f64).clamp(1.0, N);
     let logcount = N.ln();
     let idf = logcount - frequency.ln();
     let normalized_idf = idf / logcount; // [0, 1]
@@ -497,7 +519,11 @@ mod field_match {
 
     /// Maps a semantic distance back to a field index from a starting point `zero_j`. Depends only
     /// on the field length. Returns -1 for an undefined (-1) semantic distance.
-    fn semantic_distance_to_field_index(semantic_distance: i32, zero_j: i32, field_len: i32) -> i32 {
+    fn semantic_distance_to_field_index(
+        semantic_distance: i32,
+        zero_j: i32,
+        field_len: i32,
+    ) -> i32 {
         if semantic_distance == -1 {
             return -1;
         }
@@ -553,8 +579,8 @@ mod field_match {
         unweighted_proximity: f64,
         segment_distance: f64,
         pairs: i32,
-        weight: f64,        // accumulated matched weight / total weight
-        significance: f64,  // accumulated matched significance / total significance
+        weight: f64,       // accumulated matched weight / total weight
+        significance: f64, // accumulated matched significance / total significance
         occurrence: f64,
         absolute_occurrence: f64,
         weighted_occurrence: f64,
@@ -565,7 +591,12 @@ mod field_match {
     }
 
     impl Metrics {
-        fn new(query_len: i32, field_len: i32, total_term_weight: f64, total_significance: f64) -> Self {
+        fn new(
+            query_len: i32,
+            field_len: i32,
+            total_term_weight: f64,
+            total_significance: f64,
+        ) -> Self {
             Self {
                 query_len,
                 field_len,
@@ -604,11 +635,19 @@ mod field_match {
         }
 
         fn absolute_proximity(&self) -> f64 {
-            if self.pairs < 1 { 0.1 } else { self.proximity / self.pairs as f64 }
+            if self.pairs < 1 {
+                0.1
+            } else {
+                self.proximity / self.pairs as f64
+            }
         }
 
         fn unweighted_proximity(&self) -> f64 {
-            if self.pairs < 1 { 1.0 } else { self.unweighted_proximity / self.pairs as f64 }
+            if self.pairs < 1 {
+                1.0
+            } else {
+                self.unweighted_proximity / self.pairs as f64
+            }
         }
 
         fn proximity(&self) -> f64 {
@@ -630,7 +669,11 @@ mod field_match {
         }
 
         fn orderness(&self) -> f64 {
-            if self.pairs == 0 { 1.0 } else { 1.0 - self.out_of_order as f64 / self.pairs as f64 }
+            if self.pairs == 0 {
+                1.0
+            } else {
+                1.0 - self.out_of_order as f64 / self.pairs as f64
+            }
         }
 
         fn relatedness(&self) -> f64 {
@@ -642,11 +685,19 @@ mod field_match {
         }
 
         fn longest_sequence_ratio(&self) -> f64 {
-            if self.matches == 0 { 0.0 } else { self.longest_sequence as f64 / self.matches as f64 }
+            if self.matches == 0 {
+                0.0
+            } else {
+                self.longest_sequence as f64 / self.matches as f64
+            }
         }
 
         fn segment_proximity(&self) -> f64 {
-            if self.matches == 0 { 0.0 } else { 1.0 - self.segment_distance / self.field_len as f64 }
+            if self.matches == 0 {
+                0.0
+            } else {
+                1.0 - self.segment_distance / self.field_len as f64
+            }
         }
 
         fn earliness(&self) -> f64 {
@@ -667,7 +718,8 @@ mod field_match {
             if self.segments == 0 {
                 0.0
             } else {
-                self.absolute_proximity() * self.exactness() / (self.segments * self.segments) as f64
+                self.absolute_proximity() * self.exactness()
+                    / (self.segments * self.segments) as f64
             }
         }
 
@@ -733,8 +785,7 @@ mod field_match {
             let pair_proximity = PROXIMITY_TABLE[(distance + PROXIMITY_LIMIT) as usize];
             self.unweighted_proximity += pair_proximity;
             // pow(pairProximity, connectedness/0.1) * max(0.1, connectedness)
-            self.proximity +=
-                pair_proximity.powf(CONNECTEDNESS / 0.1) * CONNECTEDNESS.max(0.1);
+            self.proximity += pair_proximity.powf(CONNECTEDNESS / 0.1) * CONNECTEDNESS.max(0.1);
             self.pairs += 1;
         }
 
@@ -788,11 +839,25 @@ mod field_match {
 
     impl SegmentStartPoint {
         fn first(metrics: Metrics) -> Self {
-            Self { i: 0, skip_i: 0, metrics, previous_j: 0, semantic_distance_explored: 0, open: true }
+            Self {
+                i: 0,
+                skip_i: 0,
+                metrics,
+                previous_j: 0,
+                semantic_distance_explored: 0,
+                open: true,
+            }
         }
 
         fn at(i: i32, previous_j: i32, metrics: Metrics) -> Self {
-            Self { i, skip_i: 0, metrics, previous_j, semantic_distance_explored: 0, open: true }
+            Self {
+                i,
+                skip_i: 0,
+                metrics,
+                previous_j,
+                semantic_distance_explored: 0,
+                open: true,
+            }
         }
 
         fn start_i(&self) -> i32 {
@@ -873,8 +938,10 @@ mod field_match {
         }
 
         fn find_alternative_segment_from(&mut self, sp: usize) -> bool {
-            let mut semantic_distance_explored =
-                self.segment_start_points[sp].as_ref().unwrap().semantic_distance_explored;
+            let mut semantic_distance_explored = self.segment_start_points[sp]
+                .as_ref()
+                .unwrap()
+                .semantic_distance_explored;
             let mut previous_i: i32 = -1;
             let mut previous_j = self.segment_start_points[sp].as_ref().unwrap().previous_j;
             let mut has_open_sequence = false;
@@ -902,7 +969,10 @@ mod field_match {
                 if is_first {
                     if j != -1 {
                         self.segment_start(j, -1);
-                        self.segment_start_points[sp].as_mut().unwrap().explored_to(j, field_len);
+                        self.segment_start_points[sp]
+                            .as_mut()
+                            .unwrap()
+                            .explored_to(j, field_len);
                         is_first = false;
                     } else {
                         self.segment_start_points[sp].as_mut().unwrap().skip_i += 1;
@@ -943,7 +1013,9 @@ mod field_match {
 
         fn find_open_segment(&mut self, start_i: i32) -> Option<usize> {
             for k in (start_i as usize)..self.segment_start_points.len() {
-                let Some(sp) = self.segment_start_points[k].as_ref() else { continue };
+                let Some(sp) = self.segment_start_points[k].as_ref() else {
+                    continue;
+                };
                 if !sp.open {
                     continue;
                 }
@@ -970,7 +1042,11 @@ mod field_match {
             self.segment_start_points[0] = Some(SegmentStartPoint::first(self.metrics.clone()));
             let mut current = Some(0usize);
             while let Some(ci) = current {
-                self.metrics = self.segment_start_points[ci].as_ref().unwrap().metrics.clone();
+                self.metrics = self.segment_start_points[ci]
+                    .as_ref()
+                    .unwrap()
+                    .metrics
+                    .clone();
                 let found = self.find_alternative_segment_from(ci);
                 if !found {
                     self.segment_start_points[ci].as_mut().unwrap().open = false;
@@ -979,7 +1055,11 @@ mod field_match {
                 current = self.find_open_segment(start_i);
             }
             let last = self.find_last_start_point();
-            self.metrics = self.segment_start_points[last].as_ref().unwrap().metrics.clone();
+            self.metrics = self.segment_start_points[last]
+                .as_ref()
+                .unwrap()
+                .metrics
+                .clone();
         }
     }
 
@@ -995,8 +1075,11 @@ mod field_match {
         term_stats: &BTreeMap<&str, (i32, f64)>,
         metrics: &mut Metrics,
     ) {
-        let unique: BTreeSet<&str> =
-            query.iter().copied().filter(|t| field.contains(t)).collect();
+        let unique: BTreeSet<&str> = query
+            .iter()
+            .copied()
+            .filter(|t| field.contains(t))
+            .collect();
         if unique.is_empty() {
             return;
         }
@@ -1041,15 +1124,25 @@ mod field_match {
 
         metrics.occurrence = occurrence;
         metrics.absolute_occurrence = absolute_occurrence;
-        metrics.weighted_absolute_occurrence =
-            weighted_absolute_occurrence / if total_weight > 0 { total_weight as f64 } else { 1.0 };
+        metrics.weighted_absolute_occurrence = weighted_absolute_occurrence
+            / if total_weight > 0 {
+                total_weight as f64
+            } else {
+                1.0
+            };
         metrics.weighted_occurrence = if total_weighted_occurrences > 0.0 {
-            weighted.iter().map(|w| w / total_weighted_occurrences).sum()
+            weighted
+                .iter()
+                .map(|w| w / total_weighted_occurrences)
+                .sum()
         } else {
             0.0
         };
         metrics.significant_occurrence = if total_significant_occurrences > 0.0 {
-            significant.iter().map(|s| s / total_significant_occurrences).sum()
+            significant
+                .iter()
+                .map(|s| s / total_significant_occurrences)
+                .sum()
         } else {
             0.0
         };
@@ -1088,7 +1181,9 @@ mod field_match {
         // share the same stats, so first-occurrence wins.
         let mut term_stats: BTreeMap<&str, (i32, f64)> = BTreeMap::new();
         for (idx, &term) in query.iter().enumerate() {
-            term_stats.entry(term).or_insert((weights[idx], significances[idx]));
+            term_stats
+                .entry(term)
+                .or_insert((weights[idx], significances[idx]));
         }
         occurrence_counts(query, field, &term_stats, &mut m);
         m.on_complete();
@@ -1229,8 +1324,14 @@ mod tests {
 
     #[test]
     fn test_matches() {
-        approx_eq(matches(&analyzed("quick fox"), &analyzed("the quick red fox")), 1.0);
-        approx_eq(matches(&analyzed("zebra"), &analyzed("the quick red fox")), 0.0);
+        approx_eq(
+            matches(&analyzed("quick fox"), &analyzed("the quick red fox")),
+            1.0,
+        );
+        approx_eq(
+            matches(&analyzed("zebra"), &analyzed("the quick red fox")),
+            0.0,
+        );
     }
 
     #[test]
@@ -1281,10 +1382,22 @@ mod tests {
         approx_eq(m.segment_distance, 0.0);
         approx_eq(m.segment_proximity, 1.0);
         // proximity: single pair one token apart -> proximityTable lookup = 0.71.
-        assert!((m.proximity - 0.71).abs() < 1e-6, "proximity {}", m.proximity);
-        assert!((m.absolute_proximity - 0.071).abs() < 1e-6, "absProx {}", m.absolute_proximity);
+        assert!(
+            (m.proximity - 0.71).abs() < 1e-6,
+            "proximity {}",
+            m.proximity
+        );
+        assert!(
+            (m.absolute_proximity - 0.071).abs() < 1e-6,
+            "absProx {}",
+            m.absolute_proximity
+        );
         // Aggregate score (the reference implementation returned 0.364527230941695).
-        assert!((m.score - 0.364527230941695).abs() < 1e-6, "score {}", m.score);
+        assert!(
+            (m.score - 0.364527230941695).abs() < 1e-6,
+            "score {}",
+            m.score
+        );
     }
 
     #[test]
@@ -1306,7 +1419,11 @@ mod tests {
                 "fox" => (500_000, 1_000_000),
                 _ => (0, 0),
             };
-            TermStats { document_frequency, document_count, weight: 100 }
+            TermStats {
+                document_frequency,
+                document_count,
+                weight: 100,
+            }
         };
         let m = field_match(&q, &d, stats);
 
@@ -1317,7 +1434,10 @@ mod tests {
         // Matched terms: "quick" and "fox" ("brown" is absent from the field).
         approx_eq(m.weight, 2.0 / 3.0); // uniform weights -> matched/total query terms
         approx_eq(m.significance, (sig_quick + sig_fox) / total_sig);
-        approx_eq(m.importance, ((sig_quick + sig_fox) / total_sig + 2.0 / 3.0) / 2.0);
+        approx_eq(
+            m.importance,
+            ((sig_quick + sig_fox) / total_sig + 2.0 / 3.0) / 2.0,
+        );
         approx_eq(m.weighted_occurrence, 0.2);
         approx_eq(m.weighted_absolute_occurrence, 0.01);
         approx_eq(m.significant_occurrence, 0.2);

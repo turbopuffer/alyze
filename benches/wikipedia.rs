@@ -97,26 +97,42 @@ pub fn analysis_benchmark(c: &mut Criterion) {
     // Each config exercises an additional stage of the analysis pipeline, so the
     // deltas between rows approximate the marginal cost of each filter.
     let configs: &[(&str, AnalysisOptions)] = &[
-        ("tokenize only (case sensitive)", AnalysisOptions {
-            case_sensitive: true,
-            ..base
-        }),
+        (
+            "tokenize only (case sensitive)",
+            AnalysisOptions {
+                case_sensitive: true,
+                ..base
+            },
+        ),
         ("+ lowercase", base),
-        ("+ stopwords", AnalysisOptions {
-            stopword_removal: Some(StopwordRemoval::ForLanguage(LanguageWithStopwords::English)),
-            ..base
-        }),
-        ("+ stemming", AnalysisOptions {
-            stemming: Some(StemmingLanguage::English),
-            ..base
-        }),
-        ("full pipeline", AnalysisOptions {
-            maximum_token_length: Some(40),
-            stopword_removal: Some(StopwordRemoval::ForLanguage(LanguageWithStopwords::English)),
-            stemming: Some(StemmingLanguage::English),
-            ascii_folding: true,
-            ..base
-        }),
+        (
+            "+ stopwords",
+            AnalysisOptions {
+                stopword_removal: Some(StopwordRemoval::ForLanguage(
+                    LanguageWithStopwords::English,
+                )),
+                ..base
+            },
+        ),
+        (
+            "+ stemming",
+            AnalysisOptions {
+                stemming: Some(StemmingLanguage::English),
+                ..base
+            },
+        ),
+        (
+            "full pipeline",
+            AnalysisOptions {
+                maximum_token_length: Some(40),
+                stopword_removal: Some(StopwordRemoval::ForLanguage(
+                    LanguageWithStopwords::English,
+                )),
+                stemming: Some(StemmingLanguage::English),
+                ascii_folding: true,
+                ..base
+            },
+        ),
     ];
 
     for (name, options) in configs {

@@ -138,7 +138,9 @@ fn build_options(options: &Options) -> Result<AnalysisOptions, JsValue> {
     let stemming = if options.stemming {
         let language = options.language.as_deref().unwrap();
         Some(stemming_language(language).ok_or_else(|| {
-            js_error(&format!("stemming is not supported for language: {language}"))
+            js_error(&format!(
+                "stemming is not supported for language: {language}"
+            ))
         })?)
     } else {
         None

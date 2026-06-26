@@ -466,7 +466,10 @@ mod tests {
         input_index: usize,
     }
 
-    fn collect_inputs<'a>(opts: AnalysisOptions, inputs: impl Iterator<Item = &'a str>) -> Vec<Tok> {
+    fn collect_inputs<'a>(
+        opts: AnalysisOptions,
+        inputs: impl Iterator<Item = &'a str>,
+    ) -> Vec<Tok> {
         let mut out = Vec::new();
         Analyzer::new(opts).analyze_inputs(inputs, &mut ReusableBuffer::new(), |t| {
             out.push(Tok {
@@ -542,13 +545,25 @@ mod tests {
         let tokens = collect_inputs(opts(), inputs.iter().copied());
         // byte_range is relative to each token's own input; input_index identifies it.
         assert_eq!(tokens[0].input_index, 0);
-        assert_eq!(&inputs[tokens[0].input_index][tokens[0].byte_range.clone()], "Hello");
+        assert_eq!(
+            &inputs[tokens[0].input_index][tokens[0].byte_range.clone()],
+            "Hello"
+        );
         assert_eq!(tokens[1].input_index, 0);
-        assert_eq!(&inputs[tokens[1].input_index][tokens[1].byte_range.clone()], "world");
+        assert_eq!(
+            &inputs[tokens[1].input_index][tokens[1].byte_range.clone()],
+            "world"
+        );
         assert_eq!(tokens[2].input_index, 1);
-        assert_eq!(&inputs[tokens[2].input_index][tokens[2].byte_range.clone()], "Foo");
+        assert_eq!(
+            &inputs[tokens[2].input_index][tokens[2].byte_range.clone()],
+            "Foo"
+        );
         // Positions stay monotonic across inputs.
-        assert_eq!([tokens[0].position, tokens[1].position, tokens[2].position], [0, 1, 2]);
+        assert_eq!(
+            [tokens[0].position, tokens[1].position, tokens[2].position],
+            [0, 1, 2]
+        );
     }
 
     #[test]
