@@ -1,0 +1,33 @@
+{
+  "name": "alyze-features",
+  "version": "0.1.0",
+  "description": "Text-match ranking features (proximity, completeness, similarity) for second-stage re-ranking",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/turbopuffer/alyze.git",
+    "directory": "node"
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.js",
+    "index.d.ts",
+    "*.node"
+  ],
+  "napi": {
+    "binaryName": "alyze-features"
+  },
+  "engines": {
+    "node": ">= 18"
+  },
+  "scripts": {
+    "build": "napi build --platform --release",
+    "build:debug": "napi build --platform",
+    "prepare": "napi build --platform --release",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "@napi-rs/cli": "^3.0.0"
+  }
+}

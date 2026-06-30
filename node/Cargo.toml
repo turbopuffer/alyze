@@ -1,0 +1,31 @@
+[package]
+name = "alyze-features-node"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Node.js (napi-rs) bindings for the alyze-features text-match ranking features"
+license = "Apache-2.0"
+repository = "https://github.com/turbopuffer/alyze"
+publish = false
+
+# Its own one-member workspace so the root `alyze` workspace's `cargo build`/`test`
+# never pull in napi.
+[workspace]
+
+[lib]
+name = "alyze_features"
+# `cdylib` is the native Node addon (`.node`) that gets loaded at runtime.
+crate-type = ["cdylib"]
+
+[dependencies]
+alyze-features = { path = "../alyze-features" }
+# Used internally only, to build the analyzer that turns text into `Analyzed`; not exposed.
+alyze = { path = ".." }
+napi = "3"
+napi-derive = "3"
+
+[build-dependencies]
+napi-build = "2"
+
+[profile.release]
+lto = true
