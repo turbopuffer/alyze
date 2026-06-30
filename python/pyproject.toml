@@ -1,0 +1,25 @@
+[build-system]
+requires = ["maturin>=1.7,<2.0"]
+build-backend = "maturin"
+
+[project]
+name = "alyze-features"
+version = "0.1.0"
+description = "Text-match ranking features (proximity, completeness, similarity) for second-stage re-ranking"
+readme = "README.md"
+requires-python = ">=3.9"
+license = { text = "Apache-2.0" }
+classifiers = [
+    "Programming Language :: Rust",
+    "Programming Language :: Python :: Implementation :: CPython",
+    "Topic :: Text Processing :: Indexing",
+]
+
+[project.urls]
+Repository = "https://github.com/turbopuffer/alyze"
+
+[tool.maturin]
+# The importable module is `alyze_features` (matches `[lib] name` in Cargo.toml).
+module-name = "alyze_features"
+# `extension-module` lives here, not in Cargo.toml, so it only applies to wheel builds.
+features = ["pyo3/extension-module"]

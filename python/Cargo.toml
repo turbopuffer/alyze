@@ -1,0 +1,26 @@
+[package]
+name = "alyze-features-python"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Python bindings for the alyze-features text-match ranking features"
+license = "Apache-2.0"
+repository = "https://github.com/turbopuffer/alyze"
+publish = false
+
+# Its own one-member workspace so the root `alyze` workspace's `cargo build`/`test`
+# never pull in PyO3 (whose `extension-module` linking would break those commands).
+[workspace]
+
+[lib]
+name = "alyze_features"
+# `cdylib` is the native extension module Python imports.
+crate-type = ["cdylib"]
+
+[dependencies]
+alyze-features = { path = "../alyze-features" }
+# Used internally only, to build the analyzer that turns text into `Analyzed`; not exposed.
+alyze = { path = ".." }
+# `extension-module` is enabled via maturin (see pyproject.toml), not here, so plain
+# `cargo check` still works. `abi3-py39` builds one wheel that loads on CPython 3.9+.
+pyo3 = { version = "0.29", features = ["abi3-py39"] }
