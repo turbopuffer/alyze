@@ -39,9 +39,21 @@ pub(crate) fn lowercase_chars_in_place(s: &mut String) {
     s.drain(..original_byte_length);
 }
 
-pub(crate) fn within_token_length_limit(s: &str, maximum_token_length: usize) -> bool {
-    maximum_token_length > 0
-        && (s.len() <= maximum_token_length || s.chars().nth(maximum_token_length).is_none())
+pub(crate) fn within_token_length_limit(
+    s: &str,
+    maximum_token_length: usize,
+    is_ascii: bool,
+) -> bool {
+    if maximum_token_length == 0 {
+        return false;
+    }
+    if s.len() <= maximum_token_length {
+        return true;
+    }
+    if is_ascii {
+        return false;
+    }
+    s.chars().nth(maximum_token_length).is_none()
 }
 
 pub(crate) fn is_stopword_in_language(language: LanguageWithStopwords, token: &str) -> bool {

@@ -8,6 +8,11 @@ use properties::{
 };
 use transitions::{State, TABLE, Transition};
 
+const ASCII_WORD_SCAN_STATES: u16 = (1 << State::ALetter as u16)
+    | (1 << State::Numeric as u16)
+    | (1 << State::HLetter as u16)
+    | (1 << State::ExtendNumLet as u16);
+
 /// For backwards compatibility, require caller to pass in options struct.
 #[derive(Default, Clone, Copy, Debug)]
 #[non_exhaustive]
@@ -21,6 +26,7 @@ pub struct TokenProperties(u8);
 impl TokenProperties {
     const WORD_LIKE_MASK: u8 = 0b0000_0001;
     const NON_ASCII_MASK: u8 = 0b0000_0010;
+    const ASCII_UPPERCASE_MASK: u8 = 0b0000_0100;
 
     pub(crate) const NON_ASCII: Self = Self(Self::NON_ASCII_MASK);
     pub(crate) const WORD_LIKE: Self = Self(Self::WORD_LIKE_MASK);
@@ -40,6 +46,10 @@ impl TokenProperties {
     pub fn is_ascii(&self) -> bool {
         self.0 & Self::NON_ASCII_MASK == 0
     }
+
+    pub(crate) fn has_ascii_uppercase(&self) -> bool {
+        self.0 & Self::ASCII_UPPERCASE_MASK != 0
+    }
 }
 
 impl std::ops::BitOrAssign for TokenProperties {
@@ -52,6 +62,7 @@ impl std::ops::BitOrAssign for TokenProperties {
 /// A tokenizer that implements UAX #29 word boundary rules, using a deterministic finite automaton
 /// (DFA) to efficiently determine word boundaries in Unicode text. Includes a number of fast-paths
 /// for common cases, e.g. ASCII.
+#[inline]
 pub fn tokenize(
     text: &str,
     _options: Options,
@@ -90,10 +101,7 @@ pub fn tokenize(
     while pos < text.len() {
         // Fast path for ASCII, e.g. skip DFA all together when possible.
         // Roughly a ~2x speedup on English Wikipedia.
-        if matches!(
-            state,
-            State::ALetter | State::Numeric | State::ExtendNumLet | State::HLetter
-        ) {
+        if (ASCII_WORD_SCAN_STATES >> (state as u8)) & 1 != 0 {
             let scan_start = pos;
             let mut fast_acc: u8 = 0;
             while pos < text.len() && bytes[pos] < 0x80 {
@@ -239,15 +247,20 @@ const WORD_BREAK_CONTRIB: [TokenProperties; WordBreakProperty::NUM_VARIANTS] = {
 /// Per-ASCII-byte info for the fast-path scan and the single-char branch.
 /// - Bit 7 (`ASCII_WORD_CONTINUE`): byte is part of a word-like run (`[a-zA-Z0-9_]`).
 /// - Low bits: the byte's `TokenProperties` contribution (currently just `WORD_LIKE_MASK` for
-///   `[a-zA-Z0-9]`, since underscore continues the run but isn't itself word-like).
+///   `[a-zA-Z0-9]`, since underscore continues the run but isn't itself word-like. Also adds`ASCII_UPPERCASE_MASK` to track uppercase for fast-path lowercasing later).
 const ASCII_WORD_CONTINUE: u8 = 0b1000_0000;
 const ASCII_BYTE_INFO: [u8; 128] = {
     let mut t = [0u8; 128];
     let mut i = 0u8;
     loop {
         t[i as usize] = match i {
-            b'a'..=b'z' | b'A'..=b'Z' | b'0'..=b'9' => {
+            b'a'..=b'z' | b'0'..=b'9' => {
                 ASCII_WORD_CONTINUE | TokenProperties::WORD_LIKE_MASK
+            }
+            b'A'..=b'Z' => {
+                ASCII_WORD_CONTINUE
+                    | TokenProperties::WORD_LIKE_MASK
+                    | TokenProperties::ASCII_UPPERCASE_MASK
             }
             b'_' => ASCII_WORD_CONTINUE,
             _ => 0,
