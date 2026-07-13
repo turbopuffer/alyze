@@ -49,179 +49,201 @@ impl std::ops::BitOrAssign for TokenProperties {
     }
 }
 
+/// Lazily yields the UAX #29 word boundaries in `text` and the properties of
+/// the span ending at each boundary.
+#[inline]
+pub fn breakpoints(text: &str, _options: Options) -> Breakpoints<'_> {
+    Breakpoints {
+        text,
+        state: State::StartOfText,
+        deferred_break_pos: None,
+        pos: 0,
+        last_was_zwj: false,
+        token_props: TokenProperties::default(),
+        deferred_props: TokenProperties::default(),
+        finished: text.is_empty(),
+    }
+}
+
+pub struct Breakpoints<'a> {
+    text: &'a str,
+    state: State,
+    deferred_break_pos: Option<usize>,
+    pos: usize,
+    last_was_zwj: bool,
+    token_props: TokenProperties,
+    deferred_props: TokenProperties,
+    finished: bool,
+}
+
+impl Iterator for Breakpoints<'_> {
+    type Item = (usize, TokenProperties);
+
+    #[inline(always)]
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.finished {
+            return None;
+        }
+
+        let bytes = self.text.as_bytes();
+
+        // WB4 says: X (Extend | Format | ZWJ)*	→	X
+        // To avoid adding _many_ `_AfterZWJ` variant states, we'll cheat a little by keeping track
+        // of this condition with a bool. More specifically, we need to conditionally break based on
+        // whether the previous character was a ZWJ.
+        //
+        // Example:
+        // 'a 🛑' -> break (ALetter -> Other)
+        // 'a ZWJ 🛑' -> no break (WB4)
+        while self.pos < self.text.len() {
+            // Fast path for ASCII, e.g. skip DFA all together when possible.
+            // Roughly a ~2x speedup on English Wikipedia.
+            if matches!(
+                self.state,
+                State::ALetter | State::Numeric | State::ExtendNumLet | State::HLetter
+            ) {
+                let scan_start = self.pos;
+                let mut fast_acc: u8 = 0;
+                while self.pos < self.text.len() && bytes[self.pos] < 0x80 {
+                    let info = ASCII_BYTE_INFO[bytes[self.pos] as usize];
+                    if info & ASCII_WORD_CONTINUE == 0 {
+                        break;
+                    }
+                    fast_acc |= info;
+                    self.pos += 1;
+                }
+                if self.pos > scan_start {
+                    self.token_props.0 |= fast_acc & !ASCII_WORD_CONTINUE;
+                    let last = bytes[self.pos - 1]; // Safe because we're not in State::StartOfText.
+                    self.state = match last {
+                        b'0'..=b'9' => State::Numeric,
+                        b'_' => State::ExtendNumLet,
+                        _ => State::ALetter,
+                    };
+                    self.last_was_zwj = false;
+                    continue;
+                }
+            }
+
+            // Fast path for ASCII, e.g. avoid chars().next(), and lookup word property from table.
+            // `char_props` is this char's contribution to the enclosing token's properties; it's
+            // applied to `token_props` per-arm below, since `Action::Break` treats the breaking char
+            // as the first char of the *next* token (the contribution lands there, not in the token
+            // being emitted).
+            let b = bytes[self.pos];
+            let (c, prop, char_len, char_props) = if b < 0x80 {
+                (
+                    b as char,
+                    ASCII_WORD_BREAK_PROP[b as usize],
+                    1usize,
+                    TokenProperties(ASCII_BYTE_INFO[b as usize] & !ASCII_WORD_CONTINUE),
+                )
+            } else {
+                let c = self.text[self.pos..].chars().next().unwrap();
+                let prop = lookup_word_break_property_from_dictionary(c);
+                // Cheap path covers ALetter / HebrewLetter / Numeric. For everything else, fall back
+                // to the strict per-char check (ExtPict / Ideographic / Script / OtherNumber).
+                let mut char_props = TokenProperties::NON_ASCII;
+                char_props |= WORD_BREAK_CONTRIB[prop as usize];
+                if !char_props.is_word_like() && is_word_like_strict(c) {
+                    char_props |= TokenProperties::WORD_LIKE;
+                }
+                (c, prop, c.len_utf8(), char_props)
+            };
+
+            // Each iteration, we consult the transition table to determine the next state
+            // and whether to emit a breakpoint.
+            let Transition(next_state, action) = TABLE[self.state as usize][prop as usize];
+            match action {
+                Action::Break => {
+                    let boundary = self.pos;
+                    self.pos += char_len;
+                    if self.last_was_zwj {
+                        self.last_was_zwj = false;
+                        if WordBreakProperty::is_ext_pictographic(c) {
+                            // Transparent: char joins the in-progress token instead of breaking.
+                            self.token_props |= char_props;
+                            continue;
+                        }
+                    }
+                    self.last_was_zwj = prop == WordBreakProperty::ZWJ;
+                    self.state = next_state;
+                    let props = std::mem::take(&mut self.token_props);
+                    // Breaking char starts the next token; apply its contribution after the take.
+                    self.token_props |= char_props;
+                    return Some((boundary, props));
+                }
+                Action::NoBreak => {
+                    self.last_was_zwj = false;
+                    if next_state.is_deferred() {
+                        if self.deferred_break_pos.is_none() {
+                            self.deferred_break_pos = Some(self.pos);
+                        }
+                        self.deferred_props |= char_props;
+                    } else {
+                        if self.deferred_break_pos.take().is_some() {
+                            // Word resumed: deferred chars belong to the in-progress token.
+                            self.token_props |= std::mem::take(&mut self.deferred_props);
+                        }
+                        self.token_props |= char_props;
+                    }
+                    self.state = next_state;
+                    self.pos += char_len;
+                }
+                Action::DeferredBreak => {
+                    self.last_was_zwj = false;
+                    let boundary = self.deferred_break_pos.take().unwrap();
+                    self.state = next_state;
+                    // Notably, we don't advance `pos` here; the current char is re-examined on the
+                    // next iteration and will accumulate its props then — don't apply char_props here.
+                    let props = std::mem::take(&mut self.token_props);
+                    // Deferred chars start the next token.
+                    self.token_props |= std::mem::take(&mut self.deferred_props);
+                    return Some((boundary, props));
+                }
+                Action::Transparent => {
+                    self.last_was_zwj = prop == WordBreakProperty::ZWJ;
+                    // State doesn't change, but we still consume the character.
+                    self.pos += char_len;
+                    if self.deferred_break_pos.is_some() {
+                        self.deferred_props |= char_props;
+                    } else {
+                        self.token_props |= char_props;
+                    }
+                }
+            }
+        }
+
+        // Deferred state at EOT - defer failed
+        if self.state.is_deferred() {
+            let breakpoint = self.deferred_break_pos.take().unwrap();
+            self.state = State::StartOfText;
+            let props = std::mem::take(&mut self.token_props);
+            // Deferred chars become the trailing token.
+            self.token_props |= std::mem::take(&mut self.deferred_props);
+            return Some((breakpoint, props));
+        }
+
+        // WB2: Any ÷ eot — emit final segment
+        self.finished = true;
+        Some((self.text.len(), self.token_props))
+    }
+}
+
 /// A tokenizer that implements UAX #29 word boundary rules, using a deterministic finite automaton
 /// (DFA) to efficiently determine word boundaries in Unicode text. Includes a number of fast-paths
 /// for common cases, e.g. ASCII.
+#[inline(always)]
 pub fn tokenize(
     text: &str,
-    _options: Options,
+    options: Options,
     mut on_breakpoint: impl FnMut(usize, TokenProperties) -> bool,
 ) {
-    if text.is_empty() {
-        return;
-    }
-    let bytes = text.as_bytes();
-
-    let mut state = State::StartOfText;
-    let mut deferred_break_pos = None;
-    let mut pos = 0;
-
-    // WB4 says: X (Extend | Format | ZWJ)*	→	X
-    // To avoid adding _many_ `_AfterZWJ` variant states, we'll cheat a little by keeping track
-    // of this condition with a bool. More specifically, we need to conditionally break based on
-    // whether the previous character was a ZWJ.
-    //
-    // Example:
-    // 'a 🛑' -> break (ALetter -> Other)
-    // 'a ZWJ 🛑' -> no break (WB4)
-    let mut last_was_zwj = false;
-
-    // Maintain properties of the current token, which are reset on each break and can be used by the caller
-    // to more efficiently determine what type of token was just emitted, e.g. whether it's "word-like" or ascii.
-    let mut token_props = TokenProperties::default();
-
-    // Properties of chars consumed while in a deferred state. Held aside from `token_props`
-    // because we don't yet know which token they belong to: if the deferred state resolves
-    // via `DeferredBreak`, these chars start the *next* token (so their contribution must
-    // not leak into the in-progress one); if it resolves via `NoBreak` exiting deferred,
-    // they fold into the current token. Tracked by `deferred_break_pos.is_some()`.
-    let mut deferred_props = TokenProperties::default();
-
-    while pos < text.len() {
-        // Fast path for ASCII, e.g. skip DFA all together when possible.
-        // Roughly a ~2x speedup on English Wikipedia.
-        if matches!(
-            state,
-            State::ALetter | State::Numeric | State::ExtendNumLet | State::HLetter
-        ) {
-            let scan_start = pos;
-            let mut fast_acc: u8 = 0;
-            while pos < text.len() && bytes[pos] < 0x80 {
-                let info = ASCII_BYTE_INFO[bytes[pos] as usize];
-                if info & ASCII_WORD_CONTINUE == 0 {
-                    break;
-                }
-                fast_acc |= info;
-                pos += 1;
-            }
-            if pos > scan_start {
-                token_props.0 |= fast_acc & !ASCII_WORD_CONTINUE;
-                let last = bytes[pos - 1]; // Safe because we're not in State::StartOfText.
-                state = match last {
-                    b'0'..=b'9' => State::Numeric,
-                    b'_' => State::ExtendNumLet,
-                    _ => State::ALetter,
-                };
-                last_was_zwj = false;
-                continue;
-            }
-        }
-
-        // Fast path for ASCII, e.g. avoid chars().next(), and lookup word property from table.
-        // `char_props` is this char's contribution to the enclosing token's properties; it's
-        // applied to `token_props` per-arm below, since `Action::Break` treats the breaking char
-        // as the first char of the *next* token (the contribution lands there, not in the token
-        // being emitted).
-        let b = bytes[pos];
-        let (c, prop, char_len, char_props) = if b < 0x80 {
-            (
-                b as char,
-                ASCII_WORD_BREAK_PROP[b as usize],
-                1usize,
-                TokenProperties(ASCII_BYTE_INFO[b as usize] & !ASCII_WORD_CONTINUE),
-            )
-        } else {
-            let c = text[pos..].chars().next().unwrap();
-            let prop = lookup_word_break_property_from_dictionary(c);
-            // Cheap path covers ALetter / HebrewLetter / Numeric. For everything else, fall back
-            // to the strict per-char check (ExtPict / Ideographic / Script / OtherNumber).
-            let mut char_props = TokenProperties::NON_ASCII;
-            char_props |= WORD_BREAK_CONTRIB[prop as usize];
-            if !char_props.is_word_like() && is_word_like_strict(c) {
-                char_props |= TokenProperties::WORD_LIKE;
-            }
-            (c, prop, c.len_utf8(), char_props)
-        };
-
-        // Each iteration, we consult the transition table to determine the next state
-        // and whether to emit a breakpoint.
-        let Transition(next_state, action) = TABLE[state as usize][prop as usize];
-        match action {
-            Action::Break => {
-                let boundary = pos;
-                pos += char_len;
-                if last_was_zwj {
-                    last_was_zwj = false;
-                    if WordBreakProperty::is_ext_pictographic(c) {
-                        // Transparent: char joins the in-progress token instead of breaking.
-                        token_props |= char_props;
-                        continue;
-                    }
-                }
-                last_was_zwj = prop == WordBreakProperty::ZWJ;
-                state = next_state;
-                if !on_breakpoint(boundary, std::mem::take(&mut token_props)) {
-                    return;
-                }
-                // Breaking char starts the next token; apply its contribution after the take.
-                token_props |= char_props;
-                continue;
-            }
-            Action::NoBreak => {
-                last_was_zwj = false;
-                if next_state.is_deferred() {
-                    if deferred_break_pos.is_none() {
-                        deferred_break_pos = Some(pos);
-                    }
-                    deferred_props |= char_props;
-                } else {
-                    if deferred_break_pos.take().is_some() {
-                        // Word resumed: deferred chars belong to the in-progress token.
-                        token_props |= std::mem::take(&mut deferred_props);
-                    }
-                    token_props |= char_props;
-                }
-                state = next_state;
-                pos += char_len;
-            }
-            Action::DeferredBreak => {
-                last_was_zwj = false;
-                let boundary = deferred_break_pos.take().unwrap();
-                state = next_state;
-                // Notably, we don't advance `pos` here; the current char is re-examined on the
-                // next iteration and will accumulate its props then — don't apply char_props here.
-                if !on_breakpoint(boundary, std::mem::take(&mut token_props)) {
-                    return;
-                }
-                // Deferred chars start the next token.
-                token_props |= std::mem::take(&mut deferred_props);
-                continue;
-            }
-            Action::Transparent => {
-                last_was_zwj = prop == WordBreakProperty::ZWJ;
-                // State doesn't change, but we still consume the character.
-                pos += char_len;
-                if deferred_break_pos.is_some() {
-                    deferred_props |= char_props;
-                } else {
-                    token_props |= char_props;
-                }
-            }
+    for (breakpoint, properties) in breakpoints(text, options) {
+        if !on_breakpoint(breakpoint, properties) {
+            break;
         }
     }
-
-    // Deferred state at EOT - defer failed
-    if state.is_deferred() {
-        let breakpoint = deferred_break_pos.take().unwrap();
-        if !on_breakpoint(breakpoint, std::mem::take(&mut token_props)) {
-            return;
-        }
-        // Deferred chars become the trailing token.
-        token_props |= std::mem::take(&mut deferred_props);
-    }
-
-    // WB2: Any ÷ eot — emit final segment
-    _ = on_breakpoint(text.len(), token_props);
 }
 
 /// Cheap-path `TokenProperties` contribution for each `WordBreakProperty` value. Covers the
@@ -262,7 +284,7 @@ const ASCII_BYTE_INFO: [u8; 128] = {
 
 #[cfg(test)]
 mod tests {
-    use super::{Options, tokenize};
+    use super::{Options, breakpoints, tokenize};
     use crate::uax29::test_helpers::test_against_uax29_break_tests;
 
     #[test]
@@ -392,6 +414,32 @@ mod tests {
 
         // Circled letters
         assert_breaks("\u{200d}Ⓜ", vec![0, 6]);
+    }
+
+    #[test]
+    fn breakpoints_iterator_matches_callback() {
+        for input in [
+            "",
+            "hello",
+            "can' hi",
+            "אקספרס\u{05F4} מהיום",
+            "👨\u{200D}👩",
+        ] {
+            let from_iterator = breakpoints(input, Options::default()).collect::<Vec<_>>();
+            let mut from_callback = Vec::new();
+            tokenize(input, Options::default(), |breakpoint, properties| {
+                from_callback.push((breakpoint, properties));
+                true
+            });
+            assert_eq!(from_iterator, from_callback, "input: {input:?}");
+        }
+    }
+
+    #[test]
+    fn breakpoints_iterator_is_lazy() {
+        let mut breakpoints = breakpoints("one two three", Options::default());
+        assert_eq!(breakpoints.next().map(|(position, _)| position), Some(0));
+        assert_eq!(breakpoints.next().map(|(position, _)| position), Some(3));
     }
 
     #[test]
