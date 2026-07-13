@@ -195,7 +195,7 @@ mod tests {
                     .join(", ");
                 println!("    {},", row_str);
             }
-            assert!(false);
+            panic!("ASCII sentence-break table is stale");
         }
     }
 }

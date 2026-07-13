@@ -61,10 +61,16 @@ pub fn breakpoints(text: &str, _options: Options) -> Breakpoints<'_> {
         last_was_zwj: false,
         token_props: TokenProperties::default(),
         deferred_props: TokenProperties::default(),
-        finished: text.is_empty(),
+        end: if text.is_empty() {
+            EndState::Finished
+        } else {
+            EndState::Running
+        },
     }
 }
 
+/// Lazy UAX #29 word boundaries and their span properties.
+#[must_use = "word boundaries are produced only when the iterator is consumed"]
 pub struct Breakpoints<'a> {
     text: &'a str,
     state: State,
@@ -73,7 +79,14 @@ pub struct Breakpoints<'a> {
     last_was_zwj: bool,
     token_props: TokenProperties,
     deferred_props: TokenProperties,
-    finished: bool,
+    end: EndState,
+}
+
+#[derive(Clone, Copy, Eq, PartialEq)]
+enum EndState {
+    Running,
+    FinalBreakpointPending,
+    Finished,
 }
 
 impl Iterator for Breakpoints<'_> {
@@ -81,7 +94,7 @@ impl Iterator for Breakpoints<'_> {
 
     #[inline(always)]
     fn next(&mut self) -> Option<Self::Item> {
-        if self.finished {
+        if self.end == EndState::Finished {
             return None;
         }
 
@@ -215,9 +228,9 @@ impl Iterator for Breakpoints<'_> {
         }
 
         // Deferred state at EOT - defer failed
-        if self.state.is_deferred() {
+        if self.state.is_deferred() && self.end == EndState::Running {
             let breakpoint = self.deferred_break_pos.take().unwrap();
-            self.state = State::StartOfText;
+            self.end = EndState::FinalBreakpointPending;
             let props = std::mem::take(&mut self.token_props);
             // Deferred chars become the trailing token.
             self.token_props |= std::mem::take(&mut self.deferred_props);
@@ -225,10 +238,12 @@ impl Iterator for Breakpoints<'_> {
         }
 
         // WB2: Any ÷ eot — emit final segment
-        self.finished = true;
+        self.end = EndState::Finished;
         Some((self.text.len(), self.token_props))
     }
 }
+
+impl std::iter::FusedIterator for Breakpoints<'_> {}
 
 /// A tokenizer that implements UAX #29 word boundary rules, using a deterministic finite automaton
 /// (DFA) to efficiently determine word boundaries in Unicode text. Includes a number of fast-paths
@@ -290,11 +305,8 @@ mod tests {
     #[test]
     fn test_word_break_against_uax29_tests() {
         let (passed, failed) =
-            test_against_uax29_break_tests("testdata/WordBreakTest.txt", |s, breakpoints| {
-                tokenize(s, Options::default(), |bp, _props| {
-                    breakpoints.push(bp);
-                    true
-                });
+            test_against_uax29_break_tests("testdata/WordBreakTest.txt", |s, actual| {
+                actual.extend(breakpoints(s, Options::default()).map(|(position, _)| position));
             });
         assert_eq!(
             (1944, 0),

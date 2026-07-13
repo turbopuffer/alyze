@@ -71,9 +71,7 @@ unsafe fn reconstruct(plane: u16, low: u16) -> char {
 
 fn lookup(input: char, l1_lut: &L1Lut) -> Option<[char; 3]> {
     let (input_high, input_low) = deconstruct(input);
-    let Some(l2_lut) = l1_lut.l2_luts.get(input_high as usize) else {
-        return None;
-    };
+    let l2_lut = l1_lut.l2_luts.get(input_high as usize)?;
 
     let idx = l2_lut.singles.binary_search_by(|(range, _)| {
         use std::cmp::Ordering;
