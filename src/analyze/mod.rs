@@ -150,119 +150,247 @@ impl Analyzer {
 
     /// Analyzes a single input string, invoking the callback for each token.
     /// Returning false from the callback will stop analysis early.
+    #[inline(always)]
     pub fn analyze<'a>(
         &self,
         input: &'a str,
         buffer: &mut ReusableBuffer,
-        callback: impl FnMut(Token<'_>) -> bool,
+        mut callback: impl FnMut(Token<'_>) -> bool,
     ) {
-        self.analyze_inputs(std::iter::once(input), buffer, callback);
+        let mut stream = self.token_stream(input, buffer);
+        while let Some(token) = stream.next_token() {
+            if !callback(token) {
+                break;
+            }
+        }
     }
 
     /// Analyzes a sequence of input strings, invoking the callback for each token.
     /// Returning false from the callback will stop analysis early.
+    #[inline(always)]
     pub fn analyze_inputs<'a>(
         &self,
         inputs: impl Iterator<Item = &'a str>,
         buffer: &mut ReusableBuffer,
         mut callback: impl FnMut(Token<'_>) -> bool,
     ) {
-        let ReusableBuffer {
-            a: buffer_a,
-            b: buffer_b,
-            stemming_cache,
-        } = buffer;
+        let mut stream = self.token_stream_inputs(inputs, buffer);
+        while let Some(token) = stream.next_token() {
+            if !callback(token) {
+                break;
+            }
+        }
+    }
+
+    /// Lazily analyzes a single input string.
+    #[inline(always)]
+    pub fn token_stream<'input, 'buffer>(
+        &self,
+        input: &'input str,
+        buffer: &'buffer mut ReusableBuffer,
+    ) -> TokenStream<'input, 'buffer, std::iter::Once<&'input str>> {
+        self.token_stream_inputs(std::iter::once(input), buffer)
+    }
+
+    /// Lazily analyzes a sequence of input strings.
+    #[inline(always)]
+    pub fn token_stream_inputs<'input, 'buffer, I>(
+        &self,
+        inputs: I,
+        buffer: &'buffer mut ReusableBuffer,
+    ) -> TokenStream<'input, 'buffer, I>
+    where
+        I: Iterator<Item = &'input str>,
+    {
+        let TokenizerOptions::UAX29Word(tokenizer_options) = self.options.tokenizer;
 
         let stemmer = self.options.stemming.map(|stemming_language| {
             let algorithm = stemming_language.into();
             rust_stemmers::Stemmer::create(algorithm)
         });
 
-        // Monotonic across all inputs. Every word-like token consumes
-        // a position, even if a downstream filter (length, stopword) drops it,
-        // which is important for phrase-distance accuracy.
-        //
-        // TODO configurable gap between inputs
-        let mut next_position = 0;
+        TokenStream {
+            options: self.options,
+            tokenizer_options,
+            inputs: inputs.enumerate(),
+            buffer,
+            stemmer,
+            next_position: 0,
+            current_input: None,
+            current_input_index: 0,
+            breakpoints: None,
+            previous_breakpoint: None,
+            current_token: None,
+        }
+    }
+}
 
-        let TokenizerOptions::UAX29Word(tokenizer_opts) = self.options.tokenizer;
+/// A lazy stream of analyzed tokens.
+///
+/// Call [`advance`](Self::advance), then inspect the current token with
+/// [`token`](Self::token). The returned token is valid until the next mutable
+/// operation on the stream. This is a lending stream rather than an
+/// [`Iterator`] because token text may borrow from the reusable buffer.
+pub struct TokenStream<'input, 'buffer, I>
+where
+    I: Iterator<Item = &'input str>,
+{
+    options: AnalysisOptions,
+    tokenizer_options: uax29::word::Options,
+    inputs: std::iter::Enumerate<I>,
+    buffer: &'buffer mut ReusableBuffer,
+    stemmer: Option<rust_stemmers::Stemmer>,
+    next_position: usize,
+    current_input: Option<&'input str>,
+    current_input_index: usize,
+    breakpoints: Option<uax29::word::Breakpoints<'input>>,
+    previous_breakpoint: Option<usize>,
+    current_token: Option<CurrentToken<'input>>,
+}
 
-        for (input_index, input) in inputs.enumerate() {
-            let mut prev = None;
-            let input_as_bytes = input.as_bytes();
-            uax29::word::tokenize(input, tokenizer_opts, |bp, props| {
-                let Some(prev) = std::mem::replace(&mut prev, Some(bp)) else {
-                    return true; // don't emit token on first breakpoint
+impl<'input, I> TokenStream<'input, '_, I>
+where
+    I: Iterator<Item = &'input str>,
+{
+    /// Advances to the next analyzed token.
+    #[inline(always)]
+    pub fn advance(&mut self) -> bool {
+        self.current_token = None;
+
+        loop {
+            if self.breakpoints.is_none() {
+                let Some((input_index, input)) = self.inputs.next() else {
+                    return false;
                 };
-                if !props.is_word_like() {
-                    return true; // skip non-word tokens
-                }
+                self.current_input = Some(input);
+                self.current_input_index = input_index;
+                self.breakpoints = Some(uax29::word::breakpoints(input, self.tokenizer_options));
+                self.previous_breakpoint = None;
+            }
 
-                // Advance position after each word-like token.
-                let position = next_position;
-                next_position += 1;
+            let Some((breakpoint, properties)) = self.breakpoints.as_mut().unwrap().next() else {
+                self.breakpoints = None;
+                self.current_input = None;
+                continue;
+            };
+            let Some(previous_breakpoint) = self.previous_breakpoint.replace(breakpoint) else {
+                continue;
+            };
+            if !properties.is_word_like() {
+                continue;
+            }
 
-                // SAFETY: tokenize guarentees that breakpoints are on valid UTF-8 boundaries,
-                // thus slicing input by the breakpoint will always produce valid UTF-8.
+            // Monotonic across all inputs. Every word-like token consumes a
+            // position, even if a downstream filter drops it.
+            let position = self.next_position;
+            self.next_position += 1;
+
+            let input = self.current_input.unwrap();
+            let input_as_bytes = input.as_bytes();
+            let text = {
+                let ReusableBuffer {
+                    a: buffer_a,
+                    b: buffer_b,
+                    stemming_cache,
+                } = &mut *self.buffer;
+
+                // SAFETY: word breakpoints are always valid UTF-8 boundaries.
                 buffer_a.clear();
                 let mut token_text = InputRefOrBuffered::InputRef {
-                    input: unsafe { std::str::from_utf8_unchecked(&input_as_bytes[prev..bp]) },
+                    input: unsafe {
+                        std::str::from_utf8_unchecked(
+                            &input_as_bytes[previous_breakpoint..breakpoint],
+                        )
+                    },
                     buffer_if_needed: buffer_a,
                 };
 
-                // Token length
                 if let Some(max_token_length) = self.options.maximum_token_length
                     && !filters::within_token_length_limit(token_text.as_str(), max_token_length)
                 {
-                    return true;
+                    continue;
                 }
 
-                // Lowercasing
                 if !self.options.case_sensitive {
-                    token_text.lowercase_in_place(props.is_ascii());
+                    token_text.lowercase_in_place(properties.is_ascii());
                 }
 
-                // Stopword removal
                 if let Some(StopwordRemoval::ForLanguage(language)) = self.options.stopword_removal
                     && filters::is_stopword_in_language(language, token_text.as_str())
                 {
-                    return true;
+                    continue;
                 }
 
-                // Stemming
-                if let Some(stemmer) = &stemmer {
+                if let Some(stemmer) = &self.stemmer {
                     token_text.stem_in_place(stemmer, stemming_cache, buffer_b);
                 }
 
-                // ASCII folding
-                // Note: Not needed if token is already ASCII
-                if self.options.ascii_folding && !props.is_ascii() {
+                if self.options.ascii_folding && !properties.is_ascii() {
                     token_text.ascii_fold_in_place(buffer_b);
-
-                    // ASCII folding can produce uppercase ASCII characters,
-                    // so we'll lowercase again if case folding is enabled.
                     if !self.options.case_sensitive {
                         let is_ascii = token_text.as_str().is_ascii();
                         token_text.lowercase_in_place(is_ascii);
                     }
                 }
 
-                let token = Token {
-                    text: token_text.as_str(),
-                    position,
-                    byte_range: prev..bp,
-                    input_index,
-                };
-                callback(token)
+                token_text.into_current_token_text()
+            };
+
+            self.current_token = Some(CurrentToken {
+                text,
+                position,
+                byte_range: previous_breakpoint..breakpoint,
+                input_index: self.current_input_index,
             });
+            return true;
         }
     }
+
+    /// Returns the current token.
+    ///
+    /// Panics if the stream has not advanced to a token or is exhausted.
+    #[inline(always)]
+    pub fn token(&self) -> Token<'_> {
+        let current = self.current_token.as_ref().expect("no current token");
+        let text = match current.text {
+            CurrentTokenText::Input(text) => text,
+            CurrentTokenText::Buffer => self.buffer.a.as_str(),
+        };
+        Token {
+            text,
+            position: current.position,
+            byte_range: current.byte_range.clone(),
+            input_index: current.input_index,
+        }
+    }
+
+    /// Advances and returns the next analyzed token.
+    #[inline(always)]
+    pub fn next_token(&mut self) -> Option<Token<'_>> {
+        if self.advance() {
+            Some(self.token())
+        } else {
+            None
+        }
+    }
+}
+
+struct CurrentToken<'input> {
+    text: CurrentTokenText<'input>,
+    position: usize,
+    byte_range: Range<usize>,
+    input_index: usize,
+}
+
+enum CurrentTokenText<'input> {
+    Input(&'input str),
+    Buffer,
 }
 
 #[non_exhaustive]
 pub struct Token<'a> {
     /// Normalized text of the token, either sliced from the input string or from the reused
-    /// buffer. Only valid for the duration of the callback invocation.
+    /// buffer. Valid for the callback invocation or until the token stream is advanced.
     pub text: &'a str,
 
     /// Position of the token in the sequence of tokens. If `analyze_inputs` is used,
@@ -287,7 +415,7 @@ enum InputRefOrBuffered<'input, 'buf> {
     Buffered(&'buf mut String),
 }
 
-impl InputRefOrBuffered<'_, '_> {
+impl<'input> InputRefOrBuffered<'input, '_> {
     fn as_str(&self) -> &str {
         match self {
             Self::InputRef { input, .. } => input,
@@ -431,6 +559,13 @@ impl InputRefOrBuffered<'_, '_> {
         }
     }
 
+    fn into_current_token_text(self) -> CurrentTokenText<'input> {
+        match self {
+            Self::InputRef { input, .. } => CurrentTokenText::Input(input),
+            Self::Buffered(_) => CurrentTokenText::Buffer,
+        }
+    }
+
     // Mutates self to transition from `InputRef` to `Buffered`. Caller is responsible
     // for populating `buffer_if_needed` with the appropriate contents before calling this.
     fn transition_to_buffered(&mut self) {
@@ -459,6 +594,7 @@ mod tests {
     use super::*;
 
     /// Owned copy of a `Token`'s fields, so tests can use named access.
+    #[derive(Debug, Eq, PartialEq)]
     struct Tok {
         text: String,
         position: usize,
@@ -487,6 +623,26 @@ mod tests {
         collect_inputs(opts, std::iter::once(input))
     }
 
+    fn collect_stream_inputs<'a>(
+        opts: AnalysisOptions,
+        inputs: impl Iterator<Item = &'a str>,
+    ) -> Vec<Tok> {
+        let mut buffer = ReusableBuffer::new();
+        let analyzer = Analyzer::new(opts);
+        let mut stream = analyzer.token_stream_inputs(inputs, &mut buffer);
+        let mut out = Vec::new();
+        while stream.advance() {
+            let token = stream.token();
+            out.push(Tok {
+                text: token.text.to_string(),
+                position: token.position,
+                byte_range: token.byte_range,
+                input_index: token.input_index,
+            });
+        }
+        out
+    }
+
     fn opts() -> AnalysisOptions {
         AnalysisOptions {
             tokenizer: TokenizerOptions::UAX29Word(Default::default()),
@@ -496,6 +652,69 @@ mod tests {
             stemming: None,
             ascii_folding: false,
         }
+    }
+
+    #[test]
+    fn token_stream_matches_callback_api() {
+        let inputs = ["The café runners", "ΣΟΦΟΣ and 中 👨\u{200D}👩"];
+        let base = opts();
+        let options = [
+            AnalysisOptions {
+                case_sensitive: true,
+                ..base
+            },
+            base,
+            AnalysisOptions {
+                maximum_token_length: Some(4),
+                ..base
+            },
+            AnalysisOptions {
+                stopword_removal: Some(StopwordRemoval::ForLanguage(
+                    LanguageWithStopwords::English,
+                )),
+                ..base
+            },
+            AnalysisOptions {
+                stemming: Some(StemmingLanguage::English),
+                ..base
+            },
+            AnalysisOptions {
+                maximum_token_length: Some(40),
+                stopword_removal: Some(StopwordRemoval::ForLanguage(
+                    LanguageWithStopwords::English,
+                )),
+                stemming: Some(StemmingLanguage::English),
+                ascii_folding: true,
+                ..base
+            },
+        ];
+
+        for options in options {
+            assert_eq!(
+                collect_inputs(options, inputs.into_iter()),
+                collect_stream_inputs(options, inputs.into_iter()),
+            );
+        }
+    }
+
+    #[test]
+    fn token_stream_pulls_inputs_lazily() {
+        let inputs_pulled = std::cell::Cell::new(0);
+        let inputs = ["first", "second"].into_iter().inspect(|_| {
+            inputs_pulled.set(inputs_pulled.get() + 1);
+        });
+        let analyzer = Analyzer::new(opts());
+        let mut buffer = ReusableBuffer::new();
+        let mut stream = analyzer.token_stream_inputs(inputs, &mut buffer);
+
+        assert_eq!(inputs_pulled.get(), 0);
+        assert!(stream.advance());
+        assert_eq!(stream.token().text, "first");
+        assert_eq!(inputs_pulled.get(), 1);
+        assert!(stream.advance());
+        assert_eq!(stream.token().text, "second");
+        assert_eq!(inputs_pulled.get(), 2);
+        assert!(!stream.advance());
     }
 
     #[test]

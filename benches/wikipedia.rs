@@ -152,6 +152,19 @@ pub fn analysis_benchmark(c: &mut Criterion) {
                 std::hint::black_box(&count);
             })
         });
+        group.bench_function(format!("{name} (stream)"), |b| {
+            b.iter(|| {
+                let mut count = 0;
+                for text in &texts {
+                    let mut stream = analyzer.token_stream(text, &mut buffer);
+                    while let Some(token) = stream.next_token() {
+                        count += 1;
+                        std::hint::black_box(&token.text);
+                    }
+                }
+                std::hint::black_box(&count);
+            })
+        });
     }
 
     group.finish();
