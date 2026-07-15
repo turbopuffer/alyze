@@ -57,6 +57,10 @@ struct Token {
     /// later filter (length, stopword) drops it — which keeps phrase distances
     /// accurate. Positions can therefore have gaps.
     position: usize,
+    /// UTF-8 byte range of the raw token in the input text, before any
+    /// normalization. Always on char boundaries.
+    start: usize,
+    end: usize,
 }
 
 /// Describes a language's capabilities, so the UI can build its language picker
@@ -92,11 +96,37 @@ pub fn analyze(text: &str, options: JsValue) -> Result<JsValue, JsValue> {
         tokens.push(Token {
             text: token.text.to_string(),
             position: token.position,
+            start: token.byte_range.start,
+            end: token.byte_range.end,
         });
         true
     });
 
     serde_wasm_bindgen::to_value(&tokens).map_err(|e| js_error(&e.to_string()))
+}
+
+/// A sentence's UTF-8 byte range in the input text.
+#[derive(Serialize)]
+struct SentenceRange {
+    start: usize,
+    end: usize,
+}
+
+/// Segment `text` into sentences (UAX #29), returning each sentence's byte
+/// range. Ranges are contiguous and cover the whole input; trailing whitespace
+/// attaches to the preceding sentence.
+#[wasm_bindgen]
+pub fn sentences(text: &str) -> Result<JsValue, JsValue> {
+    let mut ranges = Vec::new();
+    let mut prev: Option<usize> = None;
+    uax29::sentence::tokenize(text, uax29::sentence::Options::default(), |idx| {
+        if let Some(start) = prev {
+            ranges.push(SentenceRange { start, end: idx });
+        }
+        prev = Some(idx);
+        true
+    });
+    serde_wasm_bindgen::to_value(&ranges).map_err(|e| js_error(&e.to_string()))
 }
 
 /// Returns the supported languages and whether each supports stemming and/or
