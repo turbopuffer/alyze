@@ -75,7 +75,7 @@ struct LanguageInfo {
 
 /// Analyze `text` and return the resulting tokens.
 ///
-/// `options` is a plain JS object matching [`Options`]. On an invalid
+/// `options` is a plain JS object matching `Options`. On an invalid
 /// configuration (e.g. stemming with case sensitivity, or an unsupported
 /// language) this throws an `Error` whose message matches what the turbopuffer
 /// API would return.

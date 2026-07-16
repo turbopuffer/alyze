@@ -10,7 +10,7 @@ pub(crate) fn lowercase_chars_in_place(s: &mut String) {
     // Pad the string with enough space for the full lowercased output.
     // Lowercasing will, at most, expand each character to `MAX_LOWERCASED_BYTE_LENGTH` bytes.
     let additional_scratch = s.chars().count() * MAX_LOWERCASED_BYTE_LENGTH;
-    s.extend(std::iter::repeat('\0').take(additional_scratch));
+    s.extend(std::iter::repeat_n('\0', additional_scratch));
 
     // Split the string into two parts, the original and lowercased part.
     // We'll read from the original part and write to the lowercased part.

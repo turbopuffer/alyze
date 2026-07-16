@@ -1,3 +1,5 @@
+#![allow(clippy::upper_case_acronyms)]
+
 use tpuf_icu_properties_211::{
     CodePointMapData, CodePointMapDataBorrowed, CodePointSetData, CodePointSetDataBorrowed,
     props::{ExtendedPictographic, GeneralCategory, Ideographic, Script, WordBreak},
@@ -289,7 +291,7 @@ mod tests {
                     .join(", ");
                 println!("    {},", row_str);
             }
-            assert!(false);
+            panic!("ASCII word-break table is stale");
         }
     }
 }

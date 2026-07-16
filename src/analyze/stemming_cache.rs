@@ -74,7 +74,7 @@ impl<const N: usize> ShortToken<N> {
 
     pub fn new_from_str(s: &str) -> Option<Self> {
         let bytes = s.as_bytes();
-        if bytes.len() == 0 || bytes.len() > N {
+        if bytes.is_empty() || bytes.len() > N {
             return None;
         }
         let mut buffer = [0; N];

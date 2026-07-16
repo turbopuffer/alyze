@@ -63,10 +63,8 @@ pub fn tokenize(text: &str, _options: Options, mut on_breakpoint: impl FnMut(usi
     }
 
     // Deferred state at EOT — defer failed, confirm break
-    if state.is_deferred() {
-        if !on_breakpoint(deferred_break_pos.unwrap()) {
-            return;
-        }
+    if state.is_deferred() && !on_breakpoint(deferred_break_pos.unwrap()) {
+        return;
     }
 
     // SB2: Any	÷ eot (break at end of text)
