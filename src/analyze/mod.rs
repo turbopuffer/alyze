@@ -212,14 +212,22 @@ impl Analyzer {
 
                 // Token length
                 if let Some(max_token_length) = self.options.maximum_token_length
-                    && !filters::within_token_length_limit(token_text.as_str(), max_token_length)
+                    && !filters::within_token_length_limit(
+                        token_text.as_str(),
+                        max_token_length,
+                        props.is_ascii(),
+                    )
                 {
                     return true;
                 }
 
                 // Lowercasing
                 if !self.options.case_sensitive {
-                    token_text.lowercase_in_place(props.is_ascii());
+                    let is_ascii = props.is_ascii();
+                    token_text.lowercase_in_place(
+                        is_ascii,
+                        is_ascii && !props.has_ascii_uppercase(),
+                    );
                 }
 
                 // Stopword removal
@@ -243,7 +251,10 @@ impl Analyzer {
                     // so we'll lowercase again if case folding is enabled.
                     if !self.options.case_sensitive {
                         let is_ascii = token_text.as_str().is_ascii();
-                        token_text.lowercase_in_place(is_ascii);
+                        token_text.lowercase_in_place(
+                            is_ascii,
+                            is_ascii && !token_text.as_str().bytes().any(|b| b.is_ascii_uppercase()),
+                        );
                     }
                 }
 
@@ -295,14 +306,14 @@ impl InputRefOrBuffered<'_, '_> {
         }
     }
 
-    fn lowercase_in_place(&mut self, is_ascii: bool) {
+    fn lowercase_in_place(&mut self, is_ascii: bool, ascii_already_lowercase: bool) {
         debug_assert_eq!(
             is_ascii,
             self.as_str().is_ascii(),
             "caller must ensure is_ascii is correct"
         );
 
-        if is_ascii && self.as_str().bytes().all(|b| !b.is_ascii_uppercase()) {
+        if is_ascii && ascii_already_lowercase {
             return;
         }
 
