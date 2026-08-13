@@ -64,6 +64,13 @@ pub fn tokenize(
     _options: Options,
     mut on_breakpoint: impl FnMut(usize, TokenProperties) -> bool,
 ) {
+    tokenize_impl::<true>(text, &mut on_breakpoint);
+}
+
+fn tokenize_impl<const WIDE: bool>(
+    text: &str,
+    on_breakpoint: &mut impl FnMut(usize, TokenProperties) -> bool,
+) {
     if text.is_empty() {
         return;
     }
@@ -94,7 +101,111 @@ pub fn tokenize(
     // they fold into the current token. Tracked by `deferred_break_pos.is_some()`.
     let mut deferred_props = TokenProperties::default();
 
+    #[cfg(all(
+        target_arch = "aarch64",
+        target_endian = "little",
+        target_feature = "neon"
+    ))]
+    let mut wide_after = 0;
+
     while pos < text.len() {
+        #[cfg(all(
+            target_arch = "aarch64",
+            target_endian = "little",
+            target_feature = "neon"
+        ))]
+        if WIDE && !state.is_deferred() && pos >= wide_after && pos + 64 <= text.len() {
+            if let Some(masks) = neon::classify(bytes, pos) {
+                // Bit zero describes the boundary before `bytes[pos]`, so it needs the DFA's
+                // state from the preceding scalar or wide block as left context.
+                let carry_word = match bytes[pos] {
+                    b'a'..=b'z' | b'A'..=b'Z' => matches!(
+                        state,
+                        State::ALetter
+                            | State::Numeric
+                            | State::ExtendNumLet
+                            | State::HLetter
+                            | State::HLetterSQ
+                    ),
+                    b'0'..=b'9' => matches!(
+                        state,
+                        State::ALetter | State::Numeric | State::ExtendNumLet | State::HLetter
+                    ),
+                    b'_' => matches!(
+                        state,
+                        State::ALetter
+                            | State::Numeric
+                            | State::ExtendNumLet
+                            | State::HLetter
+                            | State::Katakana
+                    ),
+                    _ => false,
+                };
+                let carry_space = state == State::WSegSpace;
+                let carry_letter = matches!(state, State::ALetter | State::HLetter);
+                let carry_number = state == State::Numeric;
+
+                // WB5, WB8-WB10, and WB13a/WB13b join adjacent word characters; WB3d joins
+                // spaces; WB3 joins CR/LF. A set bit means no break before that byte.
+                let mut no_break = (masks.word & (masks.word << 1))
+                    | (masks.space & ((masks.space << 1) | u64::from(carry_space)))
+                    | (masks.lf & ((masks.cr << 1) | u64::from(state == State::CR)));
+                no_break |= u64::from(carry_word && masks.word & 1 != 0);
+
+                // WB6/WB7 and WB11/WB12 join both sides of a middle character only when the
+                // required right context is present in this block.
+                let letter_middle = masks.letter_mid
+                    & ((masks.letter << 1) | u64::from(carry_letter))
+                    & (masks.letter >> 1);
+                let number_middle = masks.number_mid
+                    & ((masks.number << 1) | u64::from(carry_number))
+                    & (masks.number >> 1);
+                no_break |= letter_middle | (letter_middle << 1);
+                no_break |= number_middle | (number_middle << 1);
+                // WB7a: Hebrew_Letter × Single_Quote.
+                no_break |= u64::from(state == State::HLetter && masks.single_quote & 1 != 0);
+                let mut boundaries = !no_break;
+                let mut start = 0;
+                while boundaries != 0 {
+                    let end = boundaries.trailing_zeros() as usize;
+                    boundaries &= boundaries - 1;
+                    let before_end = u64::MAX.checked_shr((64 - end) as u32).unwrap_or(0);
+                    let span = before_end & (u64::MAX << start);
+                    if masks.word_like & span != 0 {
+                        token_props.0 |= TokenProperties::WORD_LIKE_MASK;
+                    }
+                    if masks.upper & span != 0 {
+                        token_props.0 |= TokenProperties::HAS_ASCII_UPPER_MASK;
+                    }
+                    if !on_breakpoint(pos + end, std::mem::take(&mut token_props)) {
+                        return;
+                    }
+                    start = end;
+                }
+                let span = u64::MAX << start;
+                if masks.word_like & span != 0 {
+                    token_props.0 |= TokenProperties::WORD_LIKE_MASK;
+                }
+                if masks.upper & span != 0 {
+                    token_props.0 |= TokenProperties::HAS_ASCII_UPPER_MASK;
+                }
+                state = match bytes[pos + 63] {
+                    b'a'..=b'z' | b'A'..=b'Z' => State::ALetter,
+                    b'0'..=b'9' => State::Numeric,
+                    b'_' => State::ExtendNumLet,
+                    b' ' => State::WSegSpace,
+                    b'\r' => State::CR,
+                    b'\n' | b'\x0b' | b'\x0c' => State::Newline,
+                    _ => State::Any,
+                };
+                last_was_zwj = false;
+                pos += 64;
+                continue;
+            }
+            // Avoid reclassifying an overlapping 64-byte window after a rejected block.
+            wide_after = pos + 64;
+        }
+
         // Fast path for ASCII, e.g. skip DFA all together when possible.
         // Roughly a ~2x speedup on English Wikipedia.
         if matches!(
@@ -231,6 +342,115 @@ pub fn tokenize(
     _ = on_breakpoint(text.len(), token_props);
 }
 
+#[cfg(all(
+    target_arch = "aarch64",
+    target_endian = "little",
+    target_feature = "neon"
+))]
+mod neon {
+    use std::arch::aarch64::*;
+
+    pub(super) struct Masks {
+        pub(super) word: u64,
+        pub(super) letter: u64,
+        pub(super) number: u64,
+        pub(super) word_like: u64,
+        pub(super) upper: u64,
+        pub(super) space: u64,
+        pub(super) cr: u64,
+        pub(super) lf: u64,
+        pub(super) letter_mid: u64,
+        pub(super) number_mid: u64,
+        pub(super) single_quote: u64,
+    }
+
+    #[inline(always)]
+    pub(super) fn classify(bytes: &[u8], pos: usize) -> Option<Masks> {
+        let block = bytes.get(pos..)?.get(..64)?;
+        // SAFETY: `block` proves that 64 bytes beginning at its pointer are valid for reads.
+        // Each load is 16 bytes at offsets 0, 16, 32, and 48, and AArch64 NEON loads do not
+        // require alignment. All remaining intrinsics operate on initialized vector values.
+        unsafe {
+            let p = block.as_ptr();
+            let zero = vdupq_n_u8(0);
+            let mut letters = [zero; 4];
+            let mut digits = [zero; 4];
+            let mut underscores = [zero; 4];
+            let mut spaces = [zero; 4];
+            let mut uppers = [zero; 4];
+            let mut cr = [zero; 4];
+            let mut lf = [zero; 4];
+            let mut letter_mid = [zero; 4];
+            let mut number_mid = [zero; 4];
+            let mut single_quote = [zero; 4];
+            let mut reject = zero;
+            for i in 0..4 {
+                let v = vld1q_u8(p.add(i * 16));
+                let lower = vorrq_u8(v, vdupq_n_u8(0x20));
+                letters[i] = vcleq_u8(vsubq_u8(lower, vdupq_n_u8(b'a')), vdupq_n_u8(25));
+                digits[i] = vcleq_u8(vsubq_u8(v, vdupq_n_u8(b'0')), vdupq_n_u8(9));
+                underscores[i] = vceqq_u8(v, vdupq_n_u8(b'_'));
+                spaces[i] = vceqq_u8(v, vdupq_n_u8(b' '));
+                uppers[i] = vcleq_u8(vsubq_u8(v, vdupq_n_u8(b'A')), vdupq_n_u8(25));
+                cr[i] = vceqq_u8(v, vdupq_n_u8(b'\r'));
+                lf[i] = vceqq_u8(v, vdupq_n_u8(b'\n'));
+                single_quote[i] = vceqq_u8(v, vdupq_n_u8(b'\''));
+                let semicolon = vceqq_u8(v, vdupq_n_u8(b';'));
+                let period = vceqq_u8(v, vdupq_n_u8(b'.'));
+                letter_mid[i] = vorrq_u8(
+                    single_quote[i],
+                    vorrq_u8(period, vceqq_u8(v, vdupq_n_u8(b':'))),
+                );
+                number_mid[i] = vorrq_u8(
+                    single_quote[i],
+                    vorrq_u8(period, vorrq_u8(vceqq_u8(v, vdupq_n_u8(b',')), semicolon)),
+                );
+                reject = vorrq_u8(reject, vcltzq_s8(vreinterpretq_s8_u8(v)));
+            }
+            if vmaxvq_u8(reject) != 0
+                // A trailing middle character needs right context outside this block. Let the
+                // scalar DFA decide it instead of treating the block edge as a boundary.
+                || vgetq_lane_u8::<15>(vorrq_u8(letter_mid[3], number_mid[3])) != 0
+            {
+                return None;
+            }
+            let letters = movemask(letters);
+            let digits = movemask(digits);
+            Some(Masks {
+                word: letters | digits | movemask(underscores),
+                letter: letters,
+                number: digits,
+                word_like: letters | digits,
+                upper: movemask(uppers),
+                space: movemask(spaces),
+                cr: movemask(cr),
+                lf: movemask(lf),
+                letter_mid: movemask(letter_mid),
+                number_mid: movemask(number_mid),
+                single_quote: movemask(single_quote),
+            })
+        }
+    }
+
+    #[inline(always)]
+    // Comparison lanes contain only 0x00/0xff. NEON is mandatory on AArch64, and this function
+    // is called only with initialized vectors produced by `classify`.
+    fn movemask(mut v: [uint8x16_t; 4]) -> u64 {
+        // SAFETY: the weights pointer references a complete 16-byte array for the duration of
+        // the load. The other intrinsics operate only on initialized vectors passed by value.
+        unsafe {
+            let weights =
+                vld1q_u8([1, 2, 4, 8, 16, 32, 64, 128, 1, 2, 4, 8, 16, 32, 64, 128].as_ptr());
+            for x in &mut v {
+                *x = vandq_u8(*x, weights);
+            }
+            let a0 = vpaddq_u8(vpaddq_u8(v[0], v[1]), vpaddq_u8(v[2], v[3]));
+            let a1 = vpaddq_u8(a0, a0);
+            vgetq_lane_u64::<0>(vreinterpretq_u64_u8(a1))
+        }
+    }
+}
+
 /// Cheap-path `TokenProperties` contribution for each `WordBreakProperty` value. Covers the
 /// signals that fall out of WordBreak alone — letters and digits. Katakana is intentionally
 /// **not** included: its set mixes Katakana letters (word-like) with the prolonged-sound mark
@@ -273,7 +493,7 @@ const ASCII_BYTE_INFO: [u8; 128] = {
 
 #[cfg(test)]
 mod tests {
-    use super::{Options, tokenize};
+    use super::{Options, TokenProperties, tokenize, tokenize_impl};
     use crate::uax29::test_helpers::test_against_uax29_break_tests;
 
     #[test]
@@ -292,6 +512,71 @@ mod tests {
             passed,
             passed + failed
         );
+    }
+
+    #[cfg(all(
+        target_arch = "aarch64",
+        target_endian = "little",
+        target_feature = "neon"
+    ))]
+    #[test]
+    fn neon_matches_scalar() {
+        fn collect<const WIDE: bool>(s: &str) -> Vec<(usize, TokenProperties)> {
+            let mut got = Vec::new();
+            tokenize_impl::<WIDE>(s, &mut |bp, props| {
+                got.push((bp, props));
+                true
+            });
+            got
+        }
+
+        let mut cases = vec![
+            "one two three four five six seven eight nine ten".repeat(4),
+            "a 1 abc123 under_score ! ? [ ] { } / \\ @ # $ % ^ & * - = + ` ~\t".repeat(4),
+            "x".repeat(129),
+            " ".repeat(129),
+            "x ".repeat(65),
+            format!(
+                "{}can't 12,345.67:89\r\n{}",
+                "x".repeat(63),
+                "y".repeat(129)
+            ),
+            format!(
+                "é{}中{}🙂",
+                "ascii words ".repeat(12),
+                " more_ascii".repeat(12)
+            ),
+        ];
+        for edge in [63, 64, 65, 127, 128, 129] {
+            cases.push(format!(
+                "{} abc_123 DEF {}",
+                "x".repeat(edge),
+                "y".repeat(edge)
+            ));
+            cases.push(format!(
+                "{}a.b {}1,2 {}a'b",
+                "x".repeat(edge),
+                "y".repeat(edge),
+                "z".repeat(edge)
+            ));
+        }
+
+        let alphabet = b"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ !?[]{}\\/@#$%^&*-+=`~\t\n\r\x0b\x0c'\",.:;";
+        let mut seed = 0x9e37_79b9_u32;
+        for len in [63, 64, 65, 127, 128, 129, 257, 1024] {
+            for _ in 0..64 {
+                let mut s = String::with_capacity(len);
+                for _ in 0..len {
+                    seed = seed.wrapping_mul(1_664_525).wrapping_add(1_013_904_223);
+                    s.push(alphabet[(seed as usize) % alphabet.len()] as char);
+                }
+                cases.push(s);
+            }
+        }
+
+        for s in cases {
+            assert_eq!(collect::<true>(&s), collect::<false>(&s), "input: {s:?}");
+        }
     }
 
     #[test]
