@@ -17,8 +17,46 @@ members = ["wasm", "alyze-features"]
 
 [dependencies]
 ahash = "0.8.12"
+frostem = { version = "1.20260821", default-features = false, features = [
+    # One feature per `StemmingLanguage` variant. Snowball's English-only legacy
+    # algorithms (`porter`, `lovins`, `earlymodernenglish`) are left off.
+    "arabic",
+    "armenian",
+    "basque",
+    "catalan",
+    "czech",
+    "danish",
+    "dutch",
+    "dutch_porter",
+    "english",
+    "esperanto",
+    "estonian",
+    "finnish",
+    "french",
+    "german",
+    "greek",
+    "hindi",
+    "hungarian",
+    "indonesian",
+    "irish",
+    "italian",
+    "lithuanian",
+    "nepali",
+    "norwegian",
+    "persian",
+    "polish",
+    "portuguese",
+    "romanian",
+    "russian",
+    "serbian",
+    "sesotho",
+    "spanish",
+    "swedish",
+    "tamil",
+    "turkish",
+    "yiddish",
+] }
 phf = { version = "0.13.1", features = ["macros"] }
-rust-stemmers = "1.2.0"
 tpuf_icu_properties_211 = "7"
 
 [dev-dependencies]

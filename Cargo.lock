@@ -61,10 +61,10 @@ version = "0.1.5"
 dependencies = [
  "ahash",
  "criterion",
+ "frostem",
  "itertools 0.14.0",
  "parquet",
  "phf",
- "rust-stemmers",
  "tempfile",
  "tpuf_icu_properties_211",
  "ureq",
@@ -533,6 +533,12 @@ dependencies = [
  "miniz_oxide",
  "zlib-rs",
 ]
+
+[[package]]
+name = "frostem"
+version = "1.20260821.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "c79a7d8b7c2f284e480cd6abbff7e211dfdbb5672795f5c3b254fc4345b50fa7"
 
 [[package]]
 name = "getrandom"
@@ -1065,16 +1071,6 @@ dependencies = [
  "libc",
  "untrusted",
  "windows-sys 0.52.0",
-]
-
-[[package]]
-name = "rust-stemmers"
-version = "1.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "e46a2036019fdb888131db7a4c847a1063a7493f971ed94ea82c67eada63ca54"
-dependencies = [
- "serde",
- "serde_derive",
 ]
 
 [[package]]
