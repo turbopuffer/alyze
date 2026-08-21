@@ -61,49 +61,90 @@ pub enum LanguageWithStopwords {
     Swedish,
 }
 
-#[derive(Copy, Clone, Debug)]
+/// A language whose Snowball stemming algorithm `alyze` can apply.
+///
+/// Each variant maps 1:1 onto an algorithm shipped by <https://snowballstem.org>,
+/// via the `frostem` crate.
+#[derive(Copy, Clone, Debug, PartialEq, Eq, Hash)]
 pub enum StemmingLanguage {
     Arabic,
+    Armenian,
+    Basque,
+    Catalan,
+    Czech,
     Danish,
     Dutch,
+    /// Snowball's pre-2023 Dutch algorithm, kept under its upstream name so
+    /// indexes built before [`Self::Dutch`] switched to the current algorithm
+    /// can keep their existing terms without a reindex.
+    DutchPorter,
     English,
+    Esperanto,
+    Estonian,
     Finnish,
     French,
     German,
     Greek,
+    Hindi,
     Hungarian,
+    Indonesian,
+    Irish,
     Italian,
+    Lithuanian,
+    Nepali,
     Norwegian,
+    Persian,
+    Polish,
     Portuguese,
     Romanian,
     Russian,
+    Serbian,
+    Sesotho,
     Spanish,
     Swedish,
     Tamil,
     Turkish,
+    Yiddish,
 }
 
-impl Into<rust_stemmers::Algorithm> for StemmingLanguage {
-    fn into(self) -> rust_stemmers::Algorithm {
-        match self {
-            StemmingLanguage::Arabic => rust_stemmers::Algorithm::Arabic,
-            StemmingLanguage::Danish => rust_stemmers::Algorithm::Danish,
-            StemmingLanguage::Dutch => rust_stemmers::Algorithm::Dutch,
-            StemmingLanguage::English => rust_stemmers::Algorithm::English,
-            StemmingLanguage::Finnish => rust_stemmers::Algorithm::Finnish,
-            StemmingLanguage::French => rust_stemmers::Algorithm::French,
-            StemmingLanguage::German => rust_stemmers::Algorithm::German,
-            StemmingLanguage::Greek => rust_stemmers::Algorithm::Greek,
-            StemmingLanguage::Hungarian => rust_stemmers::Algorithm::Hungarian,
-            StemmingLanguage::Italian => rust_stemmers::Algorithm::Italian,
-            StemmingLanguage::Norwegian => rust_stemmers::Algorithm::Norwegian,
-            StemmingLanguage::Portuguese => rust_stemmers::Algorithm::Portuguese,
-            StemmingLanguage::Romanian => rust_stemmers::Algorithm::Romanian,
-            StemmingLanguage::Russian => rust_stemmers::Algorithm::Russian,
-            StemmingLanguage::Spanish => rust_stemmers::Algorithm::Spanish,
-            StemmingLanguage::Swedish => rust_stemmers::Algorithm::Swedish,
-            StemmingLanguage::Tamil => rust_stemmers::Algorithm::Tamil,
-            StemmingLanguage::Turkish => rust_stemmers::Algorithm::Turkish,
+impl From<StemmingLanguage> for frostem::Algorithm {
+    fn from(language: StemmingLanguage) -> Self {
+        match language {
+            StemmingLanguage::Arabic => frostem::Algorithm::Arabic,
+            StemmingLanguage::Armenian => frostem::Algorithm::Armenian,
+            StemmingLanguage::Basque => frostem::Algorithm::Basque,
+            StemmingLanguage::Catalan => frostem::Algorithm::Catalan,
+            StemmingLanguage::Czech => frostem::Algorithm::Czech,
+            StemmingLanguage::Danish => frostem::Algorithm::Danish,
+            StemmingLanguage::Dutch => frostem::Algorithm::Dutch,
+            StemmingLanguage::DutchPorter => frostem::Algorithm::DutchPorter,
+            StemmingLanguage::English => frostem::Algorithm::English,
+            StemmingLanguage::Esperanto => frostem::Algorithm::Esperanto,
+            StemmingLanguage::Estonian => frostem::Algorithm::Estonian,
+            StemmingLanguage::Finnish => frostem::Algorithm::Finnish,
+            StemmingLanguage::French => frostem::Algorithm::French,
+            StemmingLanguage::German => frostem::Algorithm::German,
+            StemmingLanguage::Greek => frostem::Algorithm::Greek,
+            StemmingLanguage::Hindi => frostem::Algorithm::Hindi,
+            StemmingLanguage::Hungarian => frostem::Algorithm::Hungarian,
+            StemmingLanguage::Indonesian => frostem::Algorithm::Indonesian,
+            StemmingLanguage::Irish => frostem::Algorithm::Irish,
+            StemmingLanguage::Italian => frostem::Algorithm::Italian,
+            StemmingLanguage::Lithuanian => frostem::Algorithm::Lithuanian,
+            StemmingLanguage::Nepali => frostem::Algorithm::Nepali,
+            StemmingLanguage::Norwegian => frostem::Algorithm::Norwegian,
+            StemmingLanguage::Persian => frostem::Algorithm::Persian,
+            StemmingLanguage::Polish => frostem::Algorithm::Polish,
+            StemmingLanguage::Portuguese => frostem::Algorithm::Portuguese,
+            StemmingLanguage::Romanian => frostem::Algorithm::Romanian,
+            StemmingLanguage::Russian => frostem::Algorithm::Russian,
+            StemmingLanguage::Serbian => frostem::Algorithm::Serbian,
+            StemmingLanguage::Sesotho => frostem::Algorithm::Sesotho,
+            StemmingLanguage::Spanish => frostem::Algorithm::Spanish,
+            StemmingLanguage::Swedish => frostem::Algorithm::Swedish,
+            StemmingLanguage::Tamil => frostem::Algorithm::Tamil,
+            StemmingLanguage::Turkish => frostem::Algorithm::Turkish,
+            StemmingLanguage::Yiddish => frostem::Algorithm::Yiddish,
         }
     }
 }
@@ -175,7 +216,7 @@ impl Analyzer {
 
         let stemmer = self.options.stemming.map(|stemming_language| {
             let algorithm = stemming_language.into();
-            rust_stemmers::Stemmer::create(algorithm)
+            frostem::Stemmer::new(algorithm)
         });
 
         // Monotonic across all inputs. Every word-like token consumes
@@ -362,7 +403,7 @@ impl InputRefOrBuffered<'_, '_> {
 
     fn stem_in_place(
         &mut self,
-        stemmer: &rust_stemmers::Stemmer,
+        stemmer: &frostem::Stemmer,
         cache: &mut StemmingCache,
         scratch: &mut String,
     ) {
@@ -582,5 +623,120 @@ mod tests {
         assert_eq!(tokens[0].position, 1);
         assert_eq!(&input[tokens[0].byte_range.clone()], "Quick");
         assert_eq!(&input[tokens[1].byte_range.clone()], "fox");
+    }
+
+    /// Every `StemmingLanguage`, in declaration order. Adding a variant already
+    /// breaks the build at `From<StemmingLanguage> for frostem::Algorithm`;
+    /// extend this array and `expected` below at the same time.
+    const ALL_STEMMING_LANGUAGES: [StemmingLanguage; 35] = [
+        StemmingLanguage::Arabic,
+        StemmingLanguage::Armenian,
+        StemmingLanguage::Basque,
+        StemmingLanguage::Catalan,
+        StemmingLanguage::Czech,
+        StemmingLanguage::Danish,
+        StemmingLanguage::Dutch,
+        StemmingLanguage::DutchPorter,
+        StemmingLanguage::English,
+        StemmingLanguage::Esperanto,
+        StemmingLanguage::Estonian,
+        StemmingLanguage::Finnish,
+        StemmingLanguage::French,
+        StemmingLanguage::German,
+        StemmingLanguage::Greek,
+        StemmingLanguage::Hindi,
+        StemmingLanguage::Hungarian,
+        StemmingLanguage::Indonesian,
+        StemmingLanguage::Irish,
+        StemmingLanguage::Italian,
+        StemmingLanguage::Lithuanian,
+        StemmingLanguage::Nepali,
+        StemmingLanguage::Norwegian,
+        StemmingLanguage::Persian,
+        StemmingLanguage::Polish,
+        StemmingLanguage::Portuguese,
+        StemmingLanguage::Romanian,
+        StemmingLanguage::Russian,
+        StemmingLanguage::Serbian,
+        StemmingLanguage::Sesotho,
+        StemmingLanguage::Spanish,
+        StemmingLanguage::Swedish,
+        StemmingLanguage::Tamil,
+        StemmingLanguage::Turkish,
+        StemmingLanguage::Yiddish,
+    ];
+
+    fn stem_one(language: StemmingLanguage, input: &str) -> String {
+        let mut o = opts();
+        o.stemming = Some(language);
+        let tokens = collect(o, input);
+        assert_eq!(tokens.len(), 1, "{language:?} did not produce one token");
+        tokens.into_iter().next().unwrap().text
+    }
+
+    /// One word per language, with its stem read off that algorithm's
+    /// `voc.txt`/`output.txt` pair in
+    /// <https://github.com/snowballstem/snowball-data>. Every word is one the
+    /// algorithm actually rewrites, so a variant wired to the wrong
+    /// `frostem::Algorithm` fails here unless the two algorithms happen to agree
+    /// on that word — which several Latin-script pairs do, hence one vector per
+    /// language rather than a shared list.
+    #[test]
+    fn each_language_applies_its_own_snowball_algorithm() {
+        let expected: [(StemmingLanguage, &str, &str); 35] = [
+            (StemmingLanguage::Arabic, "الكتاب", "كتاب"),
+            (StemmingLanguage::Armenian, "աբբայության", "աբբայ"),
+            (StemmingLanguage::Basque, "etxeetan", "etxe"),
+            (StemmingLanguage::Catalan, "professora", "profes"),
+            (StemmingLanguage::Czech, "krásného", "krásn"),
+            (StemmingLanguage::Danish, "bueskytten", "bueskyt"),
+            (StemmingLanguage::Dutch, "aalmoezen", "aalmoes"),
+            (StemmingLanguage::DutchPorter, "aalmoezen", "aalmoez"),
+            (StemmingLanguage::English, "fruitlessly", "fruitless"),
+            (StemmingLanguage::Esperanto, "libroj", "libr"),
+            (StemmingLanguage::Estonian, "raamatutest", "raama"),
+            (StemmingLanguage::Finnish, "voimakkaasti", "voimak"),
+            (StemmingLanguage::French, "continuellement", "continuel"),
+            (StemmingLanguage::German, "abgeleitete", "abgeleit"),
+            (StemmingLanguage::Greek, "έκπληκτα", "εκπληκτ"),
+            (StemmingLanguage::Hindi, "लड़कियों", "लड़क"),
+            (StemmingLanguage::Hungarian, "alkotmányt", "alkotmány"),
+            (StemmingLanguage::Indonesian, "membaca", "baca"),
+            (StemmingLanguage::Irish, "abairteach", "abairt"),
+            (StemmingLanguage::Italian, "abbandonata", "abbandon"),
+            (StemmingLanguage::Lithuanian, "knygomis", "knyg"),
+            (StemmingLanguage::Nepali, "दिछिन्", "दि"),
+            (StemmingLanguage::Norwegian, "havnebyen", "havneby"),
+            (StemmingLanguage::Persian, "کتابها", "کتاب"),
+            (StemmingLanguage::Polish, "cieszyć", "cieszyc"),
+            (StemmingLanguage::Portuguese, "apontando", "apont"),
+            (StemmingLanguage::Romanian, "abandonați", "abandon"),
+            (StemmingLanguage::Russian, "красивый", "красив"),
+            (StemmingLanguage::Serbian, "beležnika", "beležnik"),
+            (StemmingLanguage::Sesotho, "dibuka", "dibuk"),
+            (StemmingLanguage::Spanish, "abandonada", "abandon"),
+            (StemmingLanguage::Swedish, "aftonbladet", "aftonblad"),
+            (StemmingLanguage::Tamil, "அகப்பேய்ச்", "அகப்பேய்"),
+            (StemmingLanguage::Turkish, "almasının", "alma"),
+            (StemmingLanguage::Yiddish, "ביכער", "ביכ"),
+        ];
+        let mut seen = std::collections::HashSet::new();
+        for (i, language) in ALL_STEMMING_LANGUAGES.into_iter().enumerate() {
+            assert!(seen.insert(language), "{language:?} listed twice");
+            let (covered, input, want) = expected[i];
+            assert_eq!(covered, language, "expected[] is out of order");
+            assert_eq!(stem_one(language, input), want, "{language:?}");
+        }
+    }
+
+    /// Snowball replaced its Dutch algorithm; the pre-2023 one lives on
+    /// upstream as `dutch_porter`. The two disagree on roughly half of
+    /// Snowball's own Dutch vocabulary, so they must stay distinct variants.
+    #[test]
+    fn dutch_and_dutch_porter_differ() {
+        assert_ne!(
+            stem_one(StemmingLanguage::Dutch, "aalmoezen"),
+            stem_one(StemmingLanguage::DutchPorter, "aalmoezen"),
+        );
     }
 }

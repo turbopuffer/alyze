@@ -203,50 +203,88 @@ fn build_options(options: &Options) -> Result<AnalysisOptions, JsValue> {
     })
 }
 
-/// All languages turbopuffer recognizes, with display labels. Capability flags
-/// (stemming/stopwords) are derived from the mapping functions below.
+/// Every language `alyze` can stem or strip stopwords for, with display labels.
+/// Capability flags (stemming/stopwords) are derived from the mapping functions
+/// below. Languages beyond the set turbopuffer's API accepts are reachable here
+/// because the widget runs `alyze` directly.
 const LANGUAGES: &[(&str, &str)] = &[
     ("arabic", "Arabic"),
+    ("armenian", "Armenian"),
+    ("basque", "Basque"),
+    ("catalan", "Catalan"),
+    ("czech", "Czech"),
     ("danish", "Danish"),
     ("dutch", "Dutch"),
+    ("dutch_porter", "Dutch (Porter)"),
     ("english", "English"),
+    ("esperanto", "Esperanto"),
+    ("estonian", "Estonian"),
     ("finnish", "Finnish"),
     ("french", "French"),
     ("german", "German"),
     ("greek", "Greek"),
+    ("hindi", "Hindi"),
     ("hungarian", "Hungarian"),
+    ("indonesian", "Indonesian"),
+    ("irish", "Irish"),
     ("italian", "Italian"),
+    ("lithuanian", "Lithuanian"),
+    ("nepali", "Nepali"),
     ("norwegian", "Norwegian"),
+    ("persian", "Persian"),
+    ("polish", "Polish"),
     ("portuguese", "Portuguese"),
     ("romanian", "Romanian"),
     ("russian", "Russian"),
+    ("serbian", "Serbian"),
+    ("sesotho", "Sesotho"),
     ("spanish", "Spanish"),
     ("swedish", "Swedish"),
     ("tamil", "Tamil"),
     ("turkish", "Turkish"),
+    ("yiddish", "Yiddish"),
 ];
 
-/// Mirrors `language_into_alyze_stemming_language` in the turbopuffer codebase.
+/// Maps a language name to its stemming algorithm. A superset of
+/// `language_into_alyze_stemming_language` in the turbopuffer codebase, which
+/// covers the subset the API exposes.
 fn stemming_language(language: &str) -> Option<StemmingLanguage> {
     Some(match language {
         "arabic" => StemmingLanguage::Arabic,
+        "armenian" => StemmingLanguage::Armenian,
+        "basque" => StemmingLanguage::Basque,
+        "catalan" => StemmingLanguage::Catalan,
+        "czech" => StemmingLanguage::Czech,
         "danish" => StemmingLanguage::Danish,
         "dutch" => StemmingLanguage::Dutch,
+        "dutch_porter" => StemmingLanguage::DutchPorter,
         "english" => StemmingLanguage::English,
+        "esperanto" => StemmingLanguage::Esperanto,
+        "estonian" => StemmingLanguage::Estonian,
         "finnish" => StemmingLanguage::Finnish,
         "french" => StemmingLanguage::French,
         "german" => StemmingLanguage::German,
         "greek" => StemmingLanguage::Greek,
+        "hindi" => StemmingLanguage::Hindi,
         "hungarian" => StemmingLanguage::Hungarian,
+        "indonesian" => StemmingLanguage::Indonesian,
+        "irish" => StemmingLanguage::Irish,
         "italian" => StemmingLanguage::Italian,
+        "lithuanian" => StemmingLanguage::Lithuanian,
+        "nepali" => StemmingLanguage::Nepali,
         "norwegian" => StemmingLanguage::Norwegian,
+        "persian" => StemmingLanguage::Persian,
+        "polish" => StemmingLanguage::Polish,
         "portuguese" => StemmingLanguage::Portuguese,
         "romanian" => StemmingLanguage::Romanian,
         "russian" => StemmingLanguage::Russian,
+        "serbian" => StemmingLanguage::Serbian,
+        "sesotho" => StemmingLanguage::Sesotho,
         "spanish" => StemmingLanguage::Spanish,
         "swedish" => StemmingLanguage::Swedish,
         "tamil" => StemmingLanguage::Tamil,
         "turkish" => StemmingLanguage::Turkish,
+        "yiddish" => StemmingLanguage::Yiddish,
         _ => return None,
     })
 }
