@@ -536,6 +536,27 @@ mod tests {
     }
 
     #[test]
+    fn ascii_folding_folds_accents_ligatures_and_leaves_cjk() {
+        let mut o = opts();
+        o.ascii_folding = true;
+        let input = "café Straße 馬";
+        let tokens = collect(o, input);
+        assert_eq!(tokens.len(), 3);
+        assert_eq!(tokens[0].text, "cafe");
+        assert_eq!(tokens[1].text, "strasse"); // lowercased to "straße", then ß folds to "ss"
+        assert_eq!(tokens[2].text, "馬"); // no ASCII equivalent
+        assert_eq!(&input[tokens[0].byte_range.clone()], "café");
+        assert_eq!(&input[tokens[1].byte_range.clone()], "Straße");
+        assert_eq!(&input[tokens[2].byte_range.clone()], "馬");
+    }
+
+    #[test]
+    fn ascii_folding_disabled_preserves_accents() {
+        let tokens = collect(opts(), "café");
+        assert_eq!(tokens[0].text, "café");
+    }
+
+    #[test]
     fn byte_range_recovers_raw_when_stemming_shrinks_bytes() {
         let mut o = opts();
         o.stemming = Some(StemmingLanguage::English);
@@ -582,5 +603,35 @@ mod tests {
         assert_eq!(tokens[0].position, 1);
         assert_eq!(&input[tokens[0].byte_range.clone()], "Quick");
         assert_eq!(&input[tokens[1].byte_range.clone()], "fox");
+    }
+
+    #[test]
+    fn maximum_token_length_drops_long_tokens_with_position_gap() {
+        let mut o = opts();
+        o.maximum_token_length = Some(4);
+        let input = "the Quick fox";
+        let tokens = collect(o, input);
+        // "Quick" (5 chars) is dropped but still consumes position 1.
+        assert_eq!(tokens.len(), 2);
+        assert_eq!(tokens[0].text, "the");
+        assert_eq!(tokens[0].position, 0);
+        assert_eq!(&input[tokens[0].byte_range.clone()], "the");
+        assert_eq!(tokens[1].text, "fox");
+        assert_eq!(tokens[1].position, 2);
+        assert_eq!(&input[tokens[1].byte_range.clone()], "fox");
+    }
+
+    #[test]
+    fn maximum_token_length_allows_multibyte_by_char_count() {
+        // "café" is 5 bytes / 4 chars; limit of 4 still keeps it.
+        let mut o = opts();
+        o.maximum_token_length = Some(4);
+        let tokens = collect(o, "café");
+        assert_eq!(tokens.len(), 1);
+        assert_eq!(tokens[0].text, "café");
+
+        o.maximum_token_length = Some(3);
+        let tokens = collect(o, "café");
+        assert!(tokens.is_empty());
     }
 }

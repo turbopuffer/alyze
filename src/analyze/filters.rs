@@ -1609,7 +1609,10 @@ fn fold_non_ascii_char(c: char) -> Option<&'static str> {
 #[cfg(test)]
 mod tests {
     use crate::analyze::{
-        filters::{MAX_LOWERCASED_BYTE_LENGTH, is_english_stopword, lowercase_chars_in_place},
+        filters::{
+            MAX_LOWERCASED_BYTE_LENGTH, ascii_fold, is_english_stopword, lowercase_chars_in_place,
+            within_token_length_limit,
+        },
         u17_to_lower::unicode_v17_char_to_lower,
     };
 
@@ -1681,6 +1684,48 @@ mod tests {
 
         for token in ["", "The", "therefore", "within", "hello", "中文"] {
             assert!(!is_english_stopword(token), "token: {token}");
+        }
+    }
+
+    #[test]
+    fn test_within_token_length_limit() {
+        // max == 0 rejects everything.
+        assert!(!within_token_length_limit("", 0));
+        assert!(!within_token_length_limit("a", 0));
+
+        // Empty string is within any positive limit.
+        assert!(within_token_length_limit("", 1));
+
+        // ASCII: byte length is the effective limit.
+        assert!(within_token_length_limit("hello", 5));
+        assert!(!within_token_length_limit("hello", 4));
+
+        // Multi-byte: "café" is 5 bytes / 4 chars. Allowed when byte length
+        // exceeds the limit but character count does not.
+        assert!(within_token_length_limit("café", 5));
+        assert!(within_token_length_limit("café", 4));
+        assert!(!within_token_length_limit("café", 3));
+    }
+
+    #[test]
+    fn test_ascii_fold() {
+        let cases: &[(&str, &str)] = &[
+            ("", ""),
+            ("cafe", "cafe"),
+            ("café", "cafe"),
+            ("ÄÖÜ", "AOU"), // fold doesn't lowercase; the pipeline lowercases after folding
+            ("straße", "strasse"), // ß folds to two letters, so the string grows. byte number remains the same.
+            ("Ææ", "AEae"),
+            ("ﬀﬁﬂ", "fffifl"), // ligatures
+            ("馬", "馬"),       // no sensible ASCII equivalent
+            ("中文", "中文"),
+            ("café 馬 Straße", "cafe 馬 Strasse"),
+        ];
+
+        for (input, expected) in cases {
+            let mut out = String::new();
+            ascii_fold(input, &mut out);
+            assert_eq!(&out, *expected, "input: {input:?}");
         }
     }
 }
