@@ -19,6 +19,7 @@ publish = false
 
 [dependencies]
 rust-stemmers = "1.2.0"
+tpuf_icu_properties_211 = "7"
 
 [dev-dependencies]
 criterion = "0.8.2"

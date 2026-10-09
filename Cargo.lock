@@ -78,6 +78,7 @@ dependencies = [
  "criterion",
  "parquet",
  "rust-stemmers",
+ "tpuf_icu_properties_211",
 ]
 
 [[package]]

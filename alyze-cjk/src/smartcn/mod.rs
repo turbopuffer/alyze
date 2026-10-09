@@ -31,7 +31,6 @@
 pub(crate) mod char_type;
 mod chunks;
 pub(crate) mod dict;
-mod jdk_sentence_tables;
 mod segmenter;
 pub(crate) mod sentence;
 
