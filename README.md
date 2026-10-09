@@ -48,4 +48,6 @@ workspace.
 `alyze` is MIT licensed. The separate `alyze-features` crate is Apache-2.0 (its features are derived
 from [Vespa](https://github.com/vespa-engine/vespa), Copyright Vespa.ai) — see
 [`alyze-features/`](alyze-features/) for details. With gratitude to the Vespa team for their
-excellent, well-documented work.
+excellent, well-documented work. The separate `alyze-cjk` crate (the optional `cjk` feature) is
+also Apache-2.0: its `smartcn` analyzer and dictionaries are derived from
+[Apache Lucene](https://lucene.apache.org/) — see [`alyze-cjk/`](alyze-cjk/) for details.

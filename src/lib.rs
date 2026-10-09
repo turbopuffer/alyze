@@ -13,3 +13,7 @@
 
 pub mod analyze;
 pub mod uax29;
+
+/// CJK (Chinese, Japanese, Korean) analysis. Requires the `cjk` feature.
+#[cfg(feature = "cjk")]
+pub use alyze_cjk as cjk;
