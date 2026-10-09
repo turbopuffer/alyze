@@ -2,7 +2,7 @@
 //! differential tests. Deterministic: the same seed always produces the same file, so the file is
 //! committed and this only needs rerunning when the generator changes.
 //!
-//!     cargo run --example smartcn_gen_fuzz [-- --cases N --seed S --out PATH]
+//!     cargo run -p alyze-cjk --example smartcn_gen_fuzz [-- --cases N --seed S --out PATH]
 //!
 //! After regenerating, rerun `testdata/smartcn/gen.sh` to refresh the golden files.
 //!

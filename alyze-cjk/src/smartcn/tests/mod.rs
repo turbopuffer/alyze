@@ -11,23 +11,7 @@ mod upstream;
 use std::fmt::Write as _;
 use std::ops::Range;
 
-use crate::analyze::{
-    AnalysisOptions, Analyzer, ReusableBuffer, StemmingLanguage, TokenizerOptions,
-};
 use crate::smartcn::{self, TokenKind};
-
-/// Options that reproduce Elasticsearch's `smartcn` analyzer: the smartcn tokenizer (which already
-/// lowercases ASCII and drops punctuation), English stemming, nothing else.
-pub(super) fn es_parity_options() -> AnalysisOptions {
-    AnalysisOptions {
-        tokenizer: TokenizerOptions::SmartCn(smartcn::Options::default()),
-        maximum_token_length: None,
-        case_sensitive: false,
-        stopword_removal: None,
-        stemming: Some(StemmingLanguage::English),
-        ascii_folding: false,
-    }
-}
 
 // ------------------------------------------------------------------------------------------------
 // Running the port
@@ -76,13 +60,11 @@ pub(super) fn run_tokenizer(input: &str) -> Vec<Tok> {
     tokens
 }
 
-/// Runs the full analyzer with [`es_parity_options`] (`smartcn` analyzer).
+/// Runs the full analyzer (`smartcn` analyzer).
 pub(super) fn run_analyzer(input: &str) -> Vec<Tok> {
-    let analyzer = Analyzer::new(es_parity_options());
-    let mut buffer = ReusableBuffer::new();
     let mut tokens = Vec::new();
-    analyzer.analyze(input, &mut buffer, |token| {
-        assert_eq!(token.input_index, 0);
+    let mut buffer = String::new();
+    smartcn::analyze(input, smartcn::Options::default(), &mut buffer, |token| {
         tokens.push(Tok {
             text: token.text.to_owned(),
             byte_range: token.byte_range,

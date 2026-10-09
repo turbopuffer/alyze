@@ -1,8 +1,7 @@
 //! Converts Lucene's smartcn dictionaries (`coredict.mem`, `bigramdict.mem`: Java-serialized
-//! primitive arrays) into the compact blobs that `alyze-cjk` ships and `alyze::smartcn::dict`
-//! parses. Only needs rerunning if Lucene's dictionaries change (they haven't in over a decade).
+//! primitive arrays) into the compact blobs in `data/` that `smartcn::dict` parses. Only needs rerunning if Lucene's dictionaries change (they haven't in over a decade).
 //!
-//!     cargo run -p alyze --example smartcn_convert_dicts -- \
+//!     cargo run -p alyze-cjk --example smartcn_convert_dicts -- \
 //!         ~/Src/smartcn/lucene/analysis/smartcn/src/resources/org/apache/lucene/analysis/cn/smart/hhmm
 //!
 //! Core dictionary blob (little-endian): `u32` head count, then per head character (ascending)
@@ -19,7 +18,7 @@ fn main() {
     let source_dir = std::env::args()
         .nth(1)
         .expect("path to Lucene's hhmm resource directory");
-    let out_dir = format!("{}/alyze-cjk/data", env!("CARGO_MANIFEST_DIR"));
+    let out_dir = format!("{}/data", env!("CARGO_MANIFEST_DIR"));
 
     let core = convert_core(&std::fs::read(Path::new(&source_dir).join("coredict.mem")).unwrap());
     std::fs::write(format!("{out_dir}/coredict.bin"), &core).unwrap();

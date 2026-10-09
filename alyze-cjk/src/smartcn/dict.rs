@@ -1,5 +1,6 @@
-//! The smartcn dictionaries, parsed on first use from the blobs in `alyze-cjk` (formats are
-//! documented in `examples/smartcn_convert_dicts.rs`).
+//! The smartcn dictionaries, parsed on first use from the blobs in `data/`, which
+//! `examples/smartcn_convert_dicts.rs` produces from Lucene's `coredict.mem` and `bigramdict.mem`
+//! (ICTCLAS data, Apache License 2.0) and whose formats it documents.
 //!
 //! Words are handled as UTF-16 code units throughout, like the Java implementation: every
 //! dictionary word is in the BMP, and the bigram table only stores a 64-bit hash of
@@ -7,6 +8,9 @@
 //! to find anything.
 
 use std::sync::OnceLock;
+
+const CORE_DICT: &[u8] = include_bytes!("../../data/coredict.bin");
+const BIGRAM_DICT: &[u8] = include_bytes!("../../data/bigramdict.bin");
 
 /// The core word dictionary: every known word with its frequency, grouped by first code unit.
 pub(crate) struct CoreDict {
@@ -25,7 +29,7 @@ const NO_ROW: u32 = u32::MAX;
 impl CoreDict {
     pub(crate) fn get() -> &'static CoreDict {
         static CORE: OnceLock<CoreDict> = OnceLock::new();
-        CORE.get_or_init(|| CoreDict::parse(alyze_cjk::smartcn::CORE_DICT))
+        CORE.get_or_init(|| CoreDict::parse(CORE_DICT))
     }
 
     fn parse(blob: &[u8]) -> CoreDict {
@@ -83,6 +87,7 @@ impl CoreDict {
             .map(|_| index)
     }
 
+    #[cfg(test)]
     /// Visits every `(word, frequency)` entry, in no particular order.
     pub(crate) fn for_each_entry(&self, mut f: impl FnMut(&[u16], i32)) {
         let mut word = Vec::new();
@@ -111,7 +116,7 @@ pub(crate) struct BigramDict {
 impl BigramDict {
     pub(crate) fn get() -> &'static BigramDict {
         static BIGRAM: OnceLock<BigramDict> = OnceLock::new();
-        BIGRAM.get_or_init(|| BigramDict::parse(alyze_cjk::smartcn::BIGRAM_DICT))
+        BIGRAM.get_or_init(|| BigramDict::parse(BIGRAM_DICT))
     }
 
     fn parse(blob: &[u8]) -> BigramDict {
@@ -139,6 +144,7 @@ impl BigramDict {
         }
     }
 
+    #[cfg(test)]
     /// Visits every `(hash, frequency)` entry, in no particular order.
     pub(crate) fn for_each_entry(&self, mut f: impl FnMut(u64, i32)) {
         for (&hash, &freq) in self.hashes.iter().zip(&self.freqs) {

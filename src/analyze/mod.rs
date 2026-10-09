@@ -37,10 +37,6 @@ impl AnalysisOptions {
 #[derive(Clone, Copy, Debug)]
 pub enum TokenizerOptions {
     UAX29Word(uax29::word::Options),
-    /// Lucene's `smartcn` HMM segmenter for Chinese, see [`crate::smartcn`]. Punctuation tokens
-    /// are always dropped (consuming a position), matching Elasticsearch's `smartcn` analyzer.
-    #[cfg(feature = "cjk")]
-    SmartCn(crate::smartcn::Options),
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -171,17 +167,6 @@ impl Analyzer {
         buffer: &mut ReusableBuffer,
         mut callback: impl FnMut(Token<'_>) -> bool,
     ) {
-        #[cfg(feature = "cjk")]
-        if let TokenizerOptions::SmartCn(smartcn_options) = self.options.tokenizer {
-            return crate::smartcn::analyze_inputs(
-                &self.options,
-                smartcn_options,
-                inputs,
-                buffer,
-                callback,
-            );
-        }
-
         let ReusableBuffer {
             a: buffer_a,
             b: buffer_b,
@@ -200,11 +185,7 @@ impl Analyzer {
         // TODO configurable gap between inputs
         let mut next_position = 0;
 
-        let tokenizer_opts = match self.options.tokenizer {
-            TokenizerOptions::UAX29Word(opts) => opts,
-            #[cfg(feature = "cjk")]
-            TokenizerOptions::SmartCn(_) => unreachable!("handled above"),
-        };
+        let TokenizerOptions::UAX29Word(tokenizer_opts) = self.options.tokenizer;
 
         for (input_index, input) in inputs.enumerate() {
             let mut prev = None;

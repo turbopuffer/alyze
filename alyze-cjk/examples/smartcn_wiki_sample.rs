@@ -1,7 +1,7 @@
 //! Extracts a deterministic sample of Chinese Wikipedia articles for the smartcn differential
 //! tests, one article per line in the escaped case-file format.
 //!
-//!     cargo run --example smartcn_wiki_sample [-- --bytes N --out PATH --parquet PATH]
+//!     cargo run -p alyze-cjk --example smartcn_wiki_sample [-- --bytes N --out PATH --parquet PATH]
 //!
 //! Defaults produce `testdata/smartcn/cases/wiki_zh.txt` (committed, ~512 KiB) from the first
 //! articles of one shard of the `wikimedia/wikipedia` `20231101.zh` dataset. For a large ad-hoc
@@ -9,7 +9,8 @@
 //! the golden with `testdata/smartcn/gen.sh tokens IN OUT`, then run the ignored
 //! `smartcn::tests::golden::tokens_large` test with `SMARTCN_CASES`/`SMARTCN_TOKENS` set.
 //!
-//! The shard is not downloaded automatically; fetch it once with
+//! The shard is not downloaded automatically; fetch it once (into the repository's ignored
+//! `.cache/`) with
 //!
 //!     curl -L -o .cache/wikipedia_zh/train-00002-of-00006.parquet \
 //!       'https://huggingface.co/datasets/wikimedia/wikipedia/resolve/main/20231101.zh/train-00002-of-00006.parquet?download=true'
@@ -26,7 +27,7 @@ fn main() {
     let root = env!("CARGO_MANIFEST_DIR");
     let mut bytes = 512 * 1024usize;
     let mut out = format!("{root}/testdata/smartcn/cases/wiki_zh.txt");
-    let mut parquet = format!("{root}/.cache/wikipedia_zh/train-00002-of-00006.parquet");
+    let mut parquet = format!("{root}/../.cache/wikipedia_zh/train-00002-of-00006.parquet");
     let mut args = std::env::args().skip(1);
     while let Some(arg) = args.next() {
         let value = args.next().expect("missing value");

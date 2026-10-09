@@ -13,17 +13,19 @@
 //!    ([`dict`]) and find the shortest path.
 //! 4. Normalize tokens: fullwidth to halfwidth, ASCII A-Z lowercased, every punctuation token
 //!    rewritten to `","`.
-//! 5. (Analyzer only) Porter-stem every token and drop punctuation, which consumes a position.
+//! 5. ([`analyze`] only) Porter-stem every token and drop punctuation, which consumes a position.
 //!
 //! Parity contract: steps 1-4 ([`tokenize`]) match Lucene bit for bit, including offsets, with one
 //! exception: when Lucene's 1024-unit cut lands inside a surrogate pair it emits each half as a
 //! junk one-unit token; the port emits the whole code point once, at the first half's position.
-//! Step 5 is done by `alyze`'s own filter chain ([`crate::analyze::Analyzer`] with
-//! [`crate::analyze::TokenizerOptions::SmartCn`]) and uses Porter2 rather than Lucene's Porter, so
-//! stems of English words may differ slightly from Elasticsearch; everything else matches.
+//! Step 5 ([`analyze`]) uses Porter2 rather than Lucene's Porter, so stems of English words may
+//! differ slightly from Elasticsearch; everything else matches.
 //!
 //! All of this is checked against golden files produced by the Java implementation, see
 //! `testdata/smartcn/README.md`.
+//!
+//! This module is deliberately self-contained (it doesn't plug into `alyze`'s analyzer and
+//! filter chain yet); integrating it there is a later step.
 
 pub(crate) mod char_type;
 mod chunks;
@@ -36,8 +38,6 @@ pub(crate) mod sentence;
 mod tests;
 
 use std::ops::Range;
-
-use crate::analyze::{AnalysisOptions, ReusableBuffer};
 
 /// Tokenizer options. Nothing is configurable yet; the struct exists so that options can be added
 /// without breaking callers.
@@ -111,17 +111,45 @@ pub fn tokenize(
     }
 }
 
-/// [`crate::analyze::Analyzer::analyze_inputs`] for [`crate::analyze::TokenizerOptions::SmartCn`]:
-/// runs [`tokenize`] and then `alyze`'s filter chain (lowercasing, stopwords, stemming, ASCII
-/// folding, per `options`) on each token. Punctuation tokens are dropped but consume a position,
-/// like Lucene's stop filter.
-pub(crate) fn analyze_inputs<'a>(
-    options: &AnalysisOptions,
-    smartcn_options: Options,
-    inputs: impl Iterator<Item = &'a str>,
-    buffer: &mut ReusableBuffer,
-    callback: impl FnMut(crate::analyze::Token<'_>) -> bool,
+/// A token from [`analyze`].
+#[non_exhaustive]
+pub struct AnalyzedToken<'a> {
+    /// Normalized, stemmed token text. Only valid for the duration of the callback.
+    pub text: &'a str,
+    /// Position of the token in the sequence of tokens, 0-based. Punctuation tokens consume a
+    /// position without being emitted, like Lucene's stop filter.
+    pub position: usize,
+    /// Byte range of the token in the input. Always on UTF-8 boundaries.
+    pub byte_range: Range<usize>,
+}
+
+/// Analyzes `text` like Elasticsearch's `smartcn` analyzer: [`tokenize`], drop punctuation, stem
+/// every token. Lucene stems with the original Porter algorithm, which is a no-op on anything but
+/// ASCII letters; this uses Porter2 (`rust_stemmers`' English stemmer) on ASCII tokens, so stems
+/// of English words can differ slightly. `buffer` is scratch space and should be reused.
+pub fn analyze(
+    text: &str,
+    options: Options,
+    buffer: &mut String,
+    mut on_token: impl FnMut(AnalyzedToken<'_>) -> bool,
 ) {
-    // Stub: the port has not been written yet, so no tokens are emitted.
-    let _ = (options, smartcn_options, inputs, buffer, callback);
+    let stemmer = rust_stemmers::Stemmer::create(rust_stemmers::Algorithm::English);
+    let mut next_position = 0;
+    tokenize(text, options, buffer, |token| {
+        let position = next_position;
+        next_position += 1;
+        if token.kind == TokenKind::Punctuation {
+            return true;
+        }
+        let stemmed = if token.text.is_ascii() {
+            stemmer.stem(token.text)
+        } else {
+            std::borrow::Cow::Borrowed(token.text)
+        };
+        on_token(AnalyzedToken {
+            text: &stemmed,
+            position,
+            byte_range: token.byte_range,
+        })
+    });
 }

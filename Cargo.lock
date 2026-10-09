@@ -74,6 +74,10 @@ dependencies = [
 [[package]]
 name = "alyze-cjk"
 version = "0.1.0"
+dependencies = [
+ "parquet",
+ "rust-stemmers",
+]
 
 [[package]]
 name = "alyze-features"

@@ -1,6 +1,6 @@
 # smartcn golden tests
 
-Test data for the Rust port of Lucene's `smartcn` analyzer (`src/smartcn/`, `cjk` feature), the
+Test data for the Rust port of Lucene's `smartcn` analyzer (`alyze-cjk/src/smartcn/`), the
 segmenter behind Elasticsearch's `smartcn` analyzer and `smartcn_tokenizer`.
 
 The port is checked against the reference Java implementation by golden files: `gen.sh` runs
@@ -15,8 +15,8 @@ The golden files are committed, so the Rust tests (`src/smartcn/tests/`) need no
 | `gen.sh`                    | Compiles and runs it for every file below                         |
 | `cases/upstream.txt`        | Inputs from Lucene's and Elasticsearch's own smartcn tests        |
 | `cases/edge.txt`            | Hand-written edge cases (classification boundaries, chunking, …)  |
-| `cases/fuzz.txt`            | Seeded random inputs, from `examples/smartcn_gen_fuzz.rs`         |
-| `cases/wiki_zh.txt`         | ~512 KiB of Chinese Wikipedia, from `examples/smartcn_wiki_sample.rs` |
+| `cases/fuzz.txt`            | Seeded random inputs, from `../../examples/smartcn_gen_fuzz.rs`   |
+| `cases/wiki_zh.txt`         | ~512 KiB of Chinese Wikipedia, from `../../examples/smartcn_wiki_sample.rs` |
 | `cases/dict_probes.txt`     | Words / word pairs to look up in the dictionaries                 |
 | `golden/<case>.tokens`      | `HMMChineseTokenizer` output (ES `smartcn_tokenizer`)             |
 | `golden/<case>.analyze`     | `SmartChineseAnalyzer` output (ES `smartcn`: + Porter + stop)     |
@@ -58,19 +58,19 @@ Needs a JDK and the Lucene 10.4.0 jars `lucene-core`, `lucene-analysis-common` a
 `lucene-analysis-smartcn` (from Maven Central). Defaults: Homebrew's `openjdk` and
 `~/Src/smartcn/jars`; override with `JAVA_HOME` and `LUCENE_JARS`.
 
-    cargo run -p alyze --example smartcn_gen_fuzz      # only if the generator changed
-    cargo run -p alyze --example smartcn_wiki_sample   # only if the sample should change
-    testdata/smartcn/gen.sh
+    cargo run -p alyze-cjk --example smartcn_gen_fuzz      # only if the generator changed
+    cargo run -p alyze-cjk --example smartcn_wiki_sample   # only if the sample should change
+    alyze-cjk/testdata/smartcn/gen.sh
 
 ## Large differential runs
 
 The committed Wikipedia sample is small to keep the repo small. To run the port against a lot more
 text (the parquet shard is ~120 MB; see the extractor's docs for the download):
 
-    cargo run -p alyze --example smartcn_wiki_sample -- --bytes 50000000 --out /tmp/zh.txt
-    testdata/smartcn/gen.sh tokens /tmp/zh.txt /tmp/zh.tokens
+    cargo run -p alyze-cjk --example smartcn_wiki_sample -- --bytes 50000000 --out /tmp/zh.txt
+    alyze-cjk/testdata/smartcn/gen.sh tokens /tmp/zh.txt /tmp/zh.tokens
     SMARTCN_CASES=/tmp/zh.txt SMARTCN_TOKENS=/tmp/zh.tokens \
-        cargo test --features cjk --release smartcn::tests::golden::tokens_large -- --ignored
+        cargo test -p alyze-cjk --release smartcn::tests::golden::tokens_large -- --ignored
 
 Any file in the case-file format works, so the same applies to a bigger fuzz set
 (`--example smartcn_gen_fuzz -- --cases 100000 --seed 7 --out /tmp/fuzz.txt`).
