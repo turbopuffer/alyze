@@ -76,6 +76,7 @@ name = "alyze-cjk"
 version = "0.1.0"
 dependencies = [
  "criterion",
+ "fst",
  "parquet",
  "rust-stemmers",
  "tpuf_icu_properties_211",
@@ -544,6 +545,12 @@ dependencies = [
  "miniz_oxide",
  "zlib-rs",
 ]
+
+[[package]]
+name = "fst"
+version = "0.4.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7ab85b9b05e3978cc9a9cf8fea7f01b494e1a09ed3037e16ba39edc7a29eb61a"
 
 [[package]]
 name = "getrandom"

@@ -1,0 +1,86 @@
+// Dictionary probes for golden/dict.txt. `term X` dumps every entry whose surface form is X,
+// `prefix X` lists the dictionary terms that are prefixes of X (what the Viterbi's FST walk finds),
+// `cost R L` reads one connection cost (R = right id of the previous word, L = left id of the next;
+// 0 is BOS/EOS).
+term 뿌리
+term 가
+term 는
+term 나무
+term 깊
+term 은
+term 가락지나물
+term 보험계약
+term 보험계약대출이율
+term 갠지스강
+term 가늠표
+term 감싸여
+term 걸어왔
+term 고양이로소이다
+term 월드와이드웹
+term 鄕歌
+term 車
+term 丞相
+term 喜悲哀歡
+term 一
+term 十
+term 龘
+term 사이즈
+term 인치
+term 원
+term 만
+term 십만
+term 이천
+term 오백
+term 하
+term 되
+term 이
+term 입니다
+term ᆫ
+term ᄇ니다
+term 어요
+term 안녕
+term 세종
+term 세종시
+term 한국
+term 대한민국
+term ㅋㅋ
+term ㆍ
+term ·
+term !
+term .
+term ,
+term ?
+term …
+term “
+term (
+term 영
+term 일
+term 경일
+term 없는말이다
+term abc
+term 😀
+prefix 보험계약대출이율
+prefix 가락지나물은
+prefix 한국은
+prefix 대한민국날씨
+prefix 안녕하세요
+prefix 감싸여서
+prefix 鄕歌文學
+prefix 십만이천오백원
+prefix abc가
+prefix ㅋㅋㅋㅋ
+cost 0 0
+cost 0 1780
+cost 0 1803
+cost 3533 0
+cost 3534 0
+cost 3535 0
+cost 3533 1781
+cost 3534 1781
+cost 3535 1781
+cost 3569 1803
+cost 3821 2692
+cost 1 1
+cost 3563 1798
+cost 3562 1797
+cost 3532 1796
