@@ -175,6 +175,36 @@ fn malformed() {
     ));
 }
 
+/// A leading space in the segmentation field makes Java's `split(" +")` yield an empty first
+/// segment (Lucene then emits an empty token); the port rejects the rule. An empty reading from
+/// a leading space in the readings field is harmless and kept.
+#[test]
+fn empty_segment() {
+    let err =
+        UserDictionary::parse("東京都, 東京 都, トウキョウ ト,カスタム名詞", false).unwrap_err();
+    assert!(
+        matches!(err, UserDictionaryError::Malformed { line: 1, .. }),
+        "{err}"
+    );
+    let dict = UserDictionary::parse("東京都,東京 都, トウキョウ,カスタム名詞", false).unwrap();
+    assert_eq!(dict.entries()[0].readings, ["", "トウキョウ"]);
+}
+
+/// A segment longer than 65535 code units can't be stored; the rule is rejected rather than
+/// silently cut.
+#[test]
+fn oversized_segment() {
+    let long = "あ".repeat(70_000);
+    let err = UserDictionary::parse(&format!("{long},{long},ア,カスタム名詞"), false).unwrap_err();
+    assert!(
+        matches!(err, UserDictionaryError::Malformed { line: 1, .. }),
+        "{err}"
+    );
+    let ok = "あ".repeat(65_535);
+    let dict = UserDictionary::parse(&format!("{ok},{ok},ア,カスタム名詞"), false).unwrap();
+    assert_eq!(dict.entries().len(), 1);
+}
+
 /// Elasticsearch (`KuromojiAnalysisTests.testKuromojiAnalyzerDuplicateUserDictRule`) rejects a
 /// duplicate rule, naming the term and its line; comments count, blank lines don't.
 #[test]
