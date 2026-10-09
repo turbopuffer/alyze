@@ -960,9 +960,16 @@ impl<'a> Viterbi<'a> {
             TokenKind::Known => {
                 let id = token.word_id;
                 data.part_of_speech = out.push_text(self.dict.part_of_speech(id));
-                data.base_form = self.dict.base_form(id, surface).map(|s| out.push_text(&s));
-                data.reading = Some(out.push_text(&self.dict.reading(id, surface)));
-                data.pronunciation = Some(out.push_text(&self.dict.pronunciation(id, surface)));
+                let from = out.text.len();
+                if self.dict.push_base_form(id, surface, &mut out.text) {
+                    data.base_form = Some(from..out.text.len());
+                }
+                let from = out.text.len();
+                self.dict.push_reading(id, surface, &mut out.text);
+                data.reading = Some(from..out.text.len());
+                let from = out.text.len();
+                self.dict.push_pronunciation(id, surface, &mut out.text);
+                data.pronunciation = Some(from..out.text.len());
                 data.inflection_type = self.dict.inflection_type(id).map(|s| out.push_text(s));
                 data.inflection_form = self.dict.inflection_form(id).map(|s| out.push_text(s));
             }
