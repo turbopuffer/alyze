@@ -1,0 +1,7 @@
+entry	a	0	3533	-
+entry	b	1	3533	-
+entry	c++	2	3533	-
+entry	x	3	3533	x
+entry	 	4	3533	-
+entry	서울 특별시	5	3534	-
+entry	세종시	6	3534	세종+시

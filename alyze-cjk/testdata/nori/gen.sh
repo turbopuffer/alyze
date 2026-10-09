@@ -88,7 +88,7 @@ run chardef golden/chardef.txt
 run unicode golden/unicode.txt
 run lowercase golden/lowercase.txt
 run dict cases/dict_probes.txt golden/dict.txt
-for rules in lucene es edge dups invalid empty; do
+for rules in lucene es edge dups invalid empty whitespace; do
   run userdict "userdict/$rules.txt" "golden/userdict.$rules.txt"
 done
 echo "done: $(ls golden | wc -l | tr -d ' ') golden files, $(du -sh golden | cut -f1)"

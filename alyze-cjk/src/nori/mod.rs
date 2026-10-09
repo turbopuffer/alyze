@@ -220,6 +220,12 @@ impl Tokens {
     pub(crate) fn push(&mut self, data: TokenData) {
         self.items.push(data);
     }
+
+    /// (position slots, code-unit buffer capacity) of the tokenizer's retained working memory.
+    #[cfg(test)]
+    pub(crate) fn scratch_footprint(&self) -> (usize, usize) {
+        self.scratch.footprint()
+    }
 }
 
 /// Tokenizes `text` exactly like Lucene's `KoreanTokenizer` (Elasticsearch's `nori_tokenizer`),

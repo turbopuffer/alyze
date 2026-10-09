@@ -240,7 +240,55 @@ fn lucene_quirks() {
 #[test]
 fn comments_and_whitespace() {
     let dict =
-        UserDictionary::parse("# head\n\n  \n세종시 세종 시 # tail\n\tc++\t\n", false).unwrap();
+        UserDictionary::parse("# head\n\n  \n세종시 세종 시 # tail\nc++\t\n", false).unwrap();
     let surfaces: Vec<_> = dict.entries().into_iter().map(|e| e.surface).collect();
     assert_eq!(surfaces, ["c++", "세종시"]);
+}
+
+/// Splitting follows Java, not Unicode: `\s` is ASCII, so a no-break space is part of a word;
+/// `String.trim` skips lines of characters at or below U+0020; a leading separator makes
+/// `String.split` yield an empty surface form, which Lucene rejects; lines end at a lone CR too.
+#[test]
+fn java_whitespace_semantics() {
+    assert_matches_lucene("whitespace");
+    let dict = UserDictionary::parse("서울\u{a0}특별시\n\u{b}\nx\u{c}y\ra\r\nb\n", false).unwrap();
+    let entries = dict.entries();
+    let surfaces: Vec<_> = entries.iter().map(|e| e.surface.as_str()).collect();
+    assert_eq!(surfaces, ["a", "b", "x", "서울\u{a0}특별시"]);
+    assert_eq!(entries[2].segmentation, Some(vec!["x".to_owned()]));
+
+    // A leading tab: Java splits off an empty first token and then fails the length check.
+    let err = UserDictionary::parse("세종\n\tc++\n", false).unwrap_err();
+    assert_eq!(
+        err,
+        UserDictionaryError::SegmentationTooLong {
+            rule: "c++".to_owned(),
+            line: 2
+        }
+    );
+}
+
+/// A segmentation whose parts cut a surrogate pair is rejected (Lucene emits half characters).
+#[test]
+fn segmentation_inside_surrogate_pair() {
+    for rules in ["😀a x y", "😀a x", "a😀b ab c"] {
+        let err = UserDictionary::parse(rules, true).unwrap_err();
+        assert!(
+            matches!(
+                err,
+                UserDictionaryError::SegmentationSplitsCharacter { line: 1, .. }
+            ),
+            "{rules:?}: {err}"
+        );
+    }
+    let dict = UserDictionary::parse("😀a 😀 a\na😀b a 😀", false).unwrap();
+    let entries = dict.entries();
+    assert_eq!(
+        entries[0].segmentation,
+        Some(vec!["a".to_owned(), "😀".to_owned()])
+    );
+    assert_eq!(
+        entries[1].segmentation,
+        Some(vec!["😀".to_owned(), "a".to_owned()])
+    );
 }

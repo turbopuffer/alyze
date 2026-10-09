@@ -148,6 +148,32 @@ fn analyzer_runs_everywhere() {
     }
 }
 
+/// The tokenizer's working memory is bounded by the lattice's live window, not the input: a
+/// long input (with and without spaces) leaves a reused buffer with a small position ring and
+/// trimmed per-input buffers.
+#[test]
+fn working_memory_is_bounded() {
+    let mut tokens = Tokens::new();
+    for input in [
+        ". ".repeat(500_000),
+        "뿌리가깊은나무는바람에".repeat(20_000),
+        "a".repeat(300_000),
+    ] {
+        nori::tokenize(&input, nori::Options::default(), &mut tokens);
+        let (slots, units) = tokens.scratch_footprint();
+        assert!(
+            slots <= 8192,
+            "{slots} position slots after {} bytes",
+            input.len()
+        );
+        assert!(
+            units <= 64 * 1024,
+            "{units} code units retained after {} bytes",
+            input.len()
+        );
+    }
+}
+
 /// Reusing one output buffer across inputs gives the same result as a fresh one.
 #[test]
 fn output_buffer_reuse() {

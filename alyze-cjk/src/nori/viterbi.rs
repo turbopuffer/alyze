@@ -19,6 +19,8 @@ const MAX_UNKNOWN_WORD_LENGTH: usize = 1024;
 const MAX_BACKTRACE_GAP: usize = 1024;
 /// Lucene's `left-space-penalty-factor` for the parts of speech that shouldn't follow a space.
 const SPACE_PENALTY: i32 = 3000;
+/// How many code units' worth of per-input buffers a reused [`Tokens`] keeps between inputs.
+const RETAINED_UNITS: usize = 64 * 1024;
 
 /// One arc arriving at a position: the cheapest path ending with one word there.
 #[derive(Clone, Copy, Debug)]
@@ -42,47 +44,100 @@ struct Position {
     arcs: Vec<Arc>,
 }
 
-/// Lucene's `WrappedPositionArray`, without the wrapping: positions are allocated on demand up
-/// to the highest one asked for, and freed (emptied) behind the last backtrace. The arc vectors
-/// keep their capacity across positions and inputs.
+/// Lucene's `WrappedPositionArray`: a ring buffer of positions covering the live window of the
+/// lattice, from the last backtrace to the furthest position an arc reaches. Positions behind a
+/// backtrace are recycled, so memory is bounded by that window (at most the 1024-position forced
+/// backtrace gap plus the longest word), not by the input. Arc vectors keep their capacity.
 #[derive(Default)]
 pub(crate) struct Positions {
-    positions: Vec<Position>,
-    /// Number of positions in use (`positions[len..]` are spare, emptied vectors).
-    len: usize,
-    /// Positions before this one have been freed.
-    freed: usize,
+    slots: Vec<Position>,
+    /// Slot the next new position goes to.
+    next_write: usize,
+    /// Next absolute position to allocate (one past the highest allocated).
+    next_pos: usize,
+    /// Number of live positions: `next_pos - count` is the oldest one still held.
+    count: usize,
 }
 
 impl Positions {
+    /// The position `pos`, allocating every position up to it; it must not be behind the last
+    /// `free_before`.
     fn get(&mut self, pos: usize) -> &mut Position {
-        while self.len <= pos {
-            if self.len == self.positions.len() {
-                self.positions.push(Position::default());
+        while pos >= self.next_pos {
+            if self.count == self.slots.len() {
+                // Full: grow, rotating the live positions (oldest first) to the front.
+                let old_len = self.slots.len();
+                let mut grown: Vec<Position> = Vec::with_capacity((old_len * 2).max(8));
+                grown.extend(self.slots.drain(self.next_write..));
+                grown.append(&mut self.slots);
+                grown.resize_with(grown.capacity(), Position::default);
+                self.slots = grown;
+                self.next_write = old_len;
             }
-            self.len += 1;
+            if self.next_write == self.slots.len() {
+                self.next_write = 0;
+            }
+            debug_assert!(self.slots[self.next_write].arcs.is_empty());
+            self.next_write += 1;
+            self.next_pos += 1;
+            self.count += 1;
         }
-        &mut self.positions[pos]
+        let index = self.index(pos);
+        &mut self.slots[index]
+    }
+
+    fn at(&self, pos: usize) -> &Position {
+        &self.slots[self.index(pos)]
+    }
+
+    fn at_mut(&mut self, pos: usize) -> &mut Position {
+        let index = self.index(pos);
+        &mut self.slots[index]
+    }
+
+    fn index(&self, pos: usize) -> usize {
+        debug_assert!(
+            pos < self.next_pos && pos >= self.next_pos - self.count,
+            "position {pos} not live"
+        );
+        let behind = self.next_pos - pos;
+        if self.next_write >= behind {
+            self.next_write - behind
+        } else {
+            self.next_write + self.slots.len() - behind
+        }
     }
 
     /// Lucene's `getNextPos`: one past the highest allocated position.
     fn next_pos(&self) -> usize {
-        self.len
+        self.next_pos
     }
 
+    /// Recycles every position before `pos`.
     fn free_before(&mut self, pos: usize) {
-        for p in &mut self.positions[self.freed..pos] {
-            p.arcs.clear();
+        let to_free = self.count - (self.next_pos - pos);
+        let len = self.slots.len();
+        let mut index = (self.next_write + len - self.count) % len;
+        for _ in 0..to_free {
+            self.slots[index].arcs.clear();
+            index = (index + 1) % len;
         }
-        self.freed = self.freed.max(pos);
+        self.count -= to_free;
     }
 
     fn reset(&mut self) {
-        for p in &mut self.positions[..self.len] {
-            p.arcs.clear();
+        for slot in &mut self.slots {
+            slot.arcs.clear();
         }
-        self.len = 0;
-        self.freed = 0;
+        self.next_write = 0;
+        self.next_pos = 0;
+        self.count = 0;
+    }
+
+    /// Number of position slots allocated, for tests.
+    #[cfg(test)]
+    pub(crate) fn slots(&self) -> usize {
+        self.slots.len()
     }
 }
 
@@ -94,6 +149,14 @@ pub(crate) struct Scratch {
     positions: Positions,
     pending: Vec<TokenData>,
     reading_buf: Vec<u16>,
+}
+
+impl Scratch {
+    /// (position slots, code-unit buffer capacity), for tests of memory retention.
+    #[cfg(test)]
+    pub(crate) fn footprint(&self) -> (usize, usize) {
+        (self.positions.slots(), self.units.capacity())
+    }
 }
 
 pub(crate) struct Viterbi<'a> {
@@ -157,15 +220,23 @@ impl<'a> Viterbi<'a> {
         viterbi
     }
 
-    /// Hands the scratch space back for the next input.
+    /// Hands the scratch space back for the next input. The per-input buffers are sized to the
+    /// input; after a large one they are trimmed so that a reused `Tokens` doesn't keep it.
     pub fn into_scratch(self) -> Scratch {
-        Scratch {
+        let mut scratch = Scratch {
             units: self.units,
             byte_at: self.byte_at,
             positions: self.positions,
             pending: self.pending,
             reading_buf: self.reading_buf,
-        }
+        };
+        scratch.units.clear();
+        scratch.units.shrink_to(RETAINED_UNITS);
+        scratch.byte_at.clear();
+        scratch.byte_at.shrink_to(RETAINED_UNITS);
+        scratch.pending.clear();
+        scratch.pending.shrink_to(RETAINED_UNITS / 16);
+        scratch
     }
 
     fn reset_state(&mut self) {
@@ -204,7 +275,7 @@ impl<'a> Viterbi<'a> {
             let pos = self.pos;
             self.positions.get(pos);
             let is_frontier = self.positions.next_pos() == pos + 1;
-            let count = self.positions.positions[pos].arcs.len();
+            let count = self.positions.at(pos).arcs.len();
             if count == 0 {
                 // No arcs arrive here; move to the next position.
                 self.pos += 1;
@@ -217,7 +288,7 @@ impl<'a> Viterbi<'a> {
                 let before = out.len();
                 self.backtrace(pos, 0, out);
                 // Re-base the cost so it can't overflow.
-                self.positions.positions[pos].arcs[0].cost = 0;
+                self.positions.at_mut(pos).arcs[0].cost = 0;
                 if out.len() > before {
                     return;
                 }
@@ -231,7 +302,7 @@ impl<'a> Viterbi<'a> {
                 let mut least_idx = usize::MAX;
                 let mut least_pos = usize::MAX;
                 for pos2 in pos..self.positions.next_pos() {
-                    for (idx, arc) in self.positions.positions[pos2].arcs.iter().enumerate() {
+                    for (idx, arc) in self.positions.at(pos2).arcs.iter().enumerate() {
                         if arc.cost < least_cost {
                             least_cost = arc.cost;
                             least_idx = idx;
@@ -244,7 +315,7 @@ impl<'a> Viterbi<'a> {
                     "there is always at least one live path"
                 );
                 for pos2 in pos..self.positions.next_pos() {
-                    let arcs = &mut self.positions.positions[pos2].arcs;
+                    let arcs = &mut self.positions.at_mut(pos2).arcs;
                     if pos2 != least_pos {
                         arcs.clear();
                     } else {
@@ -256,7 +327,7 @@ impl<'a> Viterbi<'a> {
                 }
                 let before = out.len();
                 self.backtrace(least_pos, 0, out);
-                self.positions.positions[least_pos].arcs[0].cost = 0;
+                self.positions.at_mut(least_pos).arcs[0].cost = 0;
                 if self.pos != least_pos {
                     // Jumped into a future position.
                     debug_assert!(self.pos < least_pos);
@@ -343,7 +414,7 @@ impl<'a> Viterbi<'a> {
             self.positions.get(end_pos);
             let mut least_cost = i32::MAX;
             let mut least_idx = usize::MAX;
-            for (idx, arc) in self.positions.positions[end_pos].arcs.iter().enumerate() {
+            for (idx, arc) in self.positions.at(end_pos).arcs.iter().enumerate() {
                 let cost = arc.cost + i32::from(self.costs.cost(arc.last_right_id, 0));
                 if cost < least_cost {
                     least_cost = cost;
@@ -445,7 +516,7 @@ impl<'a> Viterbi<'a> {
         };
         let mut least_cost = i32::MAX;
         let mut least_idx = usize::MAX;
-        let from = &self.positions.positions[from_pos];
+        let from = self.positions.at(from_pos);
         debug_assert!(!from.arcs.is_empty());
         for (idx, arc) in from.arcs.iter().enumerate() {
             let cost =
@@ -479,7 +550,7 @@ impl<'a> Viterbi<'a> {
         let mut best_idx = from_idx;
         self.pending.clear();
         while pos > self.last_backtrace_pos {
-            let arc = self.positions.positions[pos].arcs[best_idx];
+            let arc = self.positions.at(pos).arcs[best_idx];
             let back_pos = arc.back_pos as usize;
             let back_word_pos = arc.back_word_pos as usize;
             let next_best_idx = arc.back_index as usize;

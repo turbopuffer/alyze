@@ -53,31 +53,35 @@ impl UserDictionary {
     /// Parses rules, one per line. A surface form that appears twice is an error unless
     /// `lenient`, in which case the first rule wins (Lucene's behaviour; Elasticsearch 8.13+
     /// rejects duplicates unless its `lenient` setting is on). A segmentation longer than the
-    /// surface form is always an error.
+    /// surface form is always an error, and so (unlike Lucene, which then produces half
+    /// characters) is one whose parts cut a surrogate pair.
+    ///
+    /// The splitting follows Java exactly: lines end at `\n`, `\r` or `\r\n`; `#` starts a
+    /// comment; a line whose characters are all at or below U+0020 is skipped (`String.trim`);
+    /// the rule is split on runs of `[ \t\n\x0B\f\r]` (`\s+`, ASCII only, so a no-break
+    /// space is part of a word), and like `String.split` a leading separator yields an empty
+    /// first token, which Lucene then rejects as a surface form shorter than its segmentation.
     pub fn parse(rules: &str, lenient: bool) -> Result<UserDictionary, UserDictionaryError> {
         // (line number, rule without its comment)
         let mut lines: Vec<(usize, &str)> = Vec::new();
-        for (i, line) in rules.lines().enumerate() {
+        for (i, line) in java_lines(rules).enumerate() {
             let line = line.split('#').next().unwrap_or("");
-            if line.trim().is_empty() {
+            if line.chars().all(|c| c <= ' ') {
                 continue;
             }
             lines.push((i + 1, line));
         }
         // Lucene sorts by the first token (stable, so file order decides among equal surfaces)
         // and skips a rule whose surface equals the previous one.
-        fn surface_of(rule: &str) -> &str {
-            rule.split_whitespace().next().unwrap_or("")
-        }
         lines.sort_by(|a, b| {
-            let (sa, sb) = (surface_of(a.1), surface_of(b.1));
+            let (sa, sb) = (java_split(a.1)[0], java_split(b.1)[0]);
             sa.encode_utf16().cmp(sb.encode_utf16())
         });
         let mut entries: Vec<Entry> = Vec::with_capacity(lines.len());
         let mut last_surface: Option<&str> = None;
         for &(line_number, rule) in &lines {
-            let mut parts = rule.split_whitespace();
-            let surface = parts.next().unwrap();
+            let splits = java_split(rule);
+            let surface = splits[0];
             if last_surface == Some(surface) {
                 if lenient {
                     continue;
@@ -100,7 +104,8 @@ impl UserDictionary {
                 RIGHT_ID
             };
             let surface_units: Vec<u16> = surface.encode_utf16().collect();
-            let segmentation: Vec<u16> = parts
+            let segmentation: Vec<u16> = splits[1..]
+                .iter()
                 .map(|p| u16::try_from(p.encode_utf16().count()).unwrap_or(u16::MAX))
                 .collect();
             let total: usize = segmentation.iter().map(|&l| usize::from(l)).sum();
@@ -110,14 +115,27 @@ impl UserDictionary {
                     line: line_number,
                 });
             }
+            let mut boundary = 0usize;
+            for &len in &segmentation {
+                boundary += usize::from(len);
+                if boundary < surface_units.len()
+                    && (0xD800..0xDC00).contains(&surface_units[boundary - 1])
+                    && (0xDC00..0xE000).contains(&surface_units[boundary])
+                {
+                    return Err(UserDictionaryError::SegmentationSplitsCharacter {
+                        rule: rule.trim().to_owned(),
+                        line: line_number,
+                    });
+                }
+            }
             entries.push(Entry {
                 surface: surface_units,
                 right_id,
                 segmentation,
             });
         }
-        // Lucene re-sorts nothing here: entries are already in surface order, which (as UTF-16BE
-        // bytes) is the order the FST builder needs; equal surfaces were dropped above.
+        // Entries are already in surface order, which (as UTF-16BE bytes) is the order the FST
+        // builder needs; equal surfaces were dropped above.
         let mut builder = fst::MapBuilder::memory();
         for (ord, entry) in entries.iter().enumerate() {
             let key: Vec<u8> = entry.surface.iter().flat_map(|u| u.to_be_bytes()).collect();
@@ -193,12 +211,69 @@ pub(crate) struct UserEntry {
     pub segmentation: Option<Vec<String>>,
 }
 
+/// `BufferedReader.readLine`: lines end at `\n`, `\r` or `\r\n`; no line after the last
+/// terminator unless there is text.
+fn java_lines(text: &str) -> impl Iterator<Item = &str> {
+    let mut rest = text;
+    std::iter::from_fn(move || {
+        if rest.is_empty() {
+            return None;
+        }
+        let end = rest.find(['\n', '\r']).unwrap_or(rest.len());
+        let line = &rest[..end];
+        let skip = if rest[end..].starts_with("\r\n") {
+            2
+        } else if end < rest.len() {
+            1
+        } else {
+            0
+        };
+        rest = &rest[end + skip..];
+        Some(line)
+    })
+}
+
+/// Java's `\s` (without `UNICODE_CHARACTER_CLASS`): ASCII whitespace only.
+fn is_java_space(c: char) -> bool {
+    matches!(c, ' ' | '\t' | '\n' | '\x0B' | '\x0C' | '\r')
+}
+
+/// `String.split("\\s+")`: a leading separator yields an empty first element, trailing empty
+/// elements are dropped. The input is never all separators here, so the result is non-empty.
+fn java_split(rule: &str) -> Vec<&str> {
+    let mut parts: Vec<&str> = Vec::new();
+    let mut start = 0;
+    let mut in_separator = false;
+    for (i, c) in rule.char_indices() {
+        if is_java_space(c) {
+            if !in_separator {
+                parts.push(&rule[start..i]);
+                in_separator = true;
+            }
+        } else {
+            if in_separator {
+                start = i;
+                in_separator = false;
+            }
+        }
+    }
+    if !in_separator {
+        parts.push(&rule[start..]);
+    }
+    while parts.len() > 1 && parts.last() == Some(&"") {
+        parts.pop();
+    }
+    parts
+}
+
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub enum UserDictionaryError {
     /// The same surface form appears on two rules (1-based line number of the second).
     Duplicate { surface: String, line: usize },
     /// A rule's segmentation is longer than its surface form.
     SegmentationTooLong { rule: String, line: usize },
+    /// A rule's segmentation cuts a surrogate pair (Lucene would emit half characters).
+    SegmentationSplitsCharacter { rule: String, line: usize },
 }
 
 impl fmt::Display for UserDictionaryError {
@@ -213,6 +288,10 @@ impl fmt::Display for UserDictionaryError {
             UserDictionaryError::SegmentationTooLong { rule, line } => write!(
                 f,
                 "illegal user dictionary entry [{rule}] at line [{line}]: the segmentation is bigger than the surface form"
+            ),
+            UserDictionaryError::SegmentationSplitsCharacter { rule, line } => write!(
+                f,
+                "illegal user dictionary entry [{rule}] at line [{line}]: the segmentation splits a character"
             ),
         }
     }
