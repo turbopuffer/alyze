@@ -7,6 +7,7 @@
 //! `word1 '@' word2` computed over code units, so the hash has to run on exactly the same units
 //! to find anything.
 
+use std::collections::HashMap;
 use std::sync::OnceLock;
 
 const CORE_DICT: &[u8] = include_bytes!("../../data/coredict.bin");
@@ -109,8 +110,7 @@ impl CoreDict {
 /// `word1 '@' word2`. Lucene stores only the hash, so pairs whose hashes collide share a
 /// frequency; that is part of the behaviour being reproduced.
 pub(crate) struct BigramDict {
-    hashes: Vec<u64>,
-    freqs: Vec<i32>,
+    frequencies: HashMap<u64, i32>,
 }
 
 impl BigramDict {
@@ -122,32 +122,31 @@ impl BigramDict {
     fn parse(blob: &[u8]) -> BigramDict {
         let mut reader = BlobReader { bytes: blob };
         let count = reader.u32() as usize;
-        let mut hashes = Vec::with_capacity(count);
-        let mut freqs = Vec::with_capacity(count);
+        let mut frequencies = HashMap::with_capacity(count);
         for _ in 0..count {
-            hashes.push(reader.u64());
-            freqs.push(reader.i32());
+            let hash = reader.u64();
+            let freq = reader.i32();
+            assert!(frequencies.insert(hash, freq).is_none());
         }
         assert!(
             reader.bytes.is_empty(),
             "trailing bytes in bigram dictionary blob"
         );
-        assert!(hashes.is_sorted());
-        BigramDict { hashes, freqs }
+        BigramDict { frequencies }
     }
 
     /// Frequency of the pair `word1 '@' word2` (passed already joined), or 0 if unknown.
     pub(crate) fn frequency(&self, pair: &[u16]) -> i32 {
-        match self.hashes.binary_search(&bigram_hash(pair)) {
-            Ok(index) => self.freqs[index],
-            Err(_) => 0,
-        }
+        self.frequencies
+            .get(&bigram_hash(pair))
+            .copied()
+            .unwrap_or(0)
     }
 
     #[cfg(test)]
     /// Visits every `(hash, frequency)` entry, in no particular order.
     pub(crate) fn for_each_entry(&self, mut f: impl FnMut(u64, i32)) {
-        for (&hash, &freq) in self.hashes.iter().zip(&self.freqs) {
+        for (&hash, &freq) in &self.frequencies {
             f(hash, freq);
         }
     }
