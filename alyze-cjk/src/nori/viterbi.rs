@@ -3,10 +3,12 @@
 //!
 //! The input is handled as UTF-16 code units, like Lucene, so that every dictionary lookup,
 //! character-class decision and Unicode property check sees exactly what the Java code sees.
-//! Lucene reads its input incrementally through a rolling buffer; since the whole input is in
-//! memory here, positions are a plain array indexed by absolute code-unit position, but the
-//! control flow of `forward()` (including when it returns to its caller, which resets per-call
+//! Lucene reads its input incrementally through a rolling buffer; the whole input is in memory
+//! here, but positions still live in a ring buffer over the live window (`morph::positions`), and
+//! the control flow of `forward()` (including when it returns to its caller, which resets per-call
 //! state) is kept as in Lucene because it affects the output.
+
+use crate::morph::positions::Slot;
 
 use super::char_def::{self, CharClass};
 use super::dict::{ConnectionCosts, TokenInfoDict, UnknownDict};
@@ -44,102 +46,17 @@ struct Position {
     arcs: Vec<Arc>,
 }
 
-/// Lucene's `WrappedPositionArray`: a ring buffer of positions covering the live window of the
-/// lattice, from the last backtrace to the furthest position an arc reaches. Positions behind a
-/// backtrace are recycled, so memory is bounded by that window (at most the 1024-position forced
-/// backtrace gap plus the longest word), not by the input. Arc vectors keep their capacity.
-#[derive(Default)]
-pub(crate) struct Positions {
-    slots: Vec<Position>,
-    /// Slot the next new position goes to.
-    next_write: usize,
-    /// Next absolute position to allocate (one past the highest allocated).
-    next_pos: usize,
-    /// Number of live positions: `next_pos - count` is the oldest one still held.
-    count: usize,
-}
-
-impl Positions {
-    /// The position `pos`, allocating every position up to it; it must not be behind the last
-    /// `free_before`.
-    fn get(&mut self, pos: usize) -> &mut Position {
-        while pos >= self.next_pos {
-            if self.count == self.slots.len() {
-                // Full: grow, rotating the live positions (oldest first) to the front.
-                let old_len = self.slots.len();
-                let mut grown: Vec<Position> = Vec::with_capacity((old_len * 2).max(8));
-                grown.extend(self.slots.drain(self.next_write..));
-                grown.append(&mut self.slots);
-                grown.resize_with(grown.capacity(), Position::default);
-                self.slots = grown;
-                self.next_write = old_len;
-            }
-            if self.next_write == self.slots.len() {
-                self.next_write = 0;
-            }
-            debug_assert!(self.slots[self.next_write].arcs.is_empty());
-            self.next_write += 1;
-            self.next_pos += 1;
-            self.count += 1;
-        }
-        let index = self.index(pos);
-        &mut self.slots[index]
+impl Slot for Position {
+    fn clear(&mut self) {
+        self.arcs.clear();
     }
 
-    fn at(&self, pos: usize) -> &Position {
-        &self.slots[self.index(pos)]
-    }
-
-    fn at_mut(&mut self, pos: usize) -> &mut Position {
-        let index = self.index(pos);
-        &mut self.slots[index]
-    }
-
-    fn index(&self, pos: usize) -> usize {
-        debug_assert!(
-            pos < self.next_pos && pos >= self.next_pos - self.count,
-            "position {pos} not live"
-        );
-        let behind = self.next_pos - pos;
-        if self.next_write >= behind {
-            self.next_write - behind
-        } else {
-            self.next_write + self.slots.len() - behind
-        }
-    }
-
-    /// Lucene's `getNextPos`: one past the highest allocated position.
-    fn next_pos(&self) -> usize {
-        self.next_pos
-    }
-
-    /// Recycles every position before `pos`.
-    fn free_before(&mut self, pos: usize) {
-        let to_free = self.count - (self.next_pos - pos);
-        let len = self.slots.len();
-        let mut index = (self.next_write + len - self.count) % len;
-        for _ in 0..to_free {
-            self.slots[index].arcs.clear();
-            index = (index + 1) % len;
-        }
-        self.count -= to_free;
-    }
-
-    fn reset(&mut self) {
-        for slot in &mut self.slots {
-            slot.arcs.clear();
-        }
-        self.next_write = 0;
-        self.next_pos = 0;
-        self.count = 0;
-    }
-
-    /// Number of position slots allocated, for tests.
-    #[cfg(test)]
-    pub(crate) fn slots(&self) -> usize {
-        self.slots.len()
+    fn is_clear(&self) -> bool {
+        self.arcs.is_empty()
     }
 }
+
+type Positions = crate::morph::positions::Positions<Position>;
 
 /// Scratch space the search reuses across inputs (kept inside [`Tokens`]).
 #[derive(Default)]

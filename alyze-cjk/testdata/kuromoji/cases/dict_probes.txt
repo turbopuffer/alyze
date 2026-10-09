@@ -1,0 +1,153 @@
+// Dictionary probes for golden/dict.txt. `term X` dumps every entry whose surface form is X,
+// `prefix X` lists the dictionary terms that are prefixes of X (what the Viterbi's FST walk finds),
+// `cost R L` reads one connection cost (R = right id of the previous word, L = left id of the next;
+// 0 is BOS/EOS).
+term 関西
+term 関西国際空港
+term 国際
+term 空港
+term 東京
+term 東京大学
+term 京都大学
+term 京都大
+term 学
+term 日本
+term 食べ
+term 食べる
+term 行っ
+term 行く
+term 走ら
+term なけれ
+term ば
+term なら
+term ない
+term 美しかっ
+term た
+term です
+term ます
+term まし
+term の
+term は
+term が
+term を
+term に
+term と
+term で
+term か
+term 多く
+term 落ち
+term ある
+term あり
+term い
+term し
+term する
+term さ
+term れ
+term 一
+term 十
+term 百
+term 千
+term 万
+term 億
+term 兆
+term 京
+term 〇
+term 1
+term １
+term 令和
+term 元年
+term 年
+term 円
+term 人
+term スピード
+term コピー
+term サーバー
+term サーバ
+term パーティー
+term ソフトウェア
+term エンジニア
+term シニア
+term システム
+term アーキテクト
+term プロジェクト
+term マネジャー
+term 鳩山
+term 鳩
+term 山積み
+term 積み
+term 数学
+term 部長
+term 長谷川
+term 谷川
+term 成田
+term 成田空港
+term 米
+term 原油
+term 米原
+term 株式
+term 会社
+term 株式会社
+term 寿司
+term おいしい
+term 。
+term 、
+term 「
+term ・
+term ！
+term ？
+term ー
+term 々
+term 差
+term 多分
+term 日本経済新聞
+term 朝青龍
+term abcd
+term a
+term test
+term 😀
+term ア
+term あ
+term 手紙
+term 本
+term これ
+term ね
+term ちょっと
+term まっ
+term て
+term 時間
+term 測る
+term 消える
+term ストップ
+term ワイン
+term 買っ
+term 本日
+term 昨日
+term お
+term でし
+prefix 関西国際空港に行った
+prefix 東京都知事選挙
+prefix 奈良先端科学技術大学院大学
+prefix 京都大学硬式野球部
+prefix シニアソフトウェアエンジニア
+prefix 食べたいです
+prefix 走らなければならない
+prefix 十万二千五百円
+prefix 本日十万
+prefix 寿司がおいしいね
+prefix abcdefg
+prefix ｿｰｽｺｰﾄﾞ
+prefix 😀😀
+cost 0 0
+cost 0 1285
+cost 0 5
+cost 5 5
+cost 5 0
+cost 1285 1285
+cost 1285 0
+cost 1283 1285
+cost 1293 1292
+cost 9 9
+cost 3 3
+cost 1315 1315
+cost 1315 0
+cost 1 1

@@ -4,8 +4,10 @@
 
 use std::fmt;
 
+use crate::morph::java;
+use crate::morph::term_index::{self, TermIndex};
+
 use super::char_def;
-use super::dict::TermIndex;
 
 /// Lucene's fixed left connection id for user words (`NNG,상태변화` in `left-id.def`).
 pub(crate) const LEFT_ID: u16 = 1781;
@@ -64,7 +66,7 @@ impl UserDictionary {
     pub fn parse(rules: &str, lenient: bool) -> Result<UserDictionary, UserDictionaryError> {
         // (line number, rule without its comment)
         let mut lines: Vec<(usize, &str)> = Vec::new();
-        for (i, line) in java_lines(rules).enumerate() {
+        for (i, line) in java::lines(rules).enumerate() {
             let line = line.split('#').next().unwrap_or("");
             if line.chars().all(|c| c <= ' ') {
                 continue;
@@ -136,19 +138,13 @@ impl UserDictionary {
         }
         // Entries are already in surface order, which (as UTF-16BE bytes) is the order the FST
         // builder needs; equal surfaces were dropped above.
-        let mut builder = fst::MapBuilder::memory();
-        for (ord, entry) in entries.iter().enumerate() {
-            let key: Vec<u8> = entry.surface.iter().flat_map(|u| u.to_be_bytes()).collect();
-            builder
-                .insert(key, ord as u64)
-                .expect("entries are sorted and unique");
-        }
-        let fst = fst::raw::Fst::new(builder.into_inner().expect("in-memory FST"))
-            .expect("freshly built FST");
-        Ok(UserDictionary {
-            terms: TermIndex::new(fst),
-            entries,
-        })
+        let terms = term_index::build(
+            entries
+                .iter()
+                .enumerate()
+                .map(|(ord, e)| (e.surface.clone(), ord as u64)),
+        );
+        Ok(UserDictionary { terms, entries })
     }
 
     /// True when no rule survived parsing (only comments and blank lines).
@@ -211,33 +207,6 @@ pub(crate) struct UserEntry {
     pub segmentation: Option<Vec<String>>,
 }
 
-/// `BufferedReader.readLine`: lines end at `\n`, `\r` or `\r\n`; no line after the last
-/// terminator unless there is text.
-fn java_lines(text: &str) -> impl Iterator<Item = &str> {
-    let mut rest = text;
-    std::iter::from_fn(move || {
-        if rest.is_empty() {
-            return None;
-        }
-        let end = rest.find(['\n', '\r']).unwrap_or(rest.len());
-        let line = &rest[..end];
-        let skip = if rest[end..].starts_with("\r\n") {
-            2
-        } else if end < rest.len() {
-            1
-        } else {
-            0
-        };
-        rest = &rest[end + skip..];
-        Some(line)
-    })
-}
-
-/// Java's `\s` (without `UNICODE_CHARACTER_CLASS`): ASCII whitespace only.
-fn is_java_space(c: char) -> bool {
-    matches!(c, ' ' | '\t' | '\n' | '\x0B' | '\x0C' | '\r')
-}
-
 /// `String.split("\\s+")`: a leading separator yields an empty first element, trailing empty
 /// elements are dropped. The input is never all separators here, so the result is non-empty.
 fn java_split(rule: &str) -> Vec<&str> {
@@ -245,7 +214,7 @@ fn java_split(rule: &str) -> Vec<&str> {
     let mut start = 0;
     let mut in_separator = false;
     for (i, c) in rule.char_indices() {
-        if is_java_space(c) {
+        if java::is_space(c) {
             if !in_separator {
                 parts.push(&rule[start..i]);
                 in_separator = true;

@@ -1,0 +1,10 @@
+# A custom stop-word list (Elasticsearch `stopwords`), replacing the default: some default
+# Japanese stop words, the ES test's extra word, Latin words in mixed case for `ignore_case`.
+の
+は
+を
+スピード
+ストップ
+Culture
+JAPAN
+test
