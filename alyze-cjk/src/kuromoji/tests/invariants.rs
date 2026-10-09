@@ -47,9 +47,10 @@ fn normal_mode_tokens_tile_the_input() {
 
 /// Offsets never go backwards, tokens are never empty and their text is always the input slice
 /// (no filter rewrites it). In search mode without n-best the output is a graph: a compound
-/// (position length > 1) is immediately followed by its parts, the first at the same position
-/// and the last ending at the same offset; with an n-best cost, position lengths follow from the
-/// unique token edges, so a token's end position is a later token's start position or the end.
+/// (position length > 1) follows its first part at the same position, and its last part ends
+/// where it ends; otherwise positions are dense. With an n-best cost, position lengths follow
+/// from the unique token edges of each backtrace window, so only monotonic positions can be
+/// checked.
 #[test]
 fn offsets_and_positions_are_well_formed() {
     for name in [
@@ -67,9 +68,17 @@ fn offsets_and_positions_are_well_formed() {
             let toks = run_tokenizer(&input, config);
             let mut last_start = 0;
             for (i, t) in toks.iter().enumerate() {
+                // In extended mode a compound whose first part is an unknown word is served
+                // after that part's unigrams, so its start offset goes backwards (and, as its
+                // start differs from the last token's, Lucene gives it increment 1 and length 1).
                 assert!(
-                    t.byte_range.start >= last_start,
-                    "{name}: token {i} starts before the previous one"
+                    t.byte_range.start >= last_start
+                        || (config.mode == Mode::Extended
+                            && i > 0
+                            && toks[i - 1].kind == Some(TokenKind::Unknown)),
+                    "{name}: token {i} starts before the previous one: {} then {t} in {:?}",
+                    toks[i - 1],
+                    super::escape(&input)
                 );
                 assert!(!t.text.is_empty(), "{name}: empty text at token {i}");
                 assert_eq!(
@@ -78,33 +87,35 @@ fn offsets_and_positions_are_well_formed() {
                     "{name}: token {i} text"
                 );
                 last_start = t.byte_range.start;
+                let end = t.position + t.position_length as usize;
                 if config.nbest_cost > 0 {
-                    let end = t.position + t.position_length as usize;
-                    let reachable = toks[i + 1..].iter().any(|u| u.position == end)
-                        || toks
-                            .iter()
-                            .all(|u| u.position + (u.position_length as usize) <= end);
+                    // Position lengths come from the distinct token edges of a backtrace window,
+                    // and an edge nobody starts at still counts (Lucene), so a token can end past
+                    // the next token's position; only monotonicity holds.
                     assert!(
-                        reachable,
-                        "{name}: token {i} ends at an unreachable position"
+                        toks.get(i + 1).is_none_or(|u| u.position >= t.position),
+                        "{name}: positions go backwards at token {i}"
                     );
                 } else if t.position_length > 1 {
                     assert!(
                         config.mode != Mode::Normal && !config.discard_compound,
                         "{name}: compound token emitted"
                     );
-                    let parts = &toks[i + 1..i + 1 + t.position_length as usize];
-                    assert_eq!(parts[0].position, t.position);
-                    assert_eq!(
-                        parts.last().unwrap().position,
-                        t.position + t.position_length as usize - 1
-                    );
-                    assert_eq!(parts.last().unwrap().byte_range.end, t.byte_range.end);
-                    assert_eq!(parts[0].byte_range.start, t.byte_range.start);
-                } else {
                     assert!(
-                        toks.get(i + 1).is_none_or(|u| u.position == t.position + 1),
-                        "{name}: positions are dense"
+                        i > 0 && toks[i - 1].position == t.position,
+                        "{name}: compound {i}"
+                    );
+                    assert_eq!(toks[i - 1].byte_range.start, t.byte_range.start);
+                    let last_part = toks[i + 1..]
+                        .iter()
+                        .find(|u| u.position == end - 1)
+                        .unwrap_or_else(|| panic!("{name}: compound {i} has no last part"));
+                    assert_eq!(last_part.byte_range.end, t.byte_range.end);
+                } else if let Some(next) = toks.get(i + 1) {
+                    assert!(
+                        next.position == t.position + 1
+                            || (next.position == t.position && next.position_length > 1),
+                        "{name}: positions are dense ({i}: {t} then {next})"
                     );
                 }
             }
@@ -151,12 +162,13 @@ fn punctuation_is_gone() {
     }
 }
 
-/// Extended mode emits every unknown word as single characters, never cutting a surrogate pair.
+/// Extended mode emits every unknown word as single characters, never cutting a surrogate pair
+/// (an unknown compound can still appear whole, stacked over its unigrams).
 #[test]
 fn extended_mode_unigrams() {
     for input in inputs() {
         for t in run_tokenizer(&input, TokenizerConfig::named("extended")) {
-            if t.kind == Some(TokenKind::Unknown) {
+            if t.kind == Some(TokenKind::Unknown) && t.position_length == 1 {
                 assert_eq!(t.text.chars().count(), 1, "{t}");
             }
         }

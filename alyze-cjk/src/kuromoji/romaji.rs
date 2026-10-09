@@ -632,7 +632,11 @@ fn keystroke_map() -> &'static KeystrokeMap {
             if line.starts_with('#') {
                 continue;
             }
-            let cols: Vec<&str> = line.trim().split(',').collect();
+            // Java's `split(",")` drops trailing empty strings (one line ends in a comma).
+            let mut cols: Vec<&str> = line.trim().split(',').collect();
+            while cols.len() > 1 && cols.last() == Some(&"") {
+                cols.pop();
+            }
             if cols.len() < 2 {
                 continue;
             }

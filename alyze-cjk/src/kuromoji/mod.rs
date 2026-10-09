@@ -252,8 +252,30 @@ pub fn tokenize(text: &str, options: Options<'_>, out: &mut Tokens) {
 /// rest of `options` (0 when every word already appears, or no example applies). Elasticsearch
 /// uses the larger of this and `nbest_cost`.
 pub fn calc_nbest_cost(examples: &str, options: Options<'_>) -> Result<i32, NBestExamplesError> {
-    let _ = (examples, options);
-    todo!()
+    let mut max_delta = 0;
+    for example in java_split(examples, '/') {
+        if example.is_empty() {
+            continue;
+        }
+        let pair = java_split(example, '-');
+        if pair.len() != 2 {
+            return Err(NBestExamplesError(example.to_owned()));
+        }
+        max_delta = max_delta.max(viterbi::probe_delta(pair[0], pair[1], options));
+    }
+    Ok(max_delta)
+}
+
+/// `String.split` with a one-character separator: trailing empty strings are dropped.
+fn java_split(s: &str, separator: char) -> Vec<&str> {
+    let mut parts: Vec<&str> = s.split(separator).collect();
+    while parts.len() > 1 && parts.last() == Some(&"") {
+        parts.pop();
+    }
+    if parts == [""] && !s.is_empty() {
+        parts.clear();
+    }
+    parts
 }
 
 /// An `nbest_examples` entry that isn't `text-word`.
@@ -286,8 +308,30 @@ pub struct AnalyzerOptions<'a> {
 
 /// Runs the `kuromoji` analyzer over `text`, filling `out`.
 pub fn analyze(text: &str, options: AnalyzerOptions<'_>, out: &mut Tokens) {
-    let _ = (text, options, out);
-    todo!()
+    let filtered = char_filter::cjk_width(text);
+    tokenize(
+        filtered.text(),
+        Options {
+            mode: options.mode,
+            discard_punctuation: true,
+            discard_compound_token: true,
+            nbest_cost: -1,
+            user_dictionary: options.user_dictionary,
+        },
+        out,
+    );
+    filtered.correct_tokens(out);
+    filter::base_form(out);
+    match options.stop_tags {
+        Some(tags) => filter::part_of_speech_stop(out, tags),
+        None => filter::part_of_speech_stop(out, &filter::StopTags::defaults()),
+    }
+    match options.stop_words {
+        Some(words) => filter::stop(out, words),
+        None => filter::stop(out, &filter::StopWords::japanese()),
+    }
+    filter::katakana_stem(out, 4);
+    filter::lowercase(out);
 }
 
 /// Options of the `kuromoji_completion` analyzer (Lucene's `JapaneseCompletionAnalyzer`): width
@@ -302,6 +346,19 @@ pub struct CompletionAnalyzerOptions<'a> {
 
 /// Runs the `kuromoji_completion` analyzer over `text`, filling `out`.
 pub fn analyze_completion(text: &str, options: CompletionAnalyzerOptions<'_>, out: &mut Tokens) {
-    let _ = (text, options, out);
-    todo!()
+    let filtered = char_filter::cjk_width(text);
+    tokenize(
+        filtered.text(),
+        Options {
+            mode: Mode::Normal,
+            discard_punctuation: true,
+            discard_compound_token: true,
+            nbest_cost: -1,
+            user_dictionary: options.user_dictionary,
+        },
+        out,
+    );
+    filtered.correct_tokens(out);
+    filter::completion(out, options.mode);
+    filter::lowercase(out);
 }

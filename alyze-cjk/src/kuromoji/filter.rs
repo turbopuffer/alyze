@@ -656,6 +656,7 @@ pub fn lowercase(tokens: &mut Tokens) {
 }
 
 /// The mapping [`lowercase`] applies, on one string.
+#[cfg(test)]
 pub(crate) fn lowercase_text(text: &str) -> String {
     lowercase::lowercase_text(text)
 }
@@ -682,9 +683,9 @@ pub fn completion(tokens: &mut Tokens, mode: CompletionMode) {
     let mut output: Vec<TokenData> = Vec::with_capacity(input.len());
     // The pending token: surface, reading, offsets, and the input token it started from.
     let mut pending: Option<(String, String, usize, usize, TokenData)> = None;
-    let mut generate = |pdg: &(String, String, usize, usize, TokenData),
-                        out: &mut Vec<TokenData>,
-                        tokens: &mut Tokens| {
+    let generate = |pdg: &(String, String, usize, usize, TokenData),
+                    out: &mut Vec<TokenData>,
+                    tokens: &mut Tokens| {
         let (surface, reading, start, end, template) = pdg;
         let mut first = template.clone();
         first.text = tokens.push_text(surface);
