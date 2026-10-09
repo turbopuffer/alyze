@@ -42,6 +42,7 @@ impl CharClass {
         CharClass::HanjaNumeric,
     ];
 
+    #[cfg(test)]
     pub fn name(self) -> &'static str {
         match self {
             CharClass::Ngram => "NGRAM",
@@ -61,6 +62,7 @@ impl CharClass {
         }
     }
 
+    #[cfg(test)]
     pub fn from_name(name: &str) -> Option<CharClass> {
         CharClass::ALL.iter().copied().find(|c| c.name() == name)
     }

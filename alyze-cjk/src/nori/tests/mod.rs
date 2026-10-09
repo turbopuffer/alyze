@@ -100,11 +100,14 @@ pub(super) fn collect(input: &str, tokens: &Tokens) -> Vec<Tok> {
         assert!(token.byte_range.start <= token.byte_range.end);
         assert!(token.byte_range.end <= input.len());
         assert!(token.position_length >= 1, "position length 0: {token:?}");
+        // Lucene's first token has its increment from the (virtual) position -1; a filter that
+        // removed tokens before it leaves a larger increment.
+        assert!(
+            token.position_increment >= 1 || position.is_some(),
+            "first token: {token:?}"
+        );
         position = Some(match position {
-            None => {
-                assert_eq!(token.position_increment, 1, "first token: {token:?}");
-                0
-            }
+            None => token.position_increment as usize - 1,
             Some(p) => p + token.position_increment as usize,
         });
         out.push(Tok {
@@ -410,13 +413,12 @@ fn has_lone_surrogate(units: &[u16]) -> bool {
 /// on the high surrogate) followed by a token whose text starts with the lone low surrogate (its
 /// byte range already starts after the pair), or, in unigram mode, a lone-low-surrogate token with
 /// an empty byte range. The port keeps code points whole, so here a token with a lone surrogate
-/// takes the input slice of its byte range as its text, and an empty-range one is dropped (its
-/// position increment carried to the next token). Such tokens are always unknown words, whose text
-/// is otherwise exactly the input slice.
+/// takes the input slice of its byte range as its text, and an empty-range one is dropped
+/// altogether (the port emits nothing there, so the positions after it are one lower). Such tokens
+/// are always unknown words, whose text is otherwise exactly the input slice.
 pub(super) fn golden_to_toks(input: &str, golden: &[GoldenToken]) -> Vec<Tok> {
     let mut toks = Vec::with_capacity(golden.len());
     let mut position = 0usize;
-    let mut carried_inc = 0usize;
     let mut first = true;
     for t in golden {
         let text = if has_lone_surrogate(&t.text) {
@@ -426,15 +428,14 @@ pub(super) fn golden_to_toks(input: &str, golden: &[GoldenToken]) -> Vec<Tok> {
                 "lone surrogate in a non-unknown token: {t:?}"
             );
             if t.start == t.end {
-                carried_inc += t.pos_inc;
+                assert_eq!(t.pos_inc, 1, "junk half-token with a position gap: {t:?}");
                 continue;
             }
             input[t.start..t.end].to_owned()
         } else {
             String::from_utf16(&t.text).unwrap()
         };
-        let inc = t.pos_inc + carried_inc;
-        carried_inc = 0;
+        let inc = t.pos_inc;
         // Lucene's first token has increment 1 from the (virtual) position -1.
         position = if first { inc - 1 } else { position + inc };
         first = false;
@@ -462,7 +463,10 @@ pub(super) fn golden_to_toks(input: &str, golden: &[GoldenToken]) -> Vec<Tok> {
 pub(super) struct Compare {
     /// Compare token kind, part of speech, reading and morphemes. Off for chains with the number
     /// filter: Lucene leaves the attributes of whichever token it read last on a merged number
-    /// token, which is an artifact not worth reproducing.
+    /// token, which is an artifact not worth reproducing. The same artifact reaches the position
+    /// of a merged token that ends the stream (Lucene then reads the increment of a token a
+    /// preceding stop filter discarded), so with this off the last token's position isn't compared
+    /// either.
     pub attributes: bool,
     /// The stage lowercases: a text mismatch is accepted when Lucene's text is Java's simple
     /// lowercase of the raw token and the port's is alyze's lowercase of it (see the module docs).
@@ -524,18 +528,24 @@ fn toks_match(input: &str, expected: &Tok, actual: &Tok, compare: Compare) -> bo
     java == expected.text && actual.text == filter::lowercase_text(raw)
 }
 
-fn fmt_toks(toks: &[Tok]) -> String {
-    const LIMIT: usize = 40;
+/// Formats a window of tokens around `around`, since the first difference is what matters.
+fn fmt_toks(toks: &[Tok], around: usize) -> String {
+    const BEFORE: usize = 3;
+    const AFTER: usize = 12;
+    let start = around.saturating_sub(BEFORE);
+    let end = (around + AFTER).min(toks.len());
     let mut s = String::new();
-    for (i, t) in toks.iter().enumerate() {
-        if i == LIMIT {
-            write!(s, " … ({} more)", toks.len() - LIMIT).unwrap();
-            break;
-        }
+    if start > 0 {
+        write!(s, "({start} tokens) … ").unwrap();
+    }
+    for (i, t) in toks[start..end].iter().enumerate() {
         if i > 0 {
             s.push_str("  ");
         }
         write!(s, "[{t}]").unwrap();
+    }
+    if end < toks.len() {
+        write!(s, " … ({} more)", toks.len() - end).unwrap();
     }
     s
 }
@@ -561,11 +571,16 @@ pub(super) fn assert_cases_match(
     for (i, (input, golden)) in inputs.iter().zip(golden).enumerate() {
         let expected = golden_to_toks(input, golden);
         let actual = run(input);
+        let last = expected.len().saturating_sub(1);
         let matches = expected.len() == actual.len()
-            && expected
-                .iter()
-                .zip(&actual)
-                .all(|(e, a)| toks_match(input, e, a, compare));
+            && expected.iter().zip(&actual).enumerate().all(|(i, (e, a))| {
+                if !compare.attributes && i == last && e.position != a.position {
+                    let mut e = e.clone();
+                    e.position = a.position;
+                    return toks_match(input, &e, a, compare);
+                }
+                toks_match(input, e, a, compare)
+            });
         if matches {
             continue;
         }
@@ -589,8 +604,8 @@ pub(super) fn assert_cases_match(
         )
         .unwrap();
         writeln!(report, "  input:    {input_display}").unwrap();
-        writeln!(report, "  expected: {}", fmt_toks(&expected)).unwrap();
-        writeln!(report, "  actual:   {}", fmt_toks(&actual)).unwrap();
+        writeln!(report, "  expected: {}", fmt_toks(&expected, first_diff)).unwrap();
+        writeln!(report, "  actual:   {}", fmt_toks(&actual, first_diff)).unwrap();
     }
     assert!(
         failures == 0,

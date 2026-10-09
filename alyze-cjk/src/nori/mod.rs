@@ -31,15 +31,13 @@
 //! while the crate is `publish = false`, but crates.io caps a crate at 10 MB, so before publishing
 //! they need to be compressed (deflate gets them to roughly 3-4 MB) and inflated on first use.
 
-// TODO: remove once the port lands; until then the stubs' internals are unused outside tests.
-#![allow(dead_code)]
-
 pub(crate) mod char_def;
 pub(crate) mod dict;
 pub mod filter;
 pub mod pos;
 pub(crate) mod unicode;
 mod user_dict;
+mod viterbi;
 
 #[cfg(test)]
 mod tests;
@@ -142,9 +140,9 @@ pub struct Token<'a> {
 /// storage their texts live in. Reuse one across inputs to amortise allocations.
 #[derive(Clone, Debug, Default)]
 pub struct Tokens {
-    text: String,
-    morphemes: Vec<Morpheme>,
-    items: Vec<TokenData>,
+    pub(crate) text: String,
+    pub(crate) morphemes: Vec<Morpheme>,
+    pub(crate) items: Vec<TokenData>,
 }
 
 /// A token's data, with text as ranges into the [`Tokens`] buffers.
@@ -220,8 +218,7 @@ impl Tokens {
 /// appending the tokens to `out` (which is cleared first).
 pub fn tokenize(text: &str, options: Options<'_>, out: &mut Tokens) {
     out.clear();
-    let _ = (text, options);
-    todo!("nori tokenizer")
+    viterbi::tokenize(text, options, out);
 }
 
 /// Options of the `nori` analyzer: the tokenizer with punctuation discarded, then the

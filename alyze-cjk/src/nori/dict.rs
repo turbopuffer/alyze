@@ -93,6 +93,7 @@ impl<D: AsRef<[u8]>> TermIndex<D> {
     }
 
     /// The ordinal of `text` if it is a term.
+    #[cfg(test)]
     pub fn lookup(&self, text: &[u16]) -> Option<u64> {
         let mut found = None;
         self.for_each_prefix(text, |len, ord| {
@@ -170,6 +171,7 @@ impl TokenInfoDict {
 
     /// The words of the surface form `surface`, in dictionary order, or `None` if it isn't a
     /// dictionary term.
+    #[cfg(test)]
     pub fn lookup(&self, surface: &[u16]) -> Option<WordIds> {
         self.terms.lookup(surface).map(|ord| self.words_of(ord))
     }
@@ -292,6 +294,7 @@ impl UnknownDict {
 }
 
 pub(crate) struct ConnectionCosts {
+    #[cfg(test)]
     right_ids: usize,
     left_ids: usize,
     matrix: &'static [u8],
@@ -306,6 +309,7 @@ impl ConnectionCosts {
             let matrix = &COSTS_BIN[8..];
             assert_eq!(matrix.len(), right_ids * left_ids * 2);
             ConnectionCosts {
+                #[cfg(test)]
                 right_ids,
                 left_ids,
                 matrix,
@@ -314,6 +318,7 @@ impl ConnectionCosts {
     }
 
     /// Number of right ids (rows) and left ids (columns).
+    #[cfg(test)]
     pub fn dimensions(&self) -> (usize, usize) {
         (self.right_ids, self.left_ids)
     }
