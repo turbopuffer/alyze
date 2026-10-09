@@ -131,10 +131,21 @@ impl UserDictionary {
                 });
             }
             let key: Vec<u16> = values[0].encode_utf16().collect();
-            let segments: Vec<u16> = segmentation
-                .iter()
-                .map(|s| u16::try_from(s.encode_utf16().count()).unwrap_or(u16::MAX))
-                .collect();
+            // Port divergence: a segmentation field with a leading space gives Lucene an empty
+            // first segment and so an empty token; a segment over 65535 code units can't be
+            // stored. Both are rejected as malformed.
+            let mut segments: Vec<u16> = Vec::with_capacity(segmentation.len());
+            for segment in &segmentation {
+                match u16::try_from(segment.encode_utf16().count()) {
+                    Ok(len) if len > 0 => segments.push(len),
+                    _ => {
+                        return Err(UserDictionaryError::Malformed {
+                            rule,
+                            line: *number,
+                        });
+                    }
+                }
+            }
             // Port divergence: a segment boundary inside a surrogate pair of the key would make
             // Lucene emit half characters; reject the rule instead.
             let mut boundary = 0usize;
@@ -311,7 +322,9 @@ pub(crate) struct UserEntry {
 pub enum UserDictionaryError {
     /// A surface form that an earlier rule already defined (Elasticsearch, unless lenient).
     Duplicate { surface: String, line: usize },
-    /// Fewer than four fields, or an odd number of `"` (Lucene throws an index error).
+    /// Fewer than four fields, or an odd number of `"` (Lucene throws an index error); or an
+    /// empty segment (a leading space in the segmentation field, from which Lucene would emit an
+    /// empty token) or a segment over 65535 code units.
     Malformed { rule: String, line: usize },
     /// The number of segments differs from the number of readings.
     SegmentationReadingsMismatch { rule: String, line: usize },
