@@ -23,7 +23,16 @@ pub(crate) enum CharType {
 
 /// Classifies a code point (or a lone UTF-16 code unit in the surrogate range).
 pub(crate) fn char_type(cp: u32) -> CharType {
-    // Stub: the port has not been written yet.
-    let _ = cp;
-    CharType::Other
+    match cp {
+        0xD800..=0xDFFF | 0x10000.. => CharType::Surrogate,
+        0x4E00..=0x9FA5 => CharType::Hanzi,
+        0x41..=0x5A | 0x61..=0x7A => CharType::Letter,
+        0x30..=0x39 => CharType::Digit,
+        0x20 | 0x09 | 0x0D | 0x0A | 0x3000 => CharType::SpaceLike,
+        0x21..=0xBB | 0x2010..=0x2642 | 0x3001..=0x301E => CharType::Delimiter,
+        0xFF21..=0xFF3A | 0xFF41..=0xFF5A => CharType::FullwidthLetter,
+        0xFF10..=0xFF19 => CharType::FullwidthDigit,
+        0xFE30..=0xFF63 => CharType::Delimiter,
+        _ => CharType::Other,
+    }
 }

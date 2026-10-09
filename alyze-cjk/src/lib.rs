@@ -6,17 +6,12 @@
 //! don't need them.
 
 /// Dictionaries for the `smartcn` segmenter, converted from Lucene's `coredict.mem` and
-/// `bigramdict.mem` (ICTCLAS data, Apache License 2.0).
+/// `bigramdict.mem` (ICTCLAS data, Apache License 2.0) by `alyze`'s `smartcn_convert_dicts`
+/// example, which also documents the blob formats.
 pub mod smartcn {
-    /// The core word dictionary: every known word with its frequency. Format is defined by
-    /// `alyze::smartcn::dict`.
-    ///
-    /// Placeholder: the conversion tool has not been written yet, so this is empty.
-    pub const CORE_DICT: &[u8] = &[];
+    /// The core word dictionary: every known word with its frequency.
+    pub const CORE_DICT: &[u8] = include_bytes!("../data/coredict.bin");
 
-    /// The bigram dictionary: a hash of every known word pair with its frequency. Format is
-    /// defined by `alyze::smartcn::dict`.
-    ///
-    /// Placeholder: the conversion tool has not been written yet, so this is empty.
-    pub const BIGRAM_DICT: &[u8] = &[];
+    /// The bigram dictionary: a hash of every known word pair with its frequency.
+    pub const BIGRAM_DICT: &[u8] = include_bytes!("../data/bigramdict.bin");
 }
