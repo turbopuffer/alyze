@@ -12,11 +12,17 @@ exclude = ["testdata/", "benches/"]
 
 # `alyze-features` is a separate, Apache-2.0 crate (the rest of `alyze` is MIT). It is a workspace
 # member, lives in this repo, and is not published.
+# `alyze-cjk` is an MIT crate pulled into `alyze` as an optional dependency behind the `cjk` feature.
 [workspace]
-members = ["wasm", "alyze-features"]
+members = ["wasm", "alyze-features", "alyze-cjk"]
+
+[features]
+# CJK (Chinese, Japanese, Korean) analysis, re-exported as `alyze::cjk`.
+cjk = ["dep:alyze-cjk"]
 
 [dependencies]
 ahash = "0.8.12"
+alyze-cjk = { path = "alyze-cjk", version = "0.1.0", optional = true }
 phf = { version = "0.13.1", features = ["macros"] }
 rust-stemmers = "1.2.0"
 tpuf_icu_properties_211 = "7"

@@ -60,6 +60,7 @@ name = "alyze"
 version = "0.1.5"
 dependencies = [
  "ahash",
+ "alyze-cjk",
  "criterion",
  "itertools 0.14.0",
  "parquet",
@@ -69,6 +70,10 @@ dependencies = [
  "tpuf_icu_properties_211",
  "ureq",
 ]
+
+[[package]]
+name = "alyze-cjk"
+version = "0.1.0"
 
 [[package]]
 name = "alyze-features"

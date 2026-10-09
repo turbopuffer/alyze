@@ -1,0 +1,20 @@
+[package]
+name = "alyze-cjk"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "CJK (Chinese, Japanese, Korean) text analysis for alyze"
+license = "MIT"
+repository = "https://github.com/turbopuffer/alyze"
+keywords = ["tokenizer", "cjk", "segmentation", "analysis", "nlp"]
+categories = ["text-processing", "internationalization"]
+# Not yet published: the crate is still empty. Must be published before an `alyze` release that
+# ships the `cjk` feature, since `cargo publish` requires optional path dependencies to exist on
+# crates.io too.
+publish = false
+
+# Pulled into `alyze` as an optional dependency behind its `cjk` feature. Kept as a separate crate
+# so the (eventual) CJK dictionaries and segmentation models don't inflate `alyze` for users who
+# don't need them.
+
+[dependencies]

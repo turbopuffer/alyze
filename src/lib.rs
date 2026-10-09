@@ -13,3 +13,9 @@
 
 pub mod analyze;
 pub mod uax29;
+
+/// Port of Lucene's `smartcn` Chinese analyzer (Elasticsearch's `smartcn` analyzer and
+/// `smartcn_tokenizer`). Requires the `cjk` feature, which pulls in the dictionaries from
+/// `alyze-cjk`.
+#[cfg(feature = "cjk")]
+pub mod smartcn;
