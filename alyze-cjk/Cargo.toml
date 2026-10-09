@@ -8,7 +8,7 @@ license = "MIT"
 repository = "https://github.com/turbopuffer/alyze"
 keywords = ["tokenizer", "cjk", "segmentation", "analysis", "nlp"]
 categories = ["text-processing", "internationalization"]
-exclude = ["testdata/"]
+exclude = ["testdata/", "benches/"]
 # Not yet published. Must be published before an `alyze` release that ships the `cjk` feature,
 # since `cargo publish` requires optional path dependencies to exist on crates.io too.
 publish = false
@@ -20,4 +20,9 @@ publish = false
 rust-stemmers = "1.2.0"
 
 [dev-dependencies]
+criterion = "0.8.2"
 parquet = "57.3.0"
+
+[[bench]]
+name = "wikipedia_zh"
+harness = false

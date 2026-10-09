@@ -75,6 +75,7 @@ dependencies = [
 name = "alyze-cjk"
 version = "0.1.0"
 dependencies = [
+ "criterion",
  "parquet",
  "rust-stemmers",
 ]
