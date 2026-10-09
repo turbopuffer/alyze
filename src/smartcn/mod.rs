@@ -27,6 +27,7 @@
 
 pub(crate) mod char_type;
 pub(crate) mod dict;
+mod jdk_sentence_tables;
 pub(crate) mod sentence;
 
 #[cfg(test)]
