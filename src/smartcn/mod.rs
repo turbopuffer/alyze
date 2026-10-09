@@ -26,8 +26,10 @@
 //! `testdata/smartcn/README.md`.
 
 pub(crate) mod char_type;
+mod chunks;
 pub(crate) mod dict;
 mod jdk_sentence_tables;
+mod segmenter;
 pub(crate) mod sentence;
 
 #[cfg(test)]
@@ -74,10 +76,39 @@ pub fn tokenize(
     text: &str,
     options: Options,
     buffer: &mut String,
-    on_token: impl FnMut(Token<'_>) -> bool,
+    mut on_token: impl FnMut(Token<'_>) -> bool,
 ) {
-    // Stub: the port has not been written yet, so no tokens are emitted.
-    let _ = (text, options, buffer, on_token);
+    let Options {} = options;
+    let mut segmenter = segmenter::Segmenter::new();
+    let mut chunks = chunks::ChunkReader::new(text);
+    let mut chunk = String::new();
+    let mut boundaries = Vec::new();
+    while let Some(chunk_offset) = chunks.next_chunk(&mut chunk) {
+        boundaries.clear();
+        sentence::for_each_boundary(&chunk, |boundary| {
+            boundaries.push(boundary);
+            true
+        });
+        for window in boundaries.windows(2) {
+            let (sentence_start, sentence_end) = (window[0], window[1]);
+            let sentence_offset = chunk_offset + sentence_start;
+            let keep_going = segmenter.segment(
+                &chunk[sentence_start..sentence_end],
+                buffer,
+                |text, byte_range, kind| {
+                    on_token(Token {
+                        text,
+                        byte_range: sentence_offset + byte_range.start
+                            ..sentence_offset + byte_range.end,
+                        kind,
+                    })
+                },
+            );
+            if !keep_going {
+                return;
+            }
+        }
+    }
 }
 
 /// [`crate::analyze::Analyzer::analyze_inputs`] for [`crate::analyze::TokenizerOptions::SmartCn`]:
