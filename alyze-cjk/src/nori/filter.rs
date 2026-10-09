@@ -38,7 +38,9 @@ pub fn lowercase(tokens: &mut Tokens) {
     let mut lowered = String::new();
     for i in 0..tokens.items.len() {
         let text = &tokens.text[tokens.items[i].text.clone()];
-        if text.chars().all(|c| !c.is_alphabetic() || c.is_lowercase()) {
+        // Only the pinned table decides (no `char::is_lowercase`, whose Unicode version is the
+        // toolchain's); ASCII is the one safe shortcut.
+        if text.is_ascii() && !text.bytes().any(|b| b.is_ascii_uppercase()) {
             continue;
         }
         lowered.clear();

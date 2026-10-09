@@ -138,11 +138,19 @@ pub struct Token<'a> {
 
 /// Output buffer for [`tokenize`], [`analyze`] and the [`filter`]s: a list of tokens plus the
 /// storage their texts live in. Reuse one across inputs to amortise allocations.
-#[derive(Clone, Debug, Default)]
+#[derive(Default)]
 pub struct Tokens {
     pub(crate) text: String,
     pub(crate) morphemes: Vec<Morpheme>,
     pub(crate) items: Vec<TokenData>,
+    /// The tokenizer's working memory, kept here so callers reusing a `Tokens` reuse it too.
+    pub(crate) scratch: viterbi::Scratch,
+}
+
+impl std::fmt::Debug for Tokens {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_list().entries(self.iter()).finish()
+    }
 }
 
 /// A token's data, with text as ranges into the [`Tokens`] buffers.

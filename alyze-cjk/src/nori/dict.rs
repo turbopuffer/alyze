@@ -37,7 +37,7 @@ impl WordInfo {
         let left = u16::from_le_bytes([record[0], record[1]]);
         WordInfo {
             left_id: left & 0x3FFF,
-            right_id: u16::from_le_bytes([record[2], record[3]]),
+            right_id: u16::from_le_bytes([record[2], record[3]]) & 0x3FFF,
             cost: i16::from_le_bytes([record[4], record[5]]),
             pos_type: match left >> 14 {
                 0 => pos::Type::Morpheme,
@@ -57,6 +57,9 @@ pub(crate) type WordId = u32;
 pub(crate) type WordIds = Range<WordId>;
 
 const RECORD_LEN: usize = 8;
+/// Flags in a record's right-id word: the word has a reading / has morphemes in the extras.
+const HAS_READING: u16 = 1 << 14;
+const HAS_MORPHEMES: u16 = 1 << 15;
 
 /// An `fst::Map` keyed by UTF-16BE surface forms; shared by the system and user dictionaries.
 pub(crate) struct TermIndex<D: AsRef<[u8]>> {
@@ -188,6 +191,10 @@ impl TokenInfoDict {
         WordInfo::read(&self.records[at..at + RECORD_LEN])
     }
 
+    fn flags(&self, id: WordId) -> u16 {
+        u16_at(self.records, id as usize * RECORD_LEN + 2) & (HAS_READING | HAS_MORPHEMES)
+    }
+
     /// The extras block of a word (reading, morphemes), if it has one.
     fn extras_of(&self, id: WordId) -> Option<&'static [u8]> {
         let count = self.extras_index.len() / 8;
@@ -212,6 +219,9 @@ impl TokenInfoDict {
     /// into `out`, which is cleared first). Returns whether there was one.
     pub fn reading(&self, id: WordId, out: &mut Vec<u16>) -> bool {
         out.clear();
+        if self.flags(id) & HAS_READING == 0 {
+            return false;
+        }
         let Some(extras) = self.extras_of(id) else {
             return false;
         };
@@ -226,6 +236,9 @@ impl TokenInfoDict {
     /// The morphemes of a compound, inflected or pre-analysed word (`None` for a plain morpheme
     /// or an entry without a decomposition).
     pub fn morphemes(&self, id: WordId) -> Option<Vec<Morpheme>> {
+        if self.flags(id) & HAS_MORPHEMES == 0 {
+            return None;
+        }
         let extras = self.extras_of(id)?;
         let mut at = 1 + extras[0] as usize * 2;
         let count = extras[at] as usize;
@@ -293,9 +306,11 @@ impl UnknownDict {
     }
 }
 
+/// Stored left-id major, like Lucene: `cost` is called in a loop over the arcs arriving at a
+/// position (varying right ids) for one word (fixed left id), so those reads are contiguous.
 pub(crate) struct ConnectionCosts {
-    #[cfg(test)]
     right_ids: usize,
+    #[cfg(test)]
     left_ids: usize,
     matrix: &'static [u8],
 }
@@ -309,8 +324,8 @@ impl ConnectionCosts {
             let matrix = &COSTS_BIN[8..];
             assert_eq!(matrix.len(), right_ids * left_ids * 2);
             ConnectionCosts {
-                #[cfg(test)]
                 right_ids,
+                #[cfg(test)]
                 left_ids,
                 matrix,
             }
@@ -326,7 +341,7 @@ impl ConnectionCosts {
     /// The cost of a word with `left_id` following a word with `right_id` (0 is BOS/EOS).
     #[inline]
     pub fn cost(&self, right_id: u16, left_id: u16) -> i16 {
-        let at = (right_id as usize * self.left_ids + left_id as usize) * 2;
+        let at = (left_id as usize * self.right_ids + right_id as usize) * 2;
         i16::from_le_bytes([self.matrix[at], self.matrix[at + 1]])
     }
 }

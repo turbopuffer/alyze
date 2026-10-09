@@ -43,34 +43,57 @@ struct Position {
 }
 
 /// Lucene's `WrappedPositionArray`, without the wrapping: positions are allocated on demand up
-/// to the highest one asked for, and freed (emptied) behind the last backtrace.
+/// to the highest one asked for, and freed (emptied) behind the last backtrace. The arc vectors
+/// keep their capacity across positions and inputs.
 #[derive(Default)]
-struct Positions {
+pub(crate) struct Positions {
     positions: Vec<Position>,
+    /// Number of positions in use (`positions[len..]` are spare, emptied vectors).
+    len: usize,
+    /// Positions before this one have been freed.
+    freed: usize,
 }
 
 impl Positions {
     fn get(&mut self, pos: usize) -> &mut Position {
-        while self.positions.len() <= pos {
-            self.positions.push(Position::default());
+        while self.len <= pos {
+            if self.len == self.positions.len() {
+                self.positions.push(Position::default());
+            }
+            self.len += 1;
         }
         &mut self.positions[pos]
     }
 
     /// Lucene's `getNextPos`: one past the highest allocated position.
     fn next_pos(&self) -> usize {
-        self.positions.len()
+        self.len
     }
 
     fn free_before(&mut self, pos: usize) {
-        for p in &mut self.positions[..pos] {
-            p.arcs = Vec::new();
+        for p in &mut self.positions[self.freed..pos] {
+            p.arcs.clear();
         }
+        self.freed = self.freed.max(pos);
     }
 
     fn reset(&mut self) {
-        self.positions.clear();
+        for p in &mut self.positions[..self.len] {
+            p.arcs.clear();
+        }
+        self.len = 0;
+        self.freed = 0;
     }
+}
+
+/// Scratch space the search reuses across inputs (kept inside [`Tokens`]).
+#[derive(Default)]
+pub(crate) struct Scratch {
+    units: Vec<u16>,
+    byte_at: Vec<usize>,
+    positions: Positions,
+    pending: Vec<TokenData>,
+    reading_buf: Vec<u16>,
 }
 
 pub(crate) struct Viterbi<'a> {
@@ -97,9 +120,17 @@ pub(crate) struct Viterbi<'a> {
 }
 
 impl<'a> Viterbi<'a> {
-    pub fn new(input: &'a str, options: Options<'a>) -> Self {
-        let units: Vec<u16> = input.encode_utf16().collect();
-        let mut byte_at = Vec::with_capacity(units.len() + 1);
+    pub fn new(input: &'a str, options: Options<'a>, scratch: Scratch) -> Self {
+        let Scratch {
+            mut units,
+            mut byte_at,
+            positions,
+            pending,
+            reading_buf,
+        } = scratch;
+        units.clear();
+        units.extend(input.encode_utf16());
+        byte_at.clear();
         for (byte_offset, c) in input.char_indices() {
             byte_at.push(byte_offset);
             if c.len_utf16() == 2 {
@@ -112,18 +143,29 @@ impl<'a> Viterbi<'a> {
             options,
             units,
             byte_at,
-            positions: Positions::default(),
+            positions,
             dict: TokenInfoDict::get(),
             unk: UnknownDict::get(),
             costs: ConnectionCosts::get(),
             pos: 0,
             last_backtrace_pos: 0,
             end: false,
-            pending: Vec::new(),
-            reading_buf: Vec::new(),
+            pending,
+            reading_buf,
         };
         viterbi.reset_state();
         viterbi
+    }
+
+    /// Hands the scratch space back for the next input.
+    pub fn into_scratch(self) -> Scratch {
+        Scratch {
+            units: self.units,
+            byte_at: self.byte_at,
+            positions: self.positions,
+            pending: self.pending,
+            reading_buf: self.reading_buf,
+        }
     }
 
     fn reset_state(&mut self) {
@@ -719,6 +761,8 @@ fn has_space_penalty(tag: pos::Tag) -> bool {
 
 /// Entry point used by [`super::tokenize`].
 pub(crate) fn tokenize(input: &str, options: Options<'_>, out: &mut Tokens) {
-    let mut viterbi = Viterbi::new(input, options);
+    let scratch = std::mem::take(&mut out.scratch);
+    let mut viterbi = Viterbi::new(input, options, scratch);
     viterbi.run(out);
+    out.scratch = viterbi.into_scratch();
 }

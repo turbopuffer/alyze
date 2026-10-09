@@ -11,12 +11,13 @@
 //!   code-unit order) to its term ordinal, 0-based in sorted order.
 //! - `words.bin`: `u32` term count T, `u32` word count W; `(T+1) × u32` word-index bounds per
 //!   term (the words of term k are `bounds[k]..bounds[k+1]`, in Lucene's order); `W × 8` word
-//!   records: `u16` left id | POS type << 14, `u16` right id, `i16` cost, `u8` left POS, `u8`
-//!   right POS; `u32` extras count E; `E × (u32 word id, u32 offset)` sorted by word id; then the
-//!   extras: `u8` reading length (0 = none) and that many `u16`, `u8` morpheme count and per
-//!   morpheme `u8` tag, `u8` length, that many `u16`.
+//!   records: `u16` left id | POS type << 14, `u16` right id | has-reading << 14 | has-morphemes
+//!   << 15, `i16` cost, `u8` left POS, `u8` right POS; `u32` extras count E; `E × (u32 word id,
+//!   u32 offset)` sorted by word id; then the extras: `u8` reading length (0 = none) and that
+//!   many `u16`, `u8` morpheme count and per morpheme `u8` tag, `u8` length, that many `u16`.
 //! - `unk.bin`: `u8` class count, then per class `u8` entry count and that many 8-byte records.
-//! - `costs.bin`: `u32` right-id count R, `u32` left-id count L, `R × L` `i16` (right-id major).
+//! - `costs.bin`: `u32` right-id count R, `u32` left-id count L, `L × R` `i16`, left-id major
+//!   (like Lucene: the Viterbi's inner loop varies the right id, so those reads are contiguous).
 //! - `chardef.bin`: `u8` class count C, `65536` class bytes (one per code unit), `C` flag bytes
 //!   (bit 0 invoke, bit 1 group), from `testdata/nori/golden/chardef.txt`.
 
@@ -85,15 +86,15 @@ fn index_of(table: &[&str], name: &str) -> u8 {
         .unwrap_or_else(|| panic!("unknown name {name:?}")) as u8
 }
 
-/// A word record: `left id | POS type << 14`, right id, cost, left POS, right POS.
-fn record(fields: &[&str], out: &mut Vec<u8>) {
+/// A word record: `left id | POS type << 14`, `right id | flags`, cost, left POS, right POS.
+fn record(fields: &[&str], flags: u16, out: &mut Vec<u8>) {
     let left_id: u16 = fields[0].parse().unwrap();
     let right_id: u16 = fields[1].parse().unwrap();
     let cost: i16 = fields[2].parse().unwrap();
     let pos_type = index_of(POS_TYPES, fields[3]);
     assert!(left_id < 1 << 14 && right_id < 1 << 14);
     out.extend_from_slice(&(left_id | u16::from(pos_type) << 14).to_le_bytes());
-    out.extend_from_slice(&right_id.to_le_bytes());
+    out.extend_from_slice(&(right_id | flags).to_le_bytes());
     out.extend_from_slice(&cost.to_le_bytes());
     out.push(index_of(TAGS, fields[4]));
     out.push(index_of(TAGS, fields[5]));
@@ -121,7 +122,6 @@ fn convert_token_info(tsv: &Path, out: &Path) {
             bounds.push(word_id);
             last_surface = Some(surface);
         }
-        record(&fields[1..7], &mut records);
         let reading = (fields[7] != "-").then(|| utf16(&unescape(fields[7])));
         let morphemes: Vec<(u8, Vec<u16>)> = if fields[8] == "-" {
             Vec::new()
@@ -134,6 +134,8 @@ fn convert_token_info(tsv: &Path, out: &Path) {
                 })
                 .collect()
         };
+        let flags = (reading.is_some() as u16) << 14 | (!morphemes.is_empty() as u16) << 15;
+        record(&fields[1..7], flags, &mut records);
         if reading.is_some() || !morphemes.is_empty() {
             extras_index.push((word_id, extras.len() as u32));
             let reading = reading.unwrap_or_default();
@@ -189,6 +191,7 @@ fn convert_unknown(tsv: &Path, out: &Path) {
             &[
                 fields[1], fields[2], fields[3], "MORPHEME", fields[4], fields[4],
             ],
+            0,
             &mut rec,
         );
         by_class.entry(class).or_default().push(rec);
@@ -207,16 +210,18 @@ fn convert_unknown(tsv: &Path, out: &Path) {
 fn convert_costs(dump: &Path, out: &Path) {
     let matrix = fs::read(dump).unwrap();
     // The dump has no header; the dimensions are mecab-ko-dic's (right-id.def / left-id.def).
-    let (right, left) = (3822u32, 2693u32);
-    assert_eq!(
-        matrix.len(),
-        (right * left * 2) as usize,
-        "unexpected matrix size"
-    );
+    let (right, left) = (3822usize, 2693usize);
+    assert_eq!(matrix.len(), right * left * 2, "unexpected matrix size");
     let mut blob = Vec::with_capacity(matrix.len() + 8);
-    blob.extend_from_slice(&right.to_le_bytes());
-    blob.extend_from_slice(&left.to_le_bytes());
-    blob.extend_from_slice(&matrix);
+    blob.extend_from_slice(&(right as u32).to_le_bytes());
+    blob.extend_from_slice(&(left as u32).to_le_bytes());
+    // Transpose: the dump is right-id major, the blob left-id major.
+    for l in 0..left {
+        for r in 0..right {
+            let at = (r * left + l) * 2;
+            blob.extend_from_slice(&matrix[at..at + 2]);
+        }
+    }
     fs::write(out, blob).unwrap();
 }
 
