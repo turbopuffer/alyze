@@ -1,7 +1,8 @@
 //! mecab-ko-dic's character classes (`char.def`), as compiled into Lucene's
 //! `CharacterDefinition.dat`: a class per UTF-16 code unit, and per class whether unknown-word
 //! processing is invoked even when dictionary words match (`invoke`) and whether consecutive
-//! characters of the class are grouped into one unknown word (`group`).
+//! characters of the class are grouped into one unknown word (`group`). Loaded from
+//! `data/nori/chardef.bin` (see `examples/nori_convert_dict.rs`).
 
 /// A character class, in `char.def` / Lucene ordinal order.
 #[derive(Clone, Copy, Debug, PartialEq, Eq, Hash, PartialOrd, Ord)]
@@ -65,24 +66,38 @@ impl CharClass {
     }
 }
 
+static CHARDEF_BIN: &[u8] = include_bytes!("../../data/nori/chardef.bin");
+const CLASS_COUNT: usize = CharClass::ALL.len();
+
+/// The 65536 class bytes.
+#[inline]
+fn classes() -> &'static [u8] {
+    &CHARDEF_BIN[1..1 + 0x10000]
+}
+
+fn flags(class: CharClass) -> u8 {
+    debug_assert_eq!(CHARDEF_BIN[0] as usize, CLASS_COUNT);
+    CHARDEF_BIN[1 + 0x10000 + class as usize]
+}
+
 /// The class of a UTF-16 code unit. Supplementary characters are classified by their surrogate
 /// halves, which `char.def` doesn't list, so they are `Default`.
+#[inline]
 pub(crate) fn class(code_unit: u16) -> CharClass {
-    let _ = code_unit;
-    todo!("nori character definition")
+    CharClass::ALL[classes()[code_unit as usize] as usize]
 }
 
 /// Whether unknown-word processing runs at a character of this class even when dictionary words
 /// match there.
+#[inline]
 pub(crate) fn invoke(class: CharClass) -> bool {
-    let _ = class;
-    todo!("nori character definition")
+    flags(class) & 1 != 0
 }
 
 /// Whether consecutive characters of this class are grouped into one unknown word.
+#[inline]
 pub(crate) fn group(class: CharClass) -> bool {
-    let _ = class;
-    todo!("nori character definition")
+    flags(class) & 2 != 0
 }
 
 /// Whether a Hangul syllable (U+AC00..U+D7A3) has a final consonant (Lucene's `hasCoda`). Lucene

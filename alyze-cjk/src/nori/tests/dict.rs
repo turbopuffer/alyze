@@ -110,11 +110,13 @@ fn utf16(s: &str) -> Vec<u16> {
 /// The canonical word line the Java generator checksums, built from the port's view of a word.
 fn canonical_line(dict: &TokenInfoDict, surface: &[u16], id: WordId) -> String {
     let info = dict.word(id);
-    let reading = dict
-        .reading(id)
-        .map(|r| escape(&String::from_utf16(r).unwrap()))
-        .unwrap_or_else(|| "-".to_owned());
-    let morphemes = match dict.morphemes(id, surface) {
+    let mut units = Vec::new();
+    let reading = if dict.reading(id, &mut units) {
+        escape(&String::from_utf16(&units).unwrap())
+    } else {
+        "-".to_owned()
+    };
+    let morphemes = match dict.morphemes(id) {
         None => "-".to_owned(),
         Some(ms) => ms
             .iter()
@@ -150,7 +152,7 @@ fn token_info_dictionary_complete() {
         );
         last = surface.to_vec();
         terms += 1;
-        for &id in ids {
+        for id in ids {
             words += 1;
             checksum = fnv1a(checksum, canonical_line(dict, surface, id).as_bytes());
         }
@@ -209,10 +211,8 @@ fn term_probes() {
             Some(expected) => {
                 let ids =
                     actual.unwrap_or_else(|| panic!("{surface:?} should be a dictionary term"));
-                let actual_lines: Vec<String> = ids
-                    .iter()
-                    .map(|&id| canonical_line(dict, &units, id))
-                    .collect();
+                let actual_lines: Vec<String> =
+                    ids.map(|id| canonical_line(dict, &units, id)).collect();
                 let expected_lines: Vec<String> = expected
                     .iter()
                     .map(|w| {
@@ -256,7 +256,7 @@ fn prefix_probes() {
         let units = utf16(text);
         let mut actual = Vec::new();
         dict.for_each_prefix(&units, |len, ids| {
-            assert!(!ids.is_empty());
+            assert!(!ids.is_empty(), "term without words");
             actual.push(String::from_utf16(&units[..len]).unwrap());
         });
         assert_eq!(&actual, expected, "dictionary prefixes of {text:?}");

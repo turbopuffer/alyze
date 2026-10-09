@@ -20,6 +20,7 @@ publish = false
 # TODO(size): compress the nori dictionaries before publishing; crates.io caps a crate at 10 MB.
 
 [dependencies]
+fst = "0.4.7"
 rust-stemmers = "1.2.0"
 tpuf_icu_properties_211 = "7"
 

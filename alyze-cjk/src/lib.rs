@@ -11,6 +11,7 @@
 
 pub mod nori;
 pub mod smartcn;
+mod unicode_lower;
 
 #[cfg(test)]
 pub(crate) mod testutil;

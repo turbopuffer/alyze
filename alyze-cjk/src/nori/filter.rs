@@ -32,12 +32,32 @@ pub fn number(tokens: &mut Tokens) {
 /// Lowercases every token's text, with alyze's pinned Unicode lowercase mapping (Lucene's
 /// `LowerCaseFilter` uses Java's simple mapping; see the module docs for the difference).
 pub fn lowercase(tokens: &mut Tokens) {
-    let _ = tokens;
-    todo!("nori lowercase filter")
+    let mut lowered = String::new();
+    for i in 0..tokens.items.len() {
+        let text = &tokens.text[tokens.items[i].text.clone()];
+        if !text.chars().any(char::is_uppercase)
+            && !text.chars().any(|c| c.is_alphabetic() && !c.is_lowercase())
+        {
+            continue;
+        }
+        lowered.clear();
+        lowercase_into(text, &mut lowered);
+        if lowered != text {
+            let range = tokens.push_text(&lowered);
+            tokens.items[i].text = range;
+        }
+    }
 }
 
 /// The mapping [`lowercase`] applies, on one string.
 pub(crate) fn lowercase_text(text: &str) -> String {
-    let _ = text;
-    todo!("nori lowercase filter")
+    let mut out = String::with_capacity(text.len());
+    lowercase_into(text, &mut out);
+    out
+}
+
+fn lowercase_into(text: &str, out: &mut String) {
+    for c in text.chars() {
+        out.extend(crate::unicode_lower::unicode_v17_char_to_lower(c));
+    }
 }
