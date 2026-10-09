@@ -157,7 +157,7 @@ fn token_info_dictionary_complete() {
         );
         last = surface.to_vec();
         terms += 1;
-        for &id in ids {
+        for id in ids {
             words += 1;
             checksum = fnv1a(checksum, canonical_line(dict, surface, id).as_bytes());
         }
@@ -173,7 +173,7 @@ fn left_and_right_ids_agree() {
     let dict = TokenInfoDict::get();
     let mut checked = 0;
     dict.for_each_term(|_, ids| {
-        for &id in ids {
+        for id in ids {
             let info = dict.word(id);
             assert_eq!(info.left_id, info.right_id);
             checked += 1;
@@ -235,10 +235,8 @@ fn term_probes() {
             Some(expected) => {
                 let ids =
                     actual.unwrap_or_else(|| panic!("{surface:?} should be a dictionary term"));
-                let actual_lines: Vec<String> = ids
-                    .iter()
-                    .map(|&id| canonical_line(dict, &units, id))
-                    .collect();
+                let actual_lines: Vec<String> =
+                    ids.map(|id| canonical_line(dict, &units, id)).collect();
                 let expected_lines: Vec<String> =
                     expected.iter().map(|w| expected_line(surface, w)).collect();
                 assert_eq!(actual_lines, expected_lines, "words of {surface:?}");

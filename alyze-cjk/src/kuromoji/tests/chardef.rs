@@ -60,7 +60,9 @@ fn every_code_unit_and_flags() {
 fn kanji() {
     assert!(is_kanji(char_def::class('日' as u16)));
     assert!(is_kanji(char_def::class('一' as u16)));
-    assert!(is_kanji(char_def::class('々' as u16)));
+    // char.def lists U+3005 as KANJI first, but its later CJK Symbols and Punctuation range wins.
+    assert!(!is_kanji(char_def::class('々' as u16)));
+    assert!(is_kanji(char_def::class('𠀋'.encode_utf16(&mut [0; 2])[0])) == false);
     assert!(!is_kanji(char_def::class('あ' as u16)));
     assert!(!is_kanji(char_def::class('ア' as u16)));
     assert!(!is_kanji(char_def::class('1' as u16)));
