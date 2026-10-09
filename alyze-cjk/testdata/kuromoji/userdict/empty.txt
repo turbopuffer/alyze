@@ -1,0 +1,4 @@
+# Only comments and blank lines: Lucene returns no dictionary at all.
+
+   
+# another comment

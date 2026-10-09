@@ -1,0 +1,2 @@
+# An odd number of quotes makes CSVUtil.parse return no fields at all.
+"東京,東京,トウキョウ,カスタム名詞

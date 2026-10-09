@@ -1,0 +1,44 @@
+# Combined user dictionary for the golden runs: Lucene's and Elasticsearch's test dictionaries,
+# the docs' entry, and entries that exercise UserDictionary.open's and CSVUtil's corners. No
+# duplicate surface forms (Lucene would fail on them; the port rejects them unless lenient, see
+# userdict/dups.txt).
+日本経済新聞,日本 経済 新聞,ニホン ケイザイ シンブン,カスタム名詞
+関西国際空港,関西 国際 空港,カンサイ コクサイ クウコウ,テスト名詞
+朝青龍,朝青龍,アサショウリュウ,カスタム人名
+abcd,a b cd,foo1 foo2 foo3,bar
+abcdefg,ab cd efg,foo1 foo2 foo4,bar
+test#テスト,test # テスト,test # テスト,カスタム名刺
+テスト#,テスト #,テスト #,カスタム名刺
+c++,c++,w,w
+制限スピード,制限スピード,セイゲンスピード,テスト名詞
+東京スカイツリー,東京 スカイツリー,トウキョウ スカイツリー,カスタム名詞
+# Quoted fields: a comma inside the surface form, and a "" escape. CSVUtil only strips the quotes
+# of a field with no inner quote, so the second key keeps its outer quotes: "引用"符".
+"a,b","a,b",エービー,カスタム名詞
+"引用""符","引用""符",インヨウフ,カスタム名詞
+# Multiple spaces between segments (split on " +") and spaces inside the surface form (kept in the
+# term-index key, stripped for the comparison with the segmentation).
+東京  都,東京   都,トウキョウ ト,カスタム名詞
+横浜 市,横浜 市,ヨコハマ シ,カスタム名詞
+# A no-break space is not \s for Java: it stays part of the surface form and its segment.
+大阪 府,大阪 府,オオサカフ,カスタム名詞
+# Segmentation covering the whole surface form; a reading equal to the surface. (An empty POS
+# field is accepted by Lucene but crashes it when the attribute is read, so none here.)
+鳩山積み,鳩山 積み,ハトヤマ ツミ,カスタム名詞
+スカイツリー,スカイツリー,スカイツリー,カスタム名詞
+# Entries overlapping system words and a long compound's parts.
+成田空港第二ターミナル,成田空港 第二 ターミナル,ナリタクウコウ ダイニ ターミナル,カスタム名詞
+東京大学,東京大学,トウキョウダイガク,カスタム組織
+# Kana, half-width, full-width and Latin entries (the tokenizer sees them as typed; the analyzers
+# width-normalize before tokenizing, so the fullwidth ones never match there).
+ソフトウェア,ソフト ウェア,ソフト ウェア,カスタム名詞
+ｱｲｳｴｵ,ｱｲｳｴｵ,アイウエオ,カスタム名詞
+Ｔｅｓｔ,Ｔｅｓｔ,テスト,カスタム名詞
+Rust,Rust,ラスト,カスタム名詞
+# Entries with supplementary characters (segments never cut a surrogate pair).
+😀顔,😀 顔,エモジ カオ,カスタム名詞
+𠀋尺,𠀋尺,ジョウシャク,カスタム名詞
+# Single-character entries, numerals and a punctuation surface.
+蟹,蟹,カニ,カスタム名詞
+１２３,１２３,ヒャクニジュウサン,カスタム数
+々,々,ノマ,カスタム記号

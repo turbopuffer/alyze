@@ -17,11 +17,18 @@ Provides:
   token against Lucene (see `testdata/nori/README.md`); the only intended differences are how a
   surrogate pair split by Lucene's 1024-unit unknown-word cap is reported and the lowercase
   mapping the analyzer ends with.
+- `kuromoji` (in progress, test suite first): a port of Lucene's `kuromoji` analyzer, the
+  MeCab-style Japanese morphological analyzer behind Elasticsearch's `kuromoji` and
+  `kuromoji_completion` analyzers, `kuromoji_tokenizer` and the `kuromoji_*`, `ja_stop`,
+  `hiragana_uppercase` and `katakana_uppercase` filters, with mecab-ipadic as its dictionary.
+  Checked token for token against Lucene (see `testdata/kuromoji/README.md`), with the same
+  intended differences as `nori`.
 
 ## License
 
-Apache-2.0. Unlike the MIT-licensed `alyze` crate, `src/smartcn/` and `src/nori/` are ports of
-Lucene's `lucene-analysis-smartcn` and `lucene-analysis-nori` modules and `data/` is converted from
-their dictionaries (ICTCLAS data contributed by Xiaoping Gao / www.imdict.net; mecab-ko-dic by
-Yongwoon Lee and Yungho Yu), all used under the Apache License 2.0 — hence this crate is kept
+Apache-2.0. Unlike the MIT-licensed `alyze` crate, `src/smartcn/`, `src/nori/` and `src/kuromoji/`
+are ports of Lucene's `lucene-analysis-smartcn`, `lucene-analysis-nori` and
+`lucene-analysis-kuromoji` modules and `data/` is converted from their dictionaries (ICTCLAS data
+contributed by Xiaoping Gao / www.imdict.net; mecab-ko-dic by Yongwoon Lee and Yungho Yu;
+mecab-ipadic by NAIST and Taku Kudo under a BSD-style license), all used under the Apache License 2.0 — hence this crate is kept
 separate and Apache-2.0 licensed. See `LICENSE` and `NOTICE`.

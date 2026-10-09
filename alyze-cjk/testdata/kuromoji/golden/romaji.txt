@@ -1,0 +1,882 @@
+# 0
+hepburn	a
+keystrokes	1	a
+# 1
+hepburn	i
+keystrokes	1	i
+# 2
+hepburn	u
+keystrokes	1	u
+# 3
+hepburn	e
+keystrokes	1	e
+# 4
+hepburn	o
+keystrokes	1	o
+# 5
+hepburn	ka
+keystrokes	1	ka
+# 6
+hepburn	ki
+keystrokes	1	ki
+# 7
+hepburn	ku
+keystrokes	1	ku
+# 8
+hepburn	ke
+keystrokes	1	ke
+# 9
+hepburn	ko
+keystrokes	1	ko
+# 10
+hepburn	sa
+keystrokes	1	sa
+# 11
+hepburn	shi
+keystrokes	2	si	shi
+# 12
+hepburn	su
+keystrokes	1	su
+# 13
+hepburn	se
+keystrokes	1	se
+# 14
+hepburn	so
+keystrokes	1	so
+# 15
+hepburn	ta
+keystrokes	1	ta
+# 16
+hepburn	chi
+keystrokes	2	ti	chi
+# 17
+hepburn	tsu
+keystrokes	2	tu	tsu
+# 18
+hepburn	te
+keystrokes	1	te
+# 19
+hepburn	to
+keystrokes	1	to
+# 20
+hepburn	na
+keystrokes	1	na
+# 21
+hepburn	ni
+keystrokes	1	ni
+# 22
+hepburn	nu
+keystrokes	1	nu
+# 23
+hepburn	ne
+keystrokes	1	ne
+# 24
+hepburn	no
+keystrokes	1	no
+# 25
+hepburn	ha
+keystrokes	1	ha
+# 26
+hepburn	hi
+keystrokes	1	hi
+# 27
+hepburn	fu
+keystrokes	2	hu	fu
+# 28
+hepburn	he
+keystrokes	1	he
+# 29
+hepburn	ho
+keystrokes	1	ho
+# 30
+hepburn	ma
+keystrokes	1	ma
+# 31
+hepburn	mi
+keystrokes	1	mi
+# 32
+hepburn	mu
+keystrokes	1	mu
+# 33
+hepburn	me
+keystrokes	1	me
+# 34
+hepburn	mo
+keystrokes	1	mo
+# 35
+hepburn	ya
+keystrokes	1	ya
+# 36
+hepburn	yu
+keystrokes	1	yu
+# 37
+hepburn	yo
+keystrokes	1	yo
+# 38
+hepburn	ra
+keystrokes	1	ra
+# 39
+hepburn	ri
+keystrokes	1	ri
+# 40
+hepburn	ru
+keystrokes	1	ru
+# 41
+hepburn	re
+keystrokes	1	re
+# 42
+hepburn	ro
+keystrokes	1	ro
+# 43
+hepburn	wa
+keystrokes	1	wa
+# 44
+hepburn	i
+keystrokes	1	wi
+# 45
+hepburn	e
+keystrokes	1	we
+# 46
+hepburn	o
+keystrokes	2	wo	o
+# 47
+hepburn	n
+keystrokes	2	n	nn
+# 48
+hepburn	ga
+keystrokes	1	ga
+# 49
+hepburn	gi
+keystrokes	1	gi
+# 50
+hepburn	gu
+keystrokes	1	gu
+# 51
+hepburn	ge
+keystrokes	1	ge
+# 52
+hepburn	go
+keystrokes	1	go
+# 53
+hepburn	za
+keystrokes	1	za
+# 54
+hepburn	ji
+keystrokes	2	zi	ji
+# 55
+hepburn	zu
+keystrokes	1	zu
+# 56
+hepburn	ze
+keystrokes	1	ze
+# 57
+hepburn	zo
+keystrokes	1	zo
+# 58
+hepburn	da
+keystrokes	1	da
+# 59
+hepburn	ji
+keystrokes	3	di	zi	ji
+# 60
+hepburn	zu
+keystrokes	2	du	zu
+# 61
+hepburn	de
+keystrokes	1	de
+# 62
+hepburn	do
+keystrokes	1	do
+# 63
+hepburn	ba
+keystrokes	1	ba
+# 64
+hepburn	bi
+keystrokes	1	bi
+# 65
+hepburn	bu
+keystrokes	1	bu
+# 66
+hepburn	be
+keystrokes	1	be
+# 67
+hepburn	bo
+keystrokes	1	bo
+# 68
+hepburn	pa
+keystrokes	1	pa
+# 69
+hepburn	pi
+keystrokes	1	pi
+# 70
+hepburn	pu
+keystrokes	1	pu
+# 71
+hepburn	pe
+keystrokes	1	pe
+# 72
+hepburn	po
+keystrokes	1	po
+# 73
+hepburn	kya
+keystrokes	1	kya
+# 74
+hepburn	kyu
+keystrokes	1	kyu
+# 75
+hepburn	kyo
+keystrokes	1	kyo
+# 76
+hepburn	sha
+keystrokes	2	sya	sha
+# 77
+hepburn	shu
+keystrokes	2	syu	shu
+# 78
+hepburn	sho
+keystrokes	2	syo	sho
+# 79
+hepburn	cha
+keystrokes	3	tya	cha	cya
+# 80
+hepburn	chu
+keystrokes	3	tyu	chu	cyu
+# 81
+hepburn	cho
+keystrokes	3	tyo	cho	cyo
+# 82
+hepburn	nya
+keystrokes	1	nya
+# 83
+hepburn	nyu
+keystrokes	1	nyu
+# 84
+hepburn	nyo
+keystrokes	1	nyo
+# 85
+hepburn	hya
+keystrokes	1	hya
+# 86
+hepburn	hyu
+keystrokes	1	hyu
+# 87
+hepburn	hyo
+keystrokes	1	hyo
+# 88
+hepburn	mya
+keystrokes	1	mya
+# 89
+hepburn	myu
+keystrokes	1	myu
+# 90
+hepburn	myo
+keystrokes	1	myo
+# 91
+hepburn	rya
+keystrokes	1	rya
+# 92
+hepburn	ryu
+keystrokes	1	ryu
+# 93
+hepburn	ryo
+keystrokes	1	ryo
+# 94
+hepburn	gya
+keystrokes	1	gya
+# 95
+hepburn	gyu
+keystrokes	1	gyu
+# 96
+hepburn	gyo
+keystrokes	1	gyo
+# 97
+hepburn	ja
+keystrokes	2	zya	ja
+# 98
+hepburn	ju
+keystrokes	2	zyu	ju
+# 99
+hepburn	jo
+keystrokes	2	zyo	jo
+# 100
+hepburn	ja
+keystrokes	3	dya	zya	ja
+# 101
+hepburn	ju
+keystrokes	3	dyu	zyu	ju
+# 102
+hepburn	jo
+keystrokes	3	dyo	zyo	jo
+# 103
+hepburn	bya
+keystrokes	1	bya
+# 104
+hepburn	byu
+keystrokes	1	byu
+# 105
+hepburn	byo
+keystrokes	1	byo
+# 106
+hepburn	pya
+keystrokes	1	pya
+# 107
+hepburn	pyu
+keystrokes	1	pyu
+# 108
+hepburn	pyo
+keystrokes	1	pyo
+# 109
+hepburn	yi
+keystrokes	1	ixi
+# 110
+hepburn	ye
+keystrokes	1	ixe
+# 111
+hepburn	wa
+keystrokes	1	uxa
+# 112
+hepburn	wi
+keystrokes	1	wi
+# 113
+hepburn	wu
+keystrokes	1	uxu
+# 114
+hepburn	we
+keystrokes	1	we
+# 115
+hepburn	wo
+keystrokes	1	uxo
+# 116
+hepburn	wyu
+keystrokes	1	uxyu
+# 117
+hepburn	va
+keystrokes	2	va	vuxa
+# 118
+hepburn	vi
+keystrokes	2	vi	vuxi
+# 119
+hepburn	v
+keystrokes	1	vu
+# 120
+hepburn	ve
+keystrokes	2	ve	vuxe
+# 121
+hepburn	vo
+keystrokes	2	vo	vuxo
+# 122
+hepburn	vya
+keystrokes	2	vya	vuxya
+# 123
+hepburn	vyu
+keystrokes	2	vyu	vuxyu
+# 124
+hepburn	vye
+keystrokes	2	vixe	vuxixe
+# 125
+hepburn	vyo
+keystrokes	2	vyo	vuxyo
+# 126
+hepburn	kye
+keystrokes	1	kixe
+# 127
+hepburn	gye
+keystrokes	1	gixe
+# 128
+hepburn	kwa
+keystrokes	2	kwa	kuxa
+# 129
+hepburn	kwi
+keystrokes	2	kwi	kuxi
+# 130
+hepburn	kwe
+keystrokes	2	kwe	kuxe
+# 131
+hepburn	kwo
+keystrokes	2	kwo	kuxo
+# 132
+hepburn	kwa
+keystrokes	1	kuヮ
+# 133
+hepburn	gwa
+keystrokes	2	gwa	guxa
+# 134
+hepburn	gwi
+keystrokes	2	gwi	guxi
+# 135
+hepburn	gwe
+keystrokes	2	gwe	guxe
+# 136
+hepburn	gwo
+keystrokes	2	gwo	guxo
+# 137
+hepburn	gwa
+keystrokes	1	guヮ
+# 138
+hepburn	she
+keystrokes	2	sye	she
+# 139
+hepburn	je
+keystrokes	2	zye	je
+# 140
+hepburn	si
+keystrokes	2	swi	suxi
+# 141
+hepburn	zi
+keystrokes	1	zuxi
+# 142
+hepburn	che
+keystrokes	2	tixe	chixe
+# 143
+hepburn	tsa
+keystrokes	2	tuxa	tsuxa
+# 144
+hepburn	tsi
+keystrokes	2	tuxi	tsuxi
+# 145
+hepburn	tse
+keystrokes	2	tuxe	tsuxe
+# 146
+hepburn	tso
+keystrokes	2	tuxo	tsuxo
+# 147
+hepburn	tsyu
+keystrokes	2	tuxyu	tsuxyu
+# 148
+hepburn	ti
+keystrokes	2	thi	texi
+# 149
+hepburn	tu
+keystrokes	2	twu	toxu
+# 150
+hepburn	tyu
+keystrokes	2	thu	texyu
+# 151
+hepburn	di
+keystrokes	1	dexi
+# 152
+hepburn	du
+keystrokes	2	dwu	doxu
+# 153
+hepburn	dyu
+keystrokes	1	dexyu
+# 154
+hepburn	nye
+keystrokes	1	nixe
+# 155
+hepburn	hye
+keystrokes	1	hixe
+# 156
+hepburn	bye
+keystrokes	1	bixe
+# 157
+hepburn	pye
+keystrokes	1	pixe
+# 158
+hepburn	fa
+keystrokes	3	hwa	fa	huxa
+# 159
+hepburn	fi
+keystrokes	3	hwi	fi	huxi
+# 160
+hepburn	fe
+keystrokes	3	hwe	fe	huxe
+# 161
+hepburn	fo
+keystrokes	3	hwo	fo	huxo
+# 162
+hepburn	fya
+keystrokes	3	fya	huxya	fuxya
+# 163
+hepburn	fyu
+keystrokes	3	fyu	huxyu	fuxyu
+# 164
+hepburn	fye
+keystrokes	3	hwixe	fixe	huxixe
+# 165
+hepburn	fyo
+keystrokes	3	fyo	huxyo	fuxyo
+# 166
+hepburn	hu
+keystrokes	1	hoxu
+# 167
+hepburn	mye
+keystrokes	1	mixe
+# 168
+hepburn	rye
+keystrokes	1	rixe
+# 169
+hepburn	la
+keystrokes	!
+# 170
+hepburn	li
+keystrokes	!
+# 171
+hepburn	lu
+keystrokes	!
+# 172
+hepburn	le
+keystrokes	!
+# 173
+hepburn	lo
+keystrokes	!
+# 174
+hepburn	va
+keystrokes	0
+# 175
+hepburn	vi
+keystrokes	0
+# 176
+hepburn	ve
+keystrokes	0
+# 177
+hepburn	vo
+keystrokes	0
+# 178
+hepburn	majan
+keystrokes	4	maーzyan	maーjan	maーzyann	maーjann
+# 179
+hepburn	uroncha
+keystrokes	6	uーrontya	uーronntya	uーroncha	uーronncha	uーroncya	uーronncya
+# 180
+hepburn	chahan
+keystrokes	6	tyaーhan	chaーhan	cyaーhan	tyaーhann	chaーhann	cyaーhann
+# 181
+hepburn	chashu
+keystrokes	6	tyaーsyuー	chaーsyuー	cyaーsyuー	tyaーshuー	chaーshuー	cyaーshuー
+# 182
+hepburn	shumai
+keystrokes	2	syuーmai	shuーmai
+# 183
+hepburn	kon'ya
+keystrokes	2	konya	konnya
+# 184
+hepburn	ha
+keystrokes	1	ha
+# 185
+hepburn	robato
+keystrokes	1	robaーto
+# 186
+hepburn	sensei
+keystrokes	2	sensei	sennsei
+# 187
+hepburn	to
+keystrokes	1	to
+# 188
+hepburn	hanashi
+keystrokes	2	hanasi	hanashi
+# 189
+hepburn	ta
+keystrokes	1	ta
+# 190
+hepburn	hashi
+keystrokes	2	hasi	hashi
+# 191
+hepburn	yuukyū
+keystrokes	1	yuukyuu
+# 192
+hepburn	yakyū
+keystrokes	1	yakyuu
+# 193
+hepburn	tōkyō
+keystrokes	1	toukyou
+# 194
+hepburn	tokyo
+keystrokes	1	toーkyoー
+# 195
+hepburn	sakka
+keystrokes	1	sakka
+# 196
+hepburn	hyakkaten
+keystrokes	2	hyakkaten	hyakkatenn
+# 197
+hepburn	voruteru
+keystrokes	2	voruteーru	vuxoruteーru
+# 198
+hepburn	tōkyōt
+keystrokes	1	toukyout
+# 199
+hepburn	kodak
+keystrokes	1	kodakk
+# 200
+hepburn	shōsy
+keystrokes	2	syousy	shousy
+# 201
+hepburn	doraemon
+keystrokes	2	doraemon	doraemonn
+# 202
+hepburn	sosukodo
+keystrokes	1	soーsukoーdo
+# 203
+hepburn	han
+keystrokes	2	han	hann
+# 204
+hepburn	shakai
+keystrokes	2	syakai	shakai
+# 205
+hepburn	teki
+keystrokes	1	teki
+# 206
+hepburn	seiryoku
+keystrokes	1	seiryoku
+# 207
+hepburn	ze
+keystrokes	1	ze
+# 208
+hepburn	no
+keystrokes	1	no
+# 209
+hepburn	sakyur
+keystrokes	1	saーkyur
+# 210
+hepburn	sak
+keystrokes	1	sakk
+# 211
+hepburn	hansy
+keystrokes	2	hansy	hannsy
+# 212
+hepburn	tōkyōto
+keystrokes	1	toukyouto
+# 213
+hepburn	sushi
+keystrokes	2	susi	sushi
+# 214
+hepburn	konnichiha
+keystrokes	4	konnitiha	konnnitiha	konnichiha	konnnichiha
+# 215
+hepburn	
+keystrokes	1	xtu
+# 216
+hepburn	nn
+keystrokes	4	nn	nnn	nnn	nnnn
+# 217
+hepburn	n'a
+keystrokes	2	na	nna
+# 218
+hepburn	n'ya
+keystrokes	2	nya	nnya
+# 219
+hepburn	mba
+keystrokes	2	nba	nnba
+# 220
+hepburn	kka
+keystrokes	1	kka
+# 221
+hepburn	
+keystrokes	1	xtu
+# 222
+hepburn	
+keystrokes	1	ー
+# 223
+hepburn	a
+keystrokes	1	ーa
+# 224
+hepburn	kka
+keystrokes	1	xtukka
+# 225
+hepburn	n
+keystrokes	2	xtun	xtunn
+# 226
+hepburn	a
+keystrokes	1	xa
+# 227
+hepburn	ヵ
+keystrokes	1	xka
+# 228
+hepburn	ヶ
+keystrokes	1	xke
+# 229
+hepburn	ㇷ゚
+keystrokes	!
+# 230
+hepburn	ヽヾ
+keystrokes	0
+# 231
+hepburn	ga gi
+keystrokes	!
+# 232
+hepburn	ｱｲｳ
+keystrokes	!
+# 233
+hepburn	あいう
+keystrokes	!
+# 234
+hepburn	ABC
+keystrokes	!
+# 235
+hepburn	abc
+keystrokes	0
+# 236
+hepburn	日本
+keystrokes	!
+# 237
+hepburn	123
+keystrokes	!
+# 238
+hepburn	n
+keystrokes	2	n	nn
+# 239
+hepburn	nt
+keystrokes	2	nt	nnt
+# 240
+hepburn	kyasshu
+keystrokes	2	kyassyu	kyasshu
+# 241
+hepburn	jū
+keystrokes	2	zyuu	juu
+# 242
+hepburn	chō
+keystrokes	3	tyou	chou	cyou
+# 243
+hepburn	ju
+keystrokes	3	dyu	zyu	ju
+# 244
+hepburn	tsai
+keystrokes	2	tuxai	tsuxai
+# 245
+hepburn	timu
+keystrokes	2	thiーmu	texiーmu
+# 246
+hepburn	dyuo
+keystrokes	1	dexyuo
+# 247
+hepburn	fairu
+keystrokes	3	hwairu	fairu	huxairu
+# 248
+hepburn	fonto
+keystrokes	6	hwonto	fonto	huxonto	hwonnto	fonnto	huxonnto
+# 249
+hepburn	vaiorin
+keystrokes	4	vaiorin	vuxaiorin	vaiorinn	vuxaiorinn
+# 250
+hepburn	webu
+keystrokes	1	webu
+# 251
+hepburn	wota
+keystrokes	1	uxoーtaー
+# 252
+hepburn	shea
+keystrokes	2	syea	shea
+# 253
+hepburn	jetto
+keystrokes	2	zyetto	jetto
+# 254
+hepburn	chekku
+keystrokes	2	tixekku	chixekku
+# 255
+hepburn	nyusu
+keystrokes	1	nyuーsu
+# 256
+hepburn	myujikku
+keystrokes	2	myuーzikku	myuーjikku
+# 257
+hepburn	ryukku
+keystrokes	1	ryukku
+# 258
+hepburn	pyon'yan
+keystrokes	4	pyonyan	pyonnyan	pyonyann	pyonnyann
+# 259
+hepburn	byōin
+keystrokes	2	byouin	byouinn
+# 260
+hepburn	gyōza
+keystrokes	1	gyouza
+# 261
+hepburn	hyō
+keystrokes	1	hyou
+# 262
+hepburn	nyanko
+keystrokes	2	nyanko	nyannko
+# 263
+hepburn	happi
+keystrokes	1	happiー
+# 264
+hepburn	rakki
+keystrokes	1	rakkiー
+# 265
+hepburn	bagu
+keystrokes	1	baggu
+# 266
+hepburn	eji
+keystrokes	2	ezzi	ejji
+# 267
+hepburn	matchi
+keystrokes	1	matti
+# 268
+hepburn	jaji
+keystrokes	4	zyazzi	jazzi	zyajji	jajji
+# 269
+hepburn	bossu
+keystrokes	1	bossu
+# 270
+hepburn	petta
+keystrokes	1	petta
+# 271
+hepburn	suitchi
+keystrokes	1	suitti
+# 272
+hepburn	nippon
+keystrokes	2	nippon	nipponn
+# 273
+hepburn	hokke
+keystrokes	1	hokkeー
+# 274
+hepburn	sapporo
+keystrokes	1	sapporo
+# 275
+hepburn	toppu
+keystrokes	1	toppu
+# 276
+hepburn	wafuru
+keystrokes	2	wahhuru	waffuru
+# 277
+hepburn	zombi
+keystrokes	2	zonbi	zonnbi
+# 278
+hepburn	tempura
+keystrokes	2	tenpura	tennpura
+# 279
+hepburn	samma
+keystrokes	2	sanma	sannma
+# 280
+hepburn	hon'ya
+keystrokes	2	honya	honnya
+# 281
+hepburn	ninniku
+keystrokes	2	ninniku	ninnniku
+# 282
+hepburn	kan'i
+keystrokes	2	kani	kanni
+# 283
+hepburn	shin'en
+keystrokes	8	sinen	shinen	sinnen	shinnen	sinenn	shinenn	sinnenn	shinnenn
+# 284
+hepburn	gamba
+keystrokes	2	ganba	gannba
+# 285
+hepburn	na
+keystrokes	2	nxtua	nnxtua
+# 286
+hepburn	
+keystrokes	1	xtuxtuxtu
+# 287
+hepburn	
+keystrokes	1	ーーー
+# 288
+hepburn	kwansei
+keystrokes	1	kuヮンセイ
+# 289
+hepburn	zutsu
+keystrokes	4	dutu	zutu	dutsu	zutsu
+# 290
+hepburn	jiji
+keystrokes	9	didi	zidi	jidi	dizi	zizi	jizi	diji	ziji	jiji
+# 291
+hepburn	otome
+keystrokes	2	wotome	otome
+# 292
+hepburn	iseki
+keystrokes	1	wiseki
+# 293
+hepburn	ebisu
+keystrokes	1	webisu
