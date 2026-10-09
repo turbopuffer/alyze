@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2024"
 rust-version = "1.85"
 description = "CJK (Chinese, Japanese, Korean) text analysis for alyze"
-license = "MIT"
+license = "Apache-2.0"
 repository = "https://github.com/turbopuffer/alyze"
 keywords = ["tokenizer", "cjk", "segmentation", "analysis", "nlp"]
 categories = ["text-processing", "internationalization"]
@@ -14,7 +14,8 @@ exclude = ["testdata/", "benches/"]
 publish = false
 
 # Pulled into `alyze` as an optional dependency behind its `cjk` feature. Kept as a separate crate
-# so the smartcn dictionaries (`data/`, ~4.7 MB) don't inflate `alyze` for users who don't need them.
+# so the smartcn dictionaries (`data/`, ~4.7 MB) don't inflate `alyze` for users who don't need
+# them, and because unlike the MIT-licensed `alyze` it derives from Apache Lucene (see NOTICE).
 
 [dependencies]
 rust-stemmers = "1.2.0"

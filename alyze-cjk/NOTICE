@@ -1,0 +1,13 @@
+alyze-cjk
+Copyright 2026 turbopuffer
+
+This product includes software derived from Apache Lucene (https://lucene.apache.org/),
+Copyright The Apache Software Foundation, used under the Apache License, Version 2.0.
+Specifically, `src/smartcn/` is a port of Lucene's `lucene-analysis-smartcn` module and
+`data/` is converted from its dictionaries. From Lucene's NOTICE:
+
+    The SmartChineseAnalyzer source code (smartcn) was
+    provided by Xiaoping Gao and copyright 2009 by www.imdict.net.
+
+The included dictionary data is from ICTCLAS 1.0 (http://www.ictclas.org), contributed to
+Lucene under the Apache License 2.0.

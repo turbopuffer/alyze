@@ -306,12 +306,13 @@ pub(super) fn utf16_to_byte_offset(text: &str, utf16_offset: usize) -> usize {
 #[derive(Clone, Copy)]
 pub(super) enum TextMatch {
     Exact,
-    /// Tokens that are pure ASCII letters on both sides may differ in text (but not in offsets or
-    /// position): the port stems with Porter2 while Lucene uses Porter.
-    StemsMayDiffer,
+    /// Lucene stems with Porter, the port with Porter2, so for a token of ASCII letters the
+    /// expected text is instead Porter2 applied to Lucene's normalization of the raw token
+    /// (fullwidth folded, lowercased); offsets and positions must still match the golden.
+    StemsWithPorter2,
 }
 
-fn toks_match(expected: &Tok, actual: &Tok, text_match: TextMatch) -> bool {
+fn toks_match(input: &str, expected: &Tok, actual: &Tok, text_match: TextMatch) -> bool {
     if expected.byte_range != actual.byte_range || expected.position != actual.position {
         return false;
     }
@@ -319,9 +320,20 @@ fn toks_match(expected: &Tok, actual: &Tok, text_match: TextMatch) -> bool {
         return true;
     }
     let is_letters = |s: &str| !s.is_empty() && s.bytes().all(|b| b.is_ascii_alphabetic());
-    matches!(text_match, TextMatch::StemsMayDiffer)
-        && is_letters(&expected.text)
-        && is_letters(&actual.text)
+    if !matches!(text_match, TextMatch::StemsWithPorter2) || !is_letters(&expected.text) {
+        return false;
+    }
+    let raw = &input[expected.byte_range.clone()];
+    let normalized: String = raw
+        .chars()
+        .map(|c| match c as u32 {
+            0xFF21..=0xFF3A | 0xFF41..=0xFF5A => char::from_u32(c as u32 - 0xFEE0).unwrap(),
+            _ => c,
+        })
+        .map(|c| c.to_ascii_lowercase())
+        .collect();
+    let porter2 = rust_stemmers::Stemmer::create(rust_stemmers::Algorithm::English);
+    actual.text == porter2.stem(&normalized)
 }
 
 fn fmt_toks(toks: &[Tok]) -> String {
@@ -365,7 +377,7 @@ pub(super) fn assert_cases_match(
             && expected
                 .iter()
                 .zip(&actual)
-                .all(|(e, a)| toks_match(e, a, text_match));
+                .all(|(e, a)| toks_match(input, e, a, text_match));
         if matches {
             continue;
         }
@@ -376,7 +388,7 @@ pub(super) fn assert_cases_match(
         let first_diff = expected
             .iter()
             .zip(&actual)
-            .position(|(e, a)| !toks_match(e, a, text_match))
+            .position(|(e, a)| !toks_match(input, e, a, text_match))
             .unwrap_or(expected.len().min(actual.len()));
         let mut input_display = escape(input);
         if input_display.chars().count() > 300 {

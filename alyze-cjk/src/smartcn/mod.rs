@@ -1,5 +1,6 @@
 //! Port of Lucene's `smartcn` analyzer: the segmenter behind Elasticsearch's `smartcn` analyzer
-//! and `smartcn_tokenizer`.
+//! and `smartcn_tokenizer`. Derived from Apache Lucene's `lucene-analysis-smartcn` (Apache License
+//! 2.0; see the crate's `NOTICE`).
 //!
 //! `smartcn` segments Simplified Chinese with a bigram Hidden Markov Model over the ICTCLAS 1.0
 //! dictionaries. Per sentence it builds a lattice of candidate tokens (every dictionary word

@@ -26,7 +26,7 @@ fn analyze(case: &str) {
         &inputs,
         &golden,
         run_analyzer,
-        TextMatch::StemsMayDiffer,
+        TextMatch::StemsWithPorter2,
     );
 }
 

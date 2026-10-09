@@ -2,6 +2,11 @@
 //!
 //! Enabled through the `cjk` feature of the `alyze` crate, which re-exports this crate as
 //! `alyze::cjk`. Kept as a separate crate so the multi-megabyte dictionaries don't inflate
-//! `alyze` for users who don't need them.
+//! `alyze` for users who don't need them, and because it is Apache-2.0 licensed: `smartcn` is
+//! derived from Apache Lucene (Copyright The Apache Software Foundation; SmartChineseAnalyzer
+//! provided by Xiaoping Gao, copyright 2009 www.imdict.net), used under the Apache License 2.0.
+//! See `LICENSE` and `NOTICE`.
+//!
+//! SPDX-License-Identifier: Apache-2.0
 
 pub mod smartcn;
