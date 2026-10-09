@@ -37,9 +37,8 @@ enum WordType {
 }
 
 struct LatticeToken {
-    /// What the token is to the dictionaries (the word's code units, or an identity constant),
-    /// as a range of [`Segmenter::identities`].
-    identity: Range<usize>,
+    /// What the token is to the dictionaries: the word's code units, or an identity constant.
+    identity: Vec<u16>,
     /// Index into [`Lattice::slots`]: 0 for the begin sentinel, `byte start + 1` otherwise.
     slot: usize,
     /// Byte end in the sentence; 0 for the begin sentinel.
@@ -63,8 +62,6 @@ pub(crate) struct Segmenter {
     core: &'static CoreDict,
     bigram: &'static BigramDict,
     tokens: Vec<LatticeToken>,
-    identities: Vec<u16>,
-    chars: Vec<(usize, char, CharType)>,
     /// Token indices grouped by start: slot 0 is the begin sentinel, slot `b + 1` the tokens
     /// starting at byte `b`, and the last slot the end sentinel.
     slots: Vec<Vec<usize>>,
@@ -79,8 +76,6 @@ impl Segmenter {
             core: CoreDict::get(),
             bigram: BigramDict::get(),
             tokens: Vec::new(),
-            identities: Vec::new(),
-            chars: Vec::new(),
             slots: Vec::new(),
             incoming: Vec::new(),
             path: Vec::new(),
@@ -107,8 +102,7 @@ impl Segmenter {
             match token.word_type {
                 WordType::ChineseWord => {
                     scratch.extend(
-                        char::decode_utf16(self.identities[token.identity.clone()].iter().copied())
-                            .map(|c| c.unwrap()),
+                        char::decode_utf16(token.identity.iter().copied()).map(|c| c.unwrap()),
                     );
                 }
                 WordType::String | WordType::Number => {
@@ -137,7 +131,6 @@ impl Segmenter {
 
     fn build_lattice(&mut self, sentence: &str) {
         self.tokens.clear();
-        self.identities.clear();
         for slot in &mut self.slots {
             slot.clear();
         }
@@ -145,21 +138,18 @@ impl Segmenter {
             self.slots.resize_with(sentence.len() + 2, Vec::new);
         }
 
-        self.add_token(
-            &SENTENCE_BEGIN_IDENTITY,
-            0,
-            0,
-            WordType::SentenceBegin,
-            self.core.frequency(&SENTENCE_BEGIN_IDENTITY),
-        );
+        self.add_token(LatticeToken {
+            identity: SENTENCE_BEGIN_IDENTITY.to_vec(),
+            slot: 0,
+            end: 0,
+            word_type: WordType::SentenceBegin,
+            frequency: self.core.frequency(&SENTENCE_BEGIN_IDENTITY),
+        });
 
-        let mut chars = std::mem::take(&mut self.chars);
-        chars.clear();
-        chars.extend(
-            sentence
-                .char_indices()
-                .map(|(at, c)| (at, c, char_type(c as u32))),
-        );
+        let chars: Vec<(usize, char, CharType)> = sentence
+            .char_indices()
+            .map(|(at, c)| (at, c, char_type(c as u32)))
+            .collect();
         let end_of = |index: usize| chars.get(index).map_or(sentence.len(), |&(at, _, _)| at);
 
         let mut word = Vec::new();
@@ -169,39 +159,39 @@ impl Segmenter {
             match kind {
                 CharType::SpaceLike => i += 1,
                 CharType::Surrogate => {
-                    self.add_token(
-                        c.encode_utf16(&mut [0; 2]),
-                        start + 1,
-                        end_of(i + 1),
-                        WordType::ChineseWord,
-                        0,
-                    );
+                    self.add_token(LatticeToken {
+                        identity: c.encode_utf16(&mut [0; 2]).to_vec(),
+                        slot: start + 1,
+                        end: end_of(i + 1),
+                        word_type: WordType::ChineseWord,
+                        frequency: 0,
+                    });
                     i += 1;
                 }
                 CharType::Hanzi => {
                     let head = c as u16;
                     word.clear();
                     word.push(head);
-                    self.add_token(
-                        &word,
-                        start + 1,
-                        end_of(i + 1),
-                        WordType::ChineseWord,
-                        self.core.frequency(&word),
-                    );
+                    self.add_token(LatticeToken {
+                        identity: word.clone(),
+                        slot: start + 1,
+                        end: end_of(i + 1),
+                        word_type: WordType::ChineseWord,
+                        frequency: self.core.frequency(&word),
+                    });
                     let row = self.core.row(head).unwrap_or(&[]);
                     let mut found = (!row.is_empty()).then_some(0);
                     let mut j = i + 1;
                     while let Some(entry_index) = found {
                         let entry = &row[entry_index];
                         if word.len() > 1 && *entry.suffix == word[1..] {
-                            self.add_token(
-                                &word,
-                                start + 1,
-                                end_of(j),
-                                WordType::ChineseWord,
-                                entry.freq,
-                            );
+                            self.add_token(LatticeToken {
+                                identity: word.clone(),
+                                slot: start + 1,
+                                end: end_of(j),
+                                word_type: WordType::ChineseWord,
+                                frequency: entry.freq,
+                            });
                         }
                         while j < chars.len() && chars[j].2 == CharType::SpaceLike {
                             j += 1;
@@ -225,17 +215,17 @@ impl Segmenter {
                         has_fullwidth |= chars[j].2 == CharType::FullwidthLetter;
                         j += 1;
                     }
-                    self.add_token(
-                        &STRING_IDENTITY,
-                        start + 1,
-                        end_of(j),
-                        if has_fullwidth {
+                    self.add_token(LatticeToken {
+                        identity: STRING_IDENTITY.to_vec(),
+                        slot: start + 1,
+                        end: end_of(j),
+                        word_type: if has_fullwidth {
                             WordType::FullwidthString
                         } else {
                             WordType::String
                         },
-                        self.core.frequency(&STRING_IDENTITY),
-                    );
+                        frequency: self.core.frequency(&STRING_IDENTITY),
+                    });
                     i = j;
                 }
                 CharType::Digit | CharType::FullwidthDigit => {
@@ -247,70 +237,54 @@ impl Segmenter {
                         has_fullwidth |= chars[j].2 == CharType::FullwidthDigit;
                         j += 1;
                     }
-                    self.add_token(
-                        &NUMBER_IDENTITY,
-                        start + 1,
-                        end_of(j),
-                        if has_fullwidth {
+                    self.add_token(LatticeToken {
+                        identity: NUMBER_IDENTITY.to_vec(),
+                        slot: start + 1,
+                        end: end_of(j),
+                        word_type: if has_fullwidth {
                             WordType::FullwidthNumber
                         } else {
                             WordType::Number
                         },
-                        self.core.frequency(&NUMBER_IDENTITY),
-                    );
+                        frequency: self.core.frequency(&NUMBER_IDENTITY),
+                    });
                     i = j;
                 }
                 CharType::Delimiter => {
-                    self.add_token(
-                        &[c as u16],
-                        start + 1,
-                        end_of(i + 1),
-                        WordType::Delimiter,
-                        MAX_FREQUENCY,
-                    );
+                    self.add_token(LatticeToken {
+                        identity: vec![c as u16],
+                        slot: start + 1,
+                        end: end_of(i + 1),
+                        word_type: WordType::Delimiter,
+                        frequency: MAX_FREQUENCY,
+                    });
                     i += 1;
                 }
                 CharType::Other => {
-                    self.add_token(
-                        &STRING_IDENTITY,
-                        start + 1,
-                        end_of(i + 1),
-                        WordType::String,
-                        self.core.frequency(&STRING_IDENTITY),
-                    );
+                    self.add_token(LatticeToken {
+                        identity: STRING_IDENTITY.to_vec(),
+                        slot: start + 1,
+                        end: end_of(i + 1),
+                        word_type: WordType::String,
+                        frequency: self.core.frequency(&STRING_IDENTITY),
+                    });
                     i += 1;
                 }
             }
         }
 
-        self.chars = chars;
-        self.add_token(
-            &SENTENCE_END_IDENTITY,
-            sentence.len() + 1,
-            sentence.len() + 1,
-            WordType::SentenceEnd,
-            self.core.frequency(&SENTENCE_END_IDENTITY),
-        );
+        self.add_token(LatticeToken {
+            identity: SENTENCE_END_IDENTITY.to_vec(),
+            slot: sentence.len() + 1,
+            end: sentence.len() + 1,
+            word_type: WordType::SentenceEnd,
+            frequency: self.core.frequency(&SENTENCE_END_IDENTITY),
+        });
     }
 
-    fn add_token(
-        &mut self,
-        identity: &[u16],
-        slot: usize,
-        end: usize,
-        word_type: WordType,
-        frequency: i32,
-    ) {
-        let identity_start = self.identities.len();
-        self.identities.extend_from_slice(identity);
-        self.slots[slot].push(self.tokens.len());
-        self.tokens.push(LatticeToken {
-            identity: identity_start..self.identities.len(),
-            slot,
-            end,
-            word_type,
-            frequency,
-        });
+    fn add_token(&mut self, token: LatticeToken) {
+        self.slots[token.slot].push(self.tokens.len());
+        self.tokens.push(token);
     }
 
     /// Links every token to the tokens in the first occupied slot at or after its end.
@@ -332,11 +306,9 @@ impl Segmenter {
             };
             for &to in next_slot {
                 self.pair.clear();
-                self.pair
-                    .extend_from_slice(&self.identities[token.identity.clone()]);
+                self.pair.extend_from_slice(&token.identity);
                 self.pair.push(PAIR_SEPARATOR);
-                self.pair
-                    .extend_from_slice(&self.identities[self.tokens[to].identity.clone()]);
+                self.pair.extend_from_slice(&self.tokens[to].identity);
                 let weight = edge_weight(token.frequency, self.bigram.frequency(&self.pair));
                 self.incoming[to].push(Edge { from, weight });
             }
