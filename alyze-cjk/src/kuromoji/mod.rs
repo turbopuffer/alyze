@@ -49,6 +49,7 @@ mod viterbi;
 mod tests;
 
 use std::ops::Range;
+use std::sync::OnceLock;
 
 pub use user_dict::{UserDictionary, UserDictionaryError};
 
@@ -321,15 +322,17 @@ pub fn analyze(text: &str, options: AnalyzerOptions<'_>, out: &mut Tokens) {
         out,
     );
     filtered.correct_tokens(out);
+    static DEFAULT_STOP_TAGS: OnceLock<filter::StopTags> = OnceLock::new();
+    static DEFAULT_STOP_WORDS: OnceLock<filter::StopWords> = OnceLock::new();
     filter::base_form(out);
-    match options.stop_tags {
-        Some(tags) => filter::part_of_speech_stop(out, tags),
-        None => filter::part_of_speech_stop(out, &filter::StopTags::defaults()),
-    }
-    match options.stop_words {
-        Some(words) => filter::stop(out, words),
-        None => filter::stop(out, &filter::StopWords::japanese()),
-    }
+    let stop_tags = options
+        .stop_tags
+        .unwrap_or_else(|| DEFAULT_STOP_TAGS.get_or_init(filter::StopTags::defaults));
+    filter::part_of_speech_stop(out, stop_tags);
+    let stop_words = options
+        .stop_words
+        .unwrap_or_else(|| DEFAULT_STOP_WORDS.get_or_init(filter::StopWords::japanese));
+    filter::stop(out, stop_words);
     filter::katakana_stem(out, 4);
     filter::lowercase(out);
 }

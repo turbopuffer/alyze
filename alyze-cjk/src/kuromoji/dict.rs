@@ -63,41 +63,47 @@ fn str_at(bytes: &'static [u8], offset: usize) -> (&'static str, usize) {
     (s, offset + 1 + len)
 }
 
-/// Lucene's `TokenInfoMorphData.getReading` fallback: the surface form with hiragana shifted to
-/// katakana.
-fn default_reading(surface: &[u16]) -> String {
-    String::from_utf16(
-        &surface
-            .iter()
-            .map(|&u| {
-                if u > 0x3040 && u < 0x3097 {
-                    u + 0x60
-                } else {
-                    u
-                }
-            })
-            .collect::<Vec<u16>>(),
-    )
-    .expect("bad surface form")
+/// Appends UTF-16 units to a string (a lone surrogate becomes U+FFFD; dictionary text never has
+/// one).
+fn push_units(units: impl Iterator<Item = u16>, out: &mut String) {
+    out.extend(char::decode_utf16(units).map(|r| r.unwrap_or(char::REPLACEMENT_CHARACTER)));
 }
 
-/// Reads a kana / UTF-16 string as the converter writes it; returns it and the offset after.
-fn read_string(extras: &[u8], at: usize, kana: bool) -> (String, usize) {
+/// Lucene's `TokenInfoMorphData.getReading` fallback: the surface form with hiragana shifted to
+/// katakana.
+fn push_default_reading(surface: &[u16], out: &mut String) {
+    push_units(
+        surface.iter().map(|&u| {
+            if u > 0x3040 && u < 0x3097 {
+                u + 0x60
+            } else {
+                u
+            }
+        }),
+        out,
+    );
+}
+
+/// Appends a kana / UTF-16 string as the converter writes it; returns the offset after it.
+fn push_string(extras: &[u8], at: usize, kana: bool, out: &mut String) -> usize {
     let len = extras[at] as usize;
     let at = at + 1;
     if kana {
-        let units: Vec<u16> = extras[at..at + len]
-            .iter()
-            .map(|&b| 0x30A0 + u16::from(b))
-            .collect();
-        (String::from_utf16(&units).unwrap(), at + len)
+        push_units(
+            extras[at..at + len].iter().map(|&b| 0x30A0 + u16::from(b)),
+            out,
+        );
+        at + len
     } else {
-        let units: Vec<u16> = (0..len).map(|i| u16_at(extras, at + i * 2)).collect();
-        (
-            String::from_utf16(&units).expect("bad string"),
-            at + len * 2,
-        )
+        push_units((0..len).map(|i| u16_at(extras, at + i * 2)), out);
+        at + len * 2
     }
+}
+
+/// The length in bytes of a kana / UTF-16 string as the converter writes it, to skip it.
+fn string_len(extras: &[u8], at: usize, kana: bool) -> usize {
+    let len = extras[at] as usize;
+    1 + if kana { len } else { len * 2 }
 }
 
 /// The strings keyed by connection id: part of speech, inflection type, inflection form.
@@ -219,18 +225,29 @@ impl TokenInfoDict {
         self.id_strings(id).inflection_form
     }
 
-    /// `None` when the base form equals the surface form.
-    pub fn base_form(&self, id: WordId, surface: &[u16]) -> Option<String> {
+    /// Appends the base form when it differs from the surface form; returns whether it did.
+    pub fn push_base_form(&self, id: WordId, surface: &[u16], out: &mut String) -> bool {
         let extras = self.extras_of(id);
         if extras[0] & HAS_BASE_FORM == 0 {
-            return None;
+            return false;
         }
         let prefix = extras[1] as usize;
         let suffix = extras[2] as usize;
-        let mut units: Vec<u16> = Vec::with_capacity(prefix + suffix);
-        units.extend_from_slice(&surface[..prefix]);
-        units.extend((0..suffix).map(|i| u16_at(extras, 3 + i * 2)));
-        Some(String::from_utf16(&units).expect("bad base form"))
+        push_units(
+            surface[..prefix]
+                .iter()
+                .copied()
+                .chain((0..suffix).map(|i| u16_at(extras, 3 + i * 2))),
+            out,
+        );
+        true
+    }
+
+    /// `None` when the base form equals the surface form.
+    #[cfg(test)]
+    pub fn base_form(&self, id: WordId, surface: &[u16]) -> Option<String> {
+        let mut out = String::new();
+        self.push_base_form(id, surface, &mut out).then_some(out)
     }
 
     /// Offset of the reading string within the extras (after the base form, if any).
@@ -242,31 +259,49 @@ impl TokenInfoDict {
         }
     }
 
-    /// The reading, or the surface form with hiragana shifted to katakana when there is none.
-    pub fn reading(&self, id: WordId, surface: &[u16]) -> String {
+    /// Appends the reading, or the surface form with hiragana shifted to katakana when there is
+    /// none.
+    pub fn push_reading(&self, id: WordId, surface: &[u16], out: &mut String) {
         let extras = self.extras_of(id);
         if extras[0] & HAS_READING == 0 {
-            return default_reading(surface);
+            push_default_reading(surface, out);
+        } else {
+            push_string(
+                extras,
+                Self::reading_at(extras),
+                extras[0] & READING_IS_KANA != 0,
+                out,
+            );
         }
-        read_string(
-            extras,
-            Self::reading_at(extras),
-            extras[0] & READING_IS_KANA != 0,
-        )
-        .0
     }
 
-    /// The pronunciation, or the reading when there is none.
-    pub fn pronunciation(&self, id: WordId, surface: &[u16]) -> String {
+    /// The reading, or the surface form with hiragana shifted to katakana when there is none.
+    #[cfg(test)]
+    pub fn reading(&self, id: WordId, surface: &[u16]) -> String {
+        let mut out = String::new();
+        self.push_reading(id, surface, &mut out);
+        out
+    }
+
+    /// Appends the pronunciation, or the reading when there is none.
+    pub fn push_pronunciation(&self, id: WordId, surface: &[u16], out: &mut String) {
         let extras = self.extras_of(id);
         if extras[0] & HAS_PRONUNCIATION == 0 {
-            return self.reading(id, surface);
+            return self.push_reading(id, surface, out);
         }
         let mut at = Self::reading_at(extras);
         if extras[0] & HAS_READING != 0 {
-            at = read_string(extras, at, extras[0] & READING_IS_KANA != 0).1;
+            at += string_len(extras, at, extras[0] & READING_IS_KANA != 0);
         }
-        read_string(extras, at, extras[0] & PRONUNCIATION_IS_KANA != 0).0
+        push_string(extras, at, extras[0] & PRONUNCIATION_IS_KANA != 0, out);
+    }
+
+    /// The pronunciation, or the reading when there is none.
+    #[cfg(test)]
+    pub fn pronunciation(&self, id: WordId, surface: &[u16]) -> String {
+        let mut out = String::new();
+        self.push_pronunciation(id, surface, &mut out);
+        out
     }
 }
 

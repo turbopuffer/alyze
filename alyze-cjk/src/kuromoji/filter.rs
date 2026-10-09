@@ -224,8 +224,15 @@ impl StopWords {
     }
 
     pub fn contains(&self, word: &str) -> bool {
+        self.contains_with(word, &mut String::new())
+    }
+
+    /// [`StopWords::contains`] with a reusable buffer for the lowercased word.
+    fn contains_with(&self, word: &str, scratch: &mut String) -> bool {
         if self.ignore_case && !lowercase::is_lowercase_ascii(word) {
-            self.words.contains(&lowercase::lowercase_text(word))
+            scratch.clear();
+            lowercase::lowercase_into(word, scratch);
+            self.words.contains(scratch.as_str())
         } else {
             self.words.contains(word)
         }
@@ -293,8 +300,9 @@ pub fn part_of_speech_stop(tokens: &mut Tokens, stop_tags: &StopTags) {
 /// Removes tokens whose text is a stop word (Lucene's `StopFilter`, Elasticsearch's `ja_stop`),
 /// keeping positions as gaps like [`part_of_speech_stop`].
 pub fn stop(tokens: &mut Tokens, stop_words: &StopWords) {
+    let mut scratch = String::new();
     filtering(tokens, |text, token| {
-        stop_words.contains(&text[token.text.clone()])
+        stop_words.contains_with(&text[token.text.clone()], &mut scratch)
     });
 }
 
