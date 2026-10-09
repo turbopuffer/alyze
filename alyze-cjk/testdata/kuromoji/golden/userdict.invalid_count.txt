@@ -1,0 +1,1 @@
+error	RuntimeException: Illegal user dictionary entry 日本経済新聞 - the number of segmentations (3) does not the match number of readings (2)

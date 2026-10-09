@@ -2,3 +2,4 @@
 .cache/
 /alyze-cjk/testdata/smartcn/build/
 /alyze-cjk/testdata/nori/build/
+/alyze-cjk/testdata/kuromoji/build/

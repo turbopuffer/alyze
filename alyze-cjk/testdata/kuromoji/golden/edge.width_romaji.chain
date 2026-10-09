@@ -1,0 +1,1921 @@
+# 0
+# 1
+# 2
+# 3
+# 4
+# 5
+# 6
+# 7
+# 8
+# 9
+# 10
+# 11
+# 12
+# 13
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+# 14
+1	7	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+# 15
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+# 16
+2	8	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+# 17
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+7	13	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 18
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+8	14	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 19
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 20
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+7	13	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 21
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+7	13	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 22
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+8	14	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 23
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+8	14	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 24
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 25
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 26
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+18	24	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	キョウト	キョート	\N	\N	kyōto
+# 27
+0	6	1	1	KNOWN	名詞-代名詞-一般	\N	コレ	コレ	\N	\N	kore
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	12	1	1	KNOWN	名詞-一般	\N	ホン	ホン	\N	\N	hon
+12	15	1	1	KNOWN	助詞-格助詞-一般	\N	デ	デ	\N	\N	de
+15	18	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+18	24	1	1	KNOWN	形容詞-自立	\N	ナイ	ナイ	形容詞・アウオ段	基本形	nai
+# 28
+0	6	1	1	KNOWN	名詞-一般	\N	スシ	スシ	\N	\N	sushi
+6	9	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+9	15	1	1	KNOWN	動詞-自立	食べる	タベ	タベ	一段	連用形	tabe
+15	21	1	1	KNOWN	助動詞	\N	タイ	タイ	特殊・タイ	基本形	tai
+21	27	1	1	KNOWN	助動詞	\N	デス	デス	特殊・デス	基本形	desu
+# 29
+0	6	1	1	KNOWN	名詞-副詞可能	\N	オオク	オーク	\N	\N	ooku
+6	9	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+9	15	1	1	KNOWN	名詞-一般	\N	ガクセイ	ガクセイ	\N	\N	gakusei
+15	18	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+18	24	1	1	KNOWN	名詞-サ変接続	\N	シケン	シケン	\N	\N	shiken
+24	27	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+27	33	1	1	KNOWN	動詞-自立	落ちる	オチ	オチ	一段	連用形	ochi
+33	36	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 30
+0	6	1	1	KNOWN	名詞-代名詞-一般	\N	ソレ	ソレ	\N	\N	sore
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	15	1	1	KNOWN	副詞-助詞類接続	\N	マダ	マダ	\N	\N	mada
+15	21	1	1	KNOWN	名詞-サ変接続	\N	ジッケン	ジッケン	\N	\N	jikken
+21	27	1	1	KNOWN	名詞-一般	\N	ダンカイ	ダンカイ	\N	\N	dankai
+27	30	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+30	36	1	1	KNOWN	動詞-自立	ある	アリ	アリ	五段・ラ行	連用形	ari
+36	42	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+# 31
+0	3	1	1	KNOWN	名詞-代名詞-一般	\N	ワタシ	ワタシ	\N	\N	watashi
+3	6	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+6	12	1	1	KNOWN	名詞-サ変接続	\N	セイゲン	セイゲン	\N	\N	seigen
+12	24	1	1	KNOWN	名詞-一般	\N	スピード	スピード	\N	\N	supido
+24	27	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+27	36	1	1	KNOWN	動詞-自立	\N	コエル	コエル	一段	基本形	koeru
+# 32
+0	6	1	1	KNOWN	名詞-副詞可能	\N	コンヤ	コンヤ	\N	\N	kon'ya
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	21	1	1	KNOWN	名詞-固有名詞-人名-名	\N	ロバート	ロバート	\N	\N	robato
+21	27	1	1	KNOWN	名詞-一般	\N	センセイ	センセイ	\N	\N	sensei
+27	30	1	1	KNOWN	助詞-格助詞-引用	\N	ト	ト	\N	\N	to
+30	36	1	1	KNOWN	動詞-自立	話す	ハナシ	ハナシ	五段・サ行	連用形	hanashi
+36	39	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 33
+0	9	1	1	KNOWN	名詞-副詞可能	\N	ミョウゴニチ	ミョーゴニチ	\N	\N	myōgonichi
+9	24	1	1	KNOWN	名詞-一般	\N	パーティー	パーティー	\N	\N	pati
+24	27	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+27	33	1	1	KNOWN	動詞-自立	\N	イク	イク	五段・カ行促音便	基本形	iku
+33	39	1	1	KNOWN	名詞-サ変接続	\N	ヨテイ	ヨテイ	\N	\N	yotei
+39	42	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+42	48	1	1	KNOWN	動詞-自立	\N	アル	アル	五段・ラ行	基本形	aru
+51	60	1	1	KNOWN	名詞-一般	\N	トショカン	トショカン	\N	\N	toshokan
+60	63	1	1	KNOWN	助詞-格助詞-一般	\N	デ	デ	\N	\N	de
+63	69	1	1	KNOWN	名詞-一般	\N	シリョウ	シリョー	\N	\N	shiryō
+69	72	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+72	81	1	1	KNOWN	名詞-サ変接続	\N	コピー	コピー	\N	\N	kopi
+81	84	1	1	KNOWN	動詞-自立	する	シ	シ	サ変・スル	連用形	shi
+84	90	1	1	KNOWN	助動詞	ます	マシ	マシ	特殊・マス	連用形	mashi
+90	93	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 34
+0	6	1	1	KNOWN	動詞-自立	走る	ハシラ	ハシラ	五段・ラ行	未然形	hashira
+6	15	1	1	KNOWN	助動詞	ない	ナケレ	ナケレ	特殊・ナイ	仮定形	nakere
+15	18	1	1	KNOWN	助詞-接続助詞	\N	バ	バ	\N	\N	ba
+18	24	1	1	KNOWN	動詞-非自立	なる	ナラ	ナラ	五段・ラ行	未然形	nara
+24	30	1	1	KNOWN	助動詞	\N	ナイ	ナイ	特殊・ナイ	基本形	nai
+# 35
+0	12	1	1	KNOWN	形容詞-自立	美しい	ウツクシカッ	ウツクシカッ	形容詞・イ段	連用タ接続	utsukushika
+12	15	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+15	21	1	1	KNOWN	助動詞	\N	デス	デス	特殊・デス	基本形	desu
+# 36
+0	12	1	1	KNOWN	形容詞-自立	おいしい	オイシク	オイシク	形容詞・イ段	連用テ接続	oishiku
+12	21	1	1	KNOWN	助動詞	ない	ナカッ	ナカッ	特殊・ナイ	連用タ接続	naka
+21	24	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 37
+0	6	1	1	KNOWN	動詞-自立	食べる	タベ	タベ	一段	未然形	tabe
+6	12	1	1	KNOWN	動詞-接尾	させる	サセ	サセ	一段	未然形	sase
+12	18	1	1	KNOWN	動詞-接尾	られる	ラレ	ラレ	一段	連用形	rare
+18	21	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 38
+0	6	1	1	KNOWN	動詞-自立	行く	イコ	イコ	五段・カ行促音便	未然ウ接続	iko
+6	9	1	1	KNOWN	助動詞	\N	ウ	ウ	不変化型	基本形	u
+9	12	1	1	KNOWN	助詞-副助詞／並立助詞／終助詞	\N	カ	カ	\N	\N	ka
+# 39
+0	3	1	1	KNOWN	動詞-自立	来る	キ	キ	カ変・来ル	連用形	ki
+3	6	1	1	KNOWN	助詞-接続助詞	\N	テ	テ	\N	\N	te
+6	18	1	1	KNOWN	動詞-非自立	くださる	クダサイ	クダサイ	五段・ラ行特殊	命令ｉ	kudasai
+# 40
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	JR
+2	8	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	シンジュク	シンジュク	\N	\N	shinjuku
+8	11	1	1	KNOWN	名詞-接尾-地域	\N	エキ	エキ	\N	\N	eki
+11	14	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+14	20	1	1	KNOWN	名詞-副詞可能	\N	チカク	チカク	\N	\N	chikaku
+20	23	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+23	32	1	1	KNOWN	名詞-一般	\N	ビール	ビール	\N	\N	biru
+32	35	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+35	41	1	1	KNOWN	動詞-自立	飲む	ノミ	ノミ	五段・マ行	連用形	nomi
+41	44	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+44	50	1	1	KNOWN	動詞-自立	行く	イコ	イコ	五段・カ行促音便	未然ウ接続	iko
+50	53	1	1	KNOWN	助動詞	\N	ウ	ウ	不変化型	基本形	u
+53	56	1	1	KNOWN	助詞-副助詞／並立助詞／終助詞	\N	カ	カ	\N	\N	ka
+# 41
+0	6	1	1	KNOWN	名詞-副詞可能	\N	ホンジツ	ホンジツ	\N	\N	honjitsu
+6	9	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+9	12	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+12	15	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+15	18	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+18	21	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+21	24	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+24	27	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+27	30	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+30	39	1	1	KNOWN	名詞-一般	\N	ワイン	ワイン	\N	\N	wain
+39	42	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+42	48	1	1	KNOWN	動詞-自立	買う	カッ	カッ	五段・ワ行促音便	連用タ接続	ka
+48	51	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 42
+0	6	1	1	KNOWN	名詞-副詞可能	\N	キノウ	キノー	\N	\N	kinō
+6	9	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+9	12	1	1	KNOWN	接頭詞-名詞接続	\N	オ	オ	\N	\N	o
+12	18	1	1	KNOWN	名詞-一般	\N	スシ	スシ	\N	\N	sushi
+18	21	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+21	24	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+24	27	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+27	30	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+30	33	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+33	39	1	1	KNOWN	助動詞	です	デシ	デシ	特殊・デス	連用形	deshi
+39	42	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 43
+0	6	1	1	KNOWN	名詞-代名詞-一般	\N	ワガハイ	ワガハイ	\N	\N	wagahai
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	12	1	1	KNOWN	名詞-一般	\N	ネコ	ネコ	\N	\N	neko
+12	15	1	1	KNOWN	助動詞	だ	デ	デ	特殊・ダ	連用形	de
+15	21	1	1	KNOWN	助動詞	\N	アル	アル	五段・ラ行アル	基本形	aru
+24	30	1	1	KNOWN	名詞-一般	\N	ナマエ	ナマエ	\N	\N	namae
+30	33	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+33	39	1	1	KNOWN	副詞-助詞類接続	\N	マダ	マダ	\N	\N	mada
+39	45	1	1	KNOWN	形容詞-自立	\N	ナイ	ナイ	形容詞・アウオ段	基本形	nai
+# 44
+0	6	1	1	KNOWN	名詞-一般	\N	コッキョウ	コッキョー	\N	\N	kokkyō
+6	9	1	1	KNOWN	助詞-格助詞-一般	\N	ノ	ノ	\N	\N	no
+9	15	1	1	KNOWN	形容詞-自立	\N	ナガイ	ナガイ	形容詞・アウオ段	基本形	nagai
+15	27	1	1	KNOWN	名詞-一般	\N	トンネル	トンネル	\N	\N	tonneru
+27	30	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+30	39	1	1	KNOWN	動詞-自立	\N	ヌケル	ヌケル	一段	基本形	nukeru
+39	42	1	1	KNOWN	助詞-接続助詞	\N	ト	ト	\N	\N	to
+42	48	1	1	KNOWN	名詞-一般	\N	ユキグニ	ユキグニ	\N	\N	yukiguni
+48	51	1	1	KNOWN	助動詞	だ	デ	デ	特殊・ダ	連用形	de
+51	57	1	1	KNOWN	助動詞	ある	アッ	アッ	五段・ラ行アル	連用タ接続	a
+57	60	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 45
+0	9	1	1	KNOWN	名詞-一般	\N	スモモ	スモモ	\N	\N	sumomo
+9	12	1	1	KNOWN	助詞-係助詞	\N	モ	モ	\N	\N	mo
+12	18	1	1	KNOWN	名詞-一般	\N	モモ	モモ	\N	\N	momo
+18	21	1	1	KNOWN	助詞-係助詞	\N	モ	モ	\N	\N	mo
+21	27	1	1	KNOWN	名詞-一般	\N	モモ	モモ	\N	\N	momo
+27	30	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+30	36	1	1	KNOWN	名詞-非自立-副詞可能	\N	ウチ	ウチ	\N	\N	uchi
+# 46
+0	6	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+# 47
+0	9	1	1	KNOWN	名詞-一般	\N	ニッポンジン	ニッポンジン	\N	\N	nipponjin
+# 48
+0	6	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+6	12	1	1	KNOWN	名詞-一般	\N	ケイザイ	ケイザイ	\N	\N	keizai
+# 49
+0	6	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+0	18	0	3	KNOWN	名詞-固有名詞-組織	\N	ニホンケイザイシンブン	ニホンケイザイシンブン	\N	\N	nihonkeizaishimbun
+6	12	1	1	KNOWN	名詞-一般	\N	ケイザイ	ケイザイ	\N	\N	keizai
+12	18	1	1	KNOWN	名詞-一般	\N	シンブン	シンブン	\N	\N	shimbun
+# 50
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	カンサイ	カンサイ	\N	\N	kansai
+0	18	0	3	KNOWN	名詞-固有名詞-組織	\N	カンサイコクサイクウコウ	カンサイコクサイクーコー	\N	\N	kansaikokusaikuukō
+6	12	1	1	KNOWN	名詞-一般	\N	コクサイ	コクサイ	\N	\N	kokusai
+12	18	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 51
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナリタ	ナリタ	\N	\N	narita
+0	12	0	2	KNOWN	名詞-固有名詞-一般	\N	ナリタクウコウ	ナリタクーコー	\N	\N	naritakuukō
+6	12	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 52
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+0	12	0	2	KNOWN	名詞-固有名詞-組織	\N	トウキョウダイガク	トーキョーダイガク	\N	\N	tōkyōdaigaku
+6	12	1	1	KNOWN	名詞-一般	\N	ダイガク	ダイガク	\N	\N	daigaku
+# 53
+0	9	1	1	KNOWN	名詞-固有名詞-組織	\N	キョウトダイ	キョートダイ	\N	\N	kyōtodai
+9	12	1	1	KNOWN	名詞-接尾-一般	\N	ガク	ガク	\N	\N	gaku
+12	18	1	1	KNOWN	名詞-一般	\N	コウシキ	コーシキ	\N	\N	kōshiki
+18	24	1	1	KNOWN	名詞-一般	\N	ヤキュウ	ヤキュー	\N	\N	yakyū
+24	27	1	1	KNOWN	名詞-接尾-一般	\N	ブ	ブ	\N	\N	bu
+# 54
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナラ	ナラ	\N	\N	nara
+0	39	0	6	KNOWN	名詞-固有名詞-組織	\N	ナラセンタンカガクギジュツダイガクインダイガク	ナラセンタンカガクギジュツダイガクインダイガク	\N	\N	narasentankagakugijutsudaigakuindaigaku
+6	12	1	1	KNOWN	名詞-一般	\N	センタン	センタン	\N	\N	sentan
+12	18	1	1	KNOWN	名詞-一般	\N	カガク	カガク	\N	\N	kagaku
+18	24	1	1	KNOWN	名詞-一般	\N	ギジュツ	ギジュツ	\N	\N	gijutsu
+24	33	1	1	KNOWN	名詞-一般	\N	ダイガクイン	ダイガクイン	\N	\N	daigakuin
+33	39	1	1	KNOWN	名詞-一般	\N	ダイガク	ダイガク	\N	\N	daigaku
+# 55
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+6	9	1	1	KNOWN	名詞-接尾-地域	\N	ト	ト	\N	\N	to
+6	15	0	2	KNOWN	名詞-一般	\N	トチジ	トチジ	\N	\N	tochiji
+9	15	1	1	KNOWN	名詞-一般	\N	チジ	チジ	\N	\N	chiji
+15	21	1	1	KNOWN	名詞-サ変接続	\N	センキョ	センキョ	\N	\N	senkyo
+# 56
+0	6	1	1	KNOWN	名詞-一般	\N	カブシキ	カブシキ	\N	\N	kabushiki
+0	12	0	2	KNOWN	名詞-一般	\N	カブシキガイシャ	カブシキガイシャ	\N	\N	kabushikigaisha
+6	12	1	1	KNOWN	名詞-一般	\N	カイシャ	カイシャ	\N	\N	kaisha
+# 57
+0	6	1	1	KNOWN	名詞-一般	\N	カブシキ	カブシキ	\N	\N	kabushiki
+0	12	0	2	KNOWN	名詞-一般	\N	カブシキガイシャ	カブシキガイシャ	\N	\N	kabushikigaisha
+6	12	1	1	KNOWN	名詞-一般	\N	カイシャ	カイシャ	\N	\N	kaisha
+12	15	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+15	30	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	akademia
+# 58
+0	9	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ホッカイドウ	ホッカイドー	\N	\N	hokkaidō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+15	39	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	hamufaitazu
+# 59
+0	6	1	1	KNOWN	名詞-一般	\N	コクサイ	コクサイ	\N	\N	kokusai
+6	12	1	1	KNOWN	名詞-サ変接続	\N	レンゴウ	レンゴー	\N	\N	rengō
+12	18	1	1	KNOWN	名詞-形容動詞語幹	\N	アンゼン	アンゼン	\N	\N	anzen
+18	24	1	1	KNOWN	名詞-サ変接続	\N	ホショウ	ホショー	\N	\N	hoshō
+24	30	1	1	KNOWN	名詞-一般	\N	リジ	リジ	\N	\N	riji
+30	33	1	1	KNOWN	名詞-接尾-一般	\N	カイ	カイ	\N	\N	kai
+# 60
+0	6	1	1	KNOWN	名詞-一般	\N	ジョウホウ	ジョーホー	\N	\N	jōhō
+0	12	0	2	KNOWN	名詞-一般	\N	ジョウホウショリ	ジョーホーショリ	\N	\N	jōhōshori
+6	12	1	1	KNOWN	名詞-サ変接続	\N	ショリ	ショリ	\N	\N	shori
+12	18	1	1	KNOWN	名詞-一般	\N	ギジュツ	ギジュツ	\N	\N	gijutsu
+18	21	1	1	KNOWN	名詞-接尾-一般	\N	シャ	シャ	\N	\N	sha
+21	27	1	1	KNOWN	名詞-サ変接続	\N	シケン	シケン	\N	\N	shiken
+# 61
+0	9	1	1	KNOWN	名詞-一般	\N	ジドウシャ	ジドーシャ	\N	\N	jidōsha
+# 62
+0	9	1	1	KNOWN	名詞-一般	\N	ジドウシャ	ジドーシャ	\N	\N	jidōsha
+9	15	1	1	KNOWN	名詞-一般	\N	カイシャ	カイシャ	\N	\N	kaisha
+# 63
+0	9	1	1	KNOWN	名詞-一般	\N	ダイガクイン	ダイガクイン	\N	\N	daigakuin
+# 64
+0	6	1	1	KNOWN	名詞-一般	\N	ダイガク	ダイガク	\N	\N	daigaku
+0	12	0	2	KNOWN	名詞-一般	\N	ダイガクインセイ	ダイガクインセイ	\N	\N	daigakuinsei
+6	12	1	1	KNOWN	名詞-一般	\N	インセイ	インセイ	\N	\N	insei
+# 65
+0	9	1	1	KNOWN	名詞-一般	\N	シンカンセン	シンカンセン	\N	\N	shinkansen
+# 66
+0	9	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウカイドウ	トーカイドー	\N	\N	tōkaidō
+0	18	0	2	KNOWN	名詞-固有名詞-一般	\N	トウカイドウシンカンセン	トーカイドーシンカンセン	\N	\N	tōkaidōshinkansen
+9	18	1	1	KNOWN	名詞-一般	\N	シンカンセン	シンカンセン	\N	\N	shinkansen
+# 67
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+6	12	1	1	KNOWN	名詞-一般	\N	コクサイ	コクサイ	\N	\N	kokusai
+12	18	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 68
+0	6	1	1	KNOWN	名詞-一般	\N	セカイ	セカイ	\N	\N	sekai
+6	12	1	1	KNOWN	名詞-一般	\N	イサン	イサン	\N	\N	isan
+# 69
+0	6	1	1	KNOWN	名詞-一般	\N	セカイ	セカイ	\N	\N	sekai
+6	12	1	1	KNOWN	名詞-一般	\N	ブンカ	ブンカ	\N	\N	bunka
+12	18	1	1	KNOWN	名詞-一般	\N	イサン	イサン	\N	\N	isan
+# 70
+0	9	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	シニア	シニア	\N	\N	shinia
+0	42	0	3	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	shiniasofutōeaenjinia
+9	27	1	1	KNOWN	名詞-一般	\N	ソフトウェア	ソフトウェア	\N	\N	sofutōea
+27	42	1	1	KNOWN	名詞-一般	\N	エンジニア	エンジニア	\N	\N	enjinia
+# 71
+0	18	1	1	KNOWN	名詞-一般	\N	ソフトウェア	ソフトウェア	\N	\N	sofutōea
+18	33	1	1	KNOWN	名詞-一般	\N	エンジニア	エンジニア	\N	\N	enjinia
+# 72
+0	12	1	1	KNOWN	名詞-一般	\N	システム	システム	\N	\N	shisutemu
+0	42	0	2	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	shisutemuadominisutoreta
+12	42	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	adominisutoreta
+# 73
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	aburakadabura
+# 74
+0	9	1	1	KNOWN	名詞-固有名詞-組織	\N	コニカ	コニカ	\N	\N	konika
+0	45	0	3	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	konikaminorutahorudingusu
+9	21	1	1	KNOWN	名詞-固有名詞-組織	\N	ミノルタ	ミノルタ	\N	\N	minoruta
+21	45	1	1	KNOWN	名詞-一般	\N	ホールディングス	ホールディングス	\N	\N	horudingusu
+# 75
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	tōkyō
+# 76
+0	24	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	tōkyōtochiji
+# 77
+0	42	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	aripurojekutsujapan
+# 78
+0	12	1	1	KNOWN	名詞-固有名詞-組織	\N	キヤノン	キャノン	\N	\N	kiyanon
+0	60	0	4	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	kiyanonsemikondakutaekwippumento
+12	18	1	1	KNOWN	名詞-一般	\N	セミ	セミ	\N	\N	semi
+18	36	1	1	KNOWN	名詞-一般	\N	コンダクター	コンダクター	\N	\N	kondakuta
+36	60	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ekwippumento
+# 79
+0	9	1	1	KNOWN	名詞-固有名詞-人名-名	\N	ジェイ	ジェイ	\N	\N	jei
+0	39	0	4	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	jeitienjiniaringu
+9	21	1	1	KNOWN	名詞-固有名詞-人名-一般	\N	ティエン	ティエン	\N	\N	tien
+21	30	1	1	KNOWN	名詞-一般	\N	ジニア	ジニア	\N	\N	jinia
+30	39	1	1	KNOWN	名詞-一般	\N	リング	リング	\N	\N	ringu
+# 80
+0	9	1	1	KNOWN	接頭詞-名詞接続	\N	アンチ	アンチ	\N	\N	anchi
+0	24	0	2	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	anchobipasuta
+9	24	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	yobipasuta
+# 81
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	haripotta
+# 82
+0	15	1	1	KNOWN	名詞-固有名詞-人名-名	\N	スティーブ	スティーブ	\N	\N	sutibu
+15	27	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ジョブズ	ジョブズ	\N	\N	jobuzu
+# 83
+0	12	1	1	KNOWN	名詞-固有名詞-人名-名	\N	マイケル	マイケル	\N	\N	maikeru
+12	27	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ジャクソン	ジャクソン	\N	\N	jakuson
+# 84
+0	24	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	sapuraizugifuto
+# 85
+0	3	1	1	KNOWN	名詞-一般	\N	ハト	ハト	\N	\N	hato
+3	12	1	1	KNOWN	名詞-サ変接続	\N	ヤマヅミ	ヤマズミ	\N	\N	yamazumi
+# 86
+0	6	1	1	KNOWN	名詞-一般	\N	スウガク	スーガク	\N	\N	suugaku
+6	12	1	1	KNOWN	名詞-一般	\N	ブチョウ	ブチョー	\N	\N	buchō
+12	18	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	タニガワ	タニガワ	\N	\N	tanigawa
+# 87
+0	6	1	1	KNOWN	名詞-一般	\N	ケイザイ	ケイザイ	\N	\N	keizai
+6	9	1	1	KNOWN	名詞-接尾-一般	\N	ガク	ガク	\N	\N	gaku
+9	15	1	1	KNOWN	名詞-一般	\N	ブチョウ	ブチョー	\N	\N	buchō
+# 88
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナリタ	ナリタ	\N	\N	narita
+0	12	0	2	KNOWN	名詞-固有名詞-一般	\N	ナリタクウコウ	ナリタクーコー	\N	\N	naritakuukō
+6	12	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+15	18	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ベイ	ベイ	\N	\N	bei
+18	24	1	1	KNOWN	名詞-一般	\N	ゲンユ	ゲンユ	\N	\N	gen'yu
+24	30	1	1	KNOWN	名詞-サ変接続	\N	リュウシュツ	リューシュツ	\N	\N	ryūshutsu
+# 89
+0	9	1	1	KNOWN	名詞-固有名詞-一般	\N	ハコネヤマ	ハコネヤマ	\N	\N	hakoneyama
+# 90
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナリタ	ナリタ	\N	\N	narita
+0	12	0	2	KNOWN	名詞-固有名詞-一般	\N	ナリタクウコウ	ナリタクーコー	\N	\N	naritakuukō
+6	12	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 91
+0	6	1	1	KNOWN	名詞-一般	\N	ガクブ	ガクブ	\N	\N	gakubu
+# 92
+0	12	1	1	KNOWN	名詞-一般	\N	サーバー	サーバー	\N	\N	saba
+# 93
+0	9	1	1	KNOWN	名詞-一般	\N	サーバ	サーバ	\N	\N	saba
+# 94
+0	9	1	1	KNOWN	名詞-サ変接続	\N	コピー	コピー	\N	\N	kopi
+# 95
+0	12	1	1	KNOWN	名詞-一般	\N	コーヒー	コーヒー	\N	\N	kohi
+# 96
+0	12	1	1	KNOWN	名詞-一般	\N	タクシー	タクシー	\N	\N	takushi
+# 97
+0	15	1	1	KNOWN	名詞-一般	\N	パーティー	パーティー	\N	\N	pati
+# 98
+0	12	1	1	KNOWN	名詞-サ変接続	\N	パーティ	パーティ	\N	\N	pati
+# 99
+0	12	1	1	KNOWN	名詞-一般	\N	センター	センター	\N	\N	senta
+# 100
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	
+# 101
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	
+# 102
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+# 103
+0	9	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+# 104
+0	18	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	kibodo
+# 105
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	saba
+# 106
+0	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	takushi
+# 107
+0	24	1	1	KNOWN	名詞-一般	\N	ストップウォッチ	ストップウォッチ	\N	\N	sutoppuwotchi
+# 108
+0	12	1	1	KNOWN	副詞-助詞類接続	\N	チョット	チョット	\N	\N	chotto
+12	18	1	1	KNOWN	動詞-自立	まつ	マッ	マッ	五段・タ行	連用タ接続	ma
+18	21	1	1	KNOWN	助詞-接続助詞	\N	テ	テ	\N	\N	te
+# 109
+0	36	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	aiueoyayuyowaヵヶ
+# 110
+0	51	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	aiueoヵㇰヶㇱㇲㇳㇴㇵㇶㇷㇷ
+51	54	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+54	90	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ㇸㇹㇺyayuyoㇻㇼㇽㇾㇿwa
+# 111
+0	12	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	saraniㇷ
+12	15	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+16	34	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	kamuicheㇷ
+34	37	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+38	41	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ㇷ
+41	44	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+44	47	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ㇷ
+47	50	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+# 112
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𠀋
+4	28	1	1	KNOWN	名詞-一般	\N	ストップウォッチ	ストップウォッチ	\N	\N	sutoppuwotchi
+29	41	1	1	KNOWN	名詞-サ変接続	\N	ストップ	ストップ	\N	\N	sutoppu
+41	45	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𠀋
+45	57	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	wotchi
+58	82	1	1	KNOWN	名詞-一般	\N	ストップウォッチ	ストップウォッチ	\N	\N	sutoppuwotchi
+82	86	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𠀋
+# 113
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ㇷ
+# 114
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+# 115
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ㇷ
+3	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+# 116
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	゚
+3	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ㇷ
+# 117
+0	3	1	1	KNOWN	その他-間投	\N	ァ	ア	\N	\N	a
+# 118
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	wa
+# 119
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ヵ
+# 120
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ヶ
+# 121
+0	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	katakana
+# 122
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	vittsu
+# 123
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	panasonikku
+# 124
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a゙ittsu
+# 125
+0	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゙ittsu
+# 126
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a゚nasonikku
+# 127
+0	18	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゚nasonikku
+# 128
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゙
+# 129
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゚
+# 130
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゙゙
+# 131
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゙゚
+# 132
+0	9	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	v゙
+# 133
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	sosukodo
+# 134
+0	6	1	1	KNOWN	名詞-副詞可能	\N	コンヤ	コンヤ	\N	\N	kon'ya
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	24	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	robato
+24	30	1	1	KNOWN	名詞-一般	\N	センセイ	センセイ	\N	\N	sensei
+30	33	1	1	KNOWN	助詞-格助詞-引用	\N	ト	ト	\N	\N	to
+33	39	1	1	KNOWN	動詞-自立	話す	ハナシ	ハナシ	五段・サ行	連用形	hanashi
+39	42	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 135
+0	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Test
+13	16	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+16	19	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+19	22	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+22	25	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+# 136
+0	8	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Test
+9	12	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+12	17	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	234
+# 137
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Culture
+22	25	1	1	KNOWN	記号-アルファベット	\N	オー	オー	\N	\N	o
+25	28	1	1	KNOWN	記号-アルファベット	\N	エフ	エフ	\N	\N	efu
+29	44	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Japan
+# 138
+0	12	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	katakana
+13	28	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	vittsu
+29	50	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	panasonikku
+# 139
+0	6	1	1	KNOWN	名詞-一般	\N	シンバシ	シンバシ	\N	\N	shimbashi
+6	9	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+12	15	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+15	18	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+21	24	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+# 140
+0	3	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+9	12	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+12	15	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+# 141
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+6	9	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+9	12	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+12	15	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+15	18	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+# 142
+# 143
+# 144
+0	33	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	oaiueoyayuyo
+# 145
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	n
+# 146
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	v
+# 147
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	va
+# 148
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	vo
+# 149
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ka゚
+# 150
+0	60	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	babibubebopapipupepo
+# 151
+0	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	vavivevo
+# 152
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	v
+# 153
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	v
+# 154
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	veru
+# 155
+0	6	1	1	KNOWN	副詞-一般	\N	トキドキ	トキドキ	\N	\N	tokidoki
+# 156
+0	6	1	1	KNOWN	名詞-形容動詞語幹	\N	バカ	バカ	\N	\N	baka
+6	9	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+9	12	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+12	18	1	1	KNOWN	動詞-自立	しいる	シイ	シイ	一段	連用形	shii
+# 157
+0	9	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+9	12	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 158
+0	6	1	1	KNOWN	名詞-サ変接続	\N	ミス	ミス	\N	\N	misu
+6	9	1	1	KNOWN	記号-一般	\N	ヾ	ヾ	\N	\N	ヾ
+# 159
+0	3	1	1	KNOWN	接頭詞-名詞接続	\N	オ	オ	\N	\N	o
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+6	9	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+# 160
+0	6	1	1	KNOWN	名詞-固有名詞-人名-名	\N	ミス	ミス	\N	\N	misu
+6	9	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+# 161
+0	3	1	1	KNOWN	助動詞	\N	ジ	ジ	不変化型	基本形	ji
+3	6	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+# 162
+0	3	1	1	KNOWN	助動詞	\N	ジ	ジ	不変化型	基本形	ji
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 163
+0	3	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 164
+0	3	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+# 165
+0	3	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 166
+0	3	1	1	KNOWN	記号-一般	\N	ヽ	ヽ	\N	\N	ヽ
+# 167
+0	3	1	1	KNOWN	記号-一般	\N	ヾ	ヾ	\N	\N	ヾ
+# 168
+0	3	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 169
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 170
+6	9	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 171
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 172
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abc
+3	12	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+18	21	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+21	24	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 173
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abc
+3	12	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+12	15	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+18	21	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+21	24	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 174
+0	9	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+9	12	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+18	21	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+21	24	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+24	27	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+# 175
+0	3	1	1	KNOWN	助詞-終助詞	\N	ネ	ネ	\N	\N	ne
+3	6	1	1	KNOWN	助詞-並立助詞	\N	ヤ	ヤ	\N	\N	ya
+6	9	1	1	KNOWN	形容詞-接尾	ぽい	ポ	ポ	形容詞・アウオ段	ガル接続	po
+9	12	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+12	18	1	1	KNOWN	動詞-自立	\N	ツム	ツム	五段・マ行	基本形	tsumu
+18	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	pi
+# 176
+0	3	1	1	KNOWN	助詞-終助詞	\N	ネ	ネ	\N	\N	ne
+3	6	1	1	KNOWN	助詞-並立助詞	\N	ヤ	ヤ	\N	\N	ya
+6	9	1	1	KNOWN	形容詞-接尾	ぽい	ポ	ポ	形容詞・アウオ段	ガル接続	po
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+12	18	1	1	KNOWN	動詞-自立	\N	ツム	ツム	五段・マ行	基本形	tsumu
+18	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	pi
+# 177
+0	6	1	1	KNOWN	副詞-一般	\N	トキドキ	トキドキ	\N	\N	tokidoki
+9	12	1	1	KNOWN	接頭詞-名詞接続	\N	オ	オ	\N	\N	o
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+18	24	1	1	KNOWN	名詞-接尾-人名	\N	サン	サン	\N	\N	san
+24	27	1	1	KNOWN	助詞-格助詞-一般	\N	ト	ト	\N	\N	to
+27	33	1	1	KNOWN	名詞-サ変接続	\N	イッショ	イッショ	\N	\N	issho
+33	36	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+36	39	1	1	KNOWN	接頭詞-名詞接続	\N	オ	オ	\N	\N	o
+39	45	1	1	KNOWN	名詞-一般	\N	スシ	スシ	\N	\N	sushi
+45	48	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+48	54	1	1	KNOWN	動詞-自立	食べる	タベ	タベ	一段	連用形	tabe
+54	60	1	1	KNOWN	助動詞	\N	タイ	タイ	特殊・タイ	基本形	tai
+60	66	1	1	KNOWN	助動詞	\N	デス	デス	特殊・デス	基本形	desu
+69	72	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	abc
+72	81	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+81	84	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+84	87	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+87	90	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 178
+0	6	1	1	KNOWN	副詞-一般	\N	トキドキ	トキドキ	\N	\N	tokidoki
+6	12	1	1	KNOWN	名詞-形容動詞語幹	\N	バカ	バカ	\N	\N	baka
+12	15	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+15	18	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+18	24	1	1	KNOWN	動詞-自立	しいる	シイ	シイ	一段	連用形	shii
+24	33	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+33	36	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+36	39	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+39	42	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+42	48	1	1	KNOWN	名詞-サ変接続	\N	ミス	ミス	\N	\N	misu
+48	51	1	1	KNOWN	記号-一般	\N	ヾ	ヾ	\N	\N	ヾ
+# 179
+0	3	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+3	6	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+6	9	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 180
+0	6	1	1	KNOWN	副詞-一般	\N	トキドキ	トキドキ	\N	\N	tokidoki
+6	9	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+9	12	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 181
+0	9	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ササキ	ササキ	\N	\N	sasaki
+# 182
+0	9	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ヨヨギ	ヨヨギ	\N	\N	yoyogi
+# 183
+0	6	1	1	KNOWN	名詞-一般	\N	ヒトビト	ヒトビト	\N	\N	hitobito
+6	9	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+9	12	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 184
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+4	7	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 185
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+4	7	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 186
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+1	5	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+5	8	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+8	11	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 187
+0	3	1	1	KNOWN	助詞-副助詞／並立助詞／終助詞	\N	カ	カ	\N	\N	ka
+6	9	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 188
+0	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	paゝ
+# 189
+0	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	paゞ
+# 190
+0	3	1	1	KNOWN	助動詞	\N	ツ	ツ	下二・タ行	基本形	tsu
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 191
+0	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	zuゞ
+# 192
+0	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	vゝ
+# 193
+0	9	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+9	12	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+21	30	1	1	KNOWN	名詞-一般	\N	トコロ	トコロ	\N	\N	tokoro
+30	33	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+33	36	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+36	39	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 194
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	vヽ
+# 195
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	vaヽ
+# 196
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	nヽ
+# 197
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ヾ
+# 198
+0	3	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+3	6	1	1	KNOWN	記号-一般	\N	ゞ	ゞ	\N	\N	ゞ
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 199
+0	3	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+6	9	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+18	21	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+21	24	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 200
+0	6	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+6	9	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+18	21	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+21	24	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+24	27	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 201
+0	6	1	1	KNOWN	名詞-一般	\N	アイ	アイ	\N	\N	ai
+6	9	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 202
+0	3	1	1	KNOWN	フィラー	\N	ア	ア	\N	\N	a
+3	9	1	1	KNOWN	動詞-自立	\N	イウ	イウ	五段・ワ行促音便	基本形	iu
+9	12	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+12	15	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+15	18	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+18	21	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+21	24	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+24	27	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+27	30	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 203
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	3
+# 204
+0	3	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 205
+0	3	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 206
+0	3	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+3	6	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+6	9	1	1	KNOWN	名詞-数	\N	ナナ	ナナ	\N	\N	nana
+# 207
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+6	9	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+9	12	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+# 208
+0	3	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+3	6	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+6	7	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	2
+7	10	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+10	13	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+13	16	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+16	19	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 209
+0	3	1	1	KNOWN	名詞-数	\N	チョウ	チョー	\N	\N	chō
+3	6	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+6	9	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+9	12	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+12	15	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+15	18	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+18	21	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+# 210
+0	3	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+9	12	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+# 211
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+9	12	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+12	15	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+15	18	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+18	21	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+24	27	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+27	30	1	1	KNOWN	名詞-数	\N	ナナ	ナナ	\N	\N	nana
+# 212
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	4
+2	5	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	647
+6	9	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	100
+# 213
+0	2	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	15
+3	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	7
+# 214
+1	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	100
+4	7	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+# 215
+0	3	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+# 216
+0	3	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+3	6	1	1	KNOWN	名詞-接尾-助数詞	\N	ニン	ニン	\N	\N	nin
+# 217
+0	3	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+3	6	1	1	KNOWN	名詞-接尾-助数詞	\N	ニン	ニン	\N	\N	nin
+6	9	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 218
+0	3	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+0	12	0	4	KNOWN	名詞-一般	\N	ニニンサンキャク	ニニンサンキャク	\N	\N	nininsankyaku
+3	6	1	1	KNOWN	名詞-接尾-助数詞	\N	ニン	ニン	\N	\N	nin
+6	9	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+9	12	1	1	KNOWN	名詞-接尾-助数詞	\N	キャク	キャク	\N	\N	kyaku
+# 219
+0	3	1	1	KNOWN	接頭詞-名詞接続	\N	フ	フ	\N	\N	fu
+0	9	0	3	KNOWN	名詞-固有名詞-組織	\N	フジヤ	フジヤ	\N	\N	fujiya
+3	6	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+6	9	1	1	KNOWN	名詞-接尾-助数詞	\N	イエ	イエ	\N	\N	ie
+9	12	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+12	15	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+15	18	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 220
+0	3	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+3	6	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+# 221
+0	3	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+3	6	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+6	9	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+# 222
+0	6	1	1	KNOWN	名詞-一般	\N	チジ	チジ	\N	\N	chiji
+6	12	1	1	KNOWN	名詞-一般	\N	チジ	チジ	\N	\N	chiji
+# 223
+0	3	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+3	6	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+9	12	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+12	15	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+15	18	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+18	21	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+21	24	1	1	KNOWN	名詞-数	\N	ナナ	ナナ	\N	\N	nana
+24	27	1	1	KNOWN	名詞-数	\N	ハチ	ハチ	\N	\N	hachi
+27	30	1	1	KNOWN	名詞-数	\N	キュウ	キュー	\N	\N	kyū
+30	33	1	1	KNOWN	名詞-数	\N	キュウ	キュー	\N	\N	kyū
+33	36	1	1	KNOWN	名詞-数	\N	ハチ	ハチ	\N	\N	hachi
+36	39	1	1	KNOWN	名詞-数	\N	ナナ	ナナ	\N	\N	nana
+39	42	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+42	45	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+45	48	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+48	51	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+51	54	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+54	57	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+57	60	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+# 224
+0	3	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+3	6	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+# 225
+0	6	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	タナカ	タナカ	\N	\N	tanaka
+6	12	1	1	KNOWN	名詞-固有名詞-人名-名	\N	キョウイチ	キョーイチ	\N	\N	kyōichi
+# 226
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	4
+2	5	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	647
+# 227
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	4
+2	5	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	647
+6	10	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	0010
+# 228
+0	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	1000
+5	9	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	1000
+# 229
+0	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	1000
+5	9	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	0000
+# 230
+0	15	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	atirika
+15	18	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+18	24	1	1	KNOWN	名詞-一般	\N	シホン	シホン	\N	\N	shihon
+24	27	1	1	KNOWN	名詞-接尾-一般	\N	キン	キン	\N	\N	kin
+27	30	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+30	33	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+33	36	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+36	39	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+39	42	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+42	45	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+45	51	1	1	KNOWN	助動詞	\N	デス	デス	特殊・デス	基本形	desu
+# 231
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	キュウ	キュー	\N	\N	kyū
+6	9	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+9	12	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+12	15	1	1	KNOWN	名詞-接尾-助数詞	\N	ネン	ネン	\N	\N	nen
+15	21	1	1	KNOWN	名詞-副詞可能	\N	ハチガツ	ハチガツ	\N	\N	hachigatsu
+21	24	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+24	27	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+27	30	1	1	KNOWN	名詞-接尾-助数詞	\N	ニチ	ニチ	\N	\N	nichi
+# 232
+0	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	2024
+4	7	1	1	KNOWN	名詞-接尾-助数詞	\N	ネン	ネン	\N	\N	nen
+7	9	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	10
+9	12	1	1	KNOWN	名詞-一般	\N	ツキ	ツキ	\N	\N	tsuki
+12	13	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	9
+13	16	1	1	KNOWN	名詞-接尾-助数詞	\N	ニチ	ニチ	\N	\N	nichi
+# 233
+0	6	1	1	KNOWN	名詞-固有名詞-一般	\N	レイワ	レイワ	\N	\N	reiwa
+6	12	1	1	KNOWN	名詞-一般	\N	ガンネン	ガンネン	\N	\N	gannen
+# 234
+0	6	1	1	KNOWN	名詞-固有名詞-一般	\N	ヘイセイ	ヘイセイ	\N	\N	heisei
+6	9	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+9	12	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+12	15	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+15	18	1	1	KNOWN	名詞-接尾-助数詞	\N	ネン	ネン	\N	\N	nen
+# 235
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+9	12	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+12	15	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+15	18	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+18	21	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+21	24	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+24	27	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+27	30	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+# 236
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+6	9	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+12	15	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+15	18	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+18	21	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+24	27	1	1	KNOWN	名詞-数	\N	ナナ	ナナ	\N	\N	nana
+27	30	1	1	KNOWN	名詞-数	\N	ハチ	ハチ	\N	\N	hachi
+30	33	1	1	KNOWN	名詞-数	\N	キュウ	キュー	\N	\N	kyū
+# 237
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	0
+2	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	5
+# 238
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+6	9	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+# 239
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+6	9	1	1	KNOWN	名詞-数	\N	オク	オク	\N	\N	oku
+9	12	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+# 240
+0	3	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+3	6	1	1	KNOWN	名詞-数	\N	マン	マン	\N	\N	man
+6	9	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+9	12	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+12	15	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+15	18	1	1	KNOWN	名詞-数	\N	セン	セン	\N	\N	sen
+18	21	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+# 241
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+12	15	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 242
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+6	9	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+9	12	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+12	15	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+18	21	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+21	24	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+24	27	1	1	KNOWN	名詞-数	\N	ナナ	ナナ	\N	\N	nana
+# 243
+0	6	1	1	KNOWN	名詞-一般	\N	スウジ	スージ	\N	\N	suuji
+6	9	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	123
+9	12	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+12	15	1	1	KNOWN	名詞-固有名詞-地域-国	\N	カン	カン	\N	\N	kan
+15	21	1	1	KNOWN	名詞-一般	\N	スウジ	スージ	\N	\N	suuji
+21	24	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+24	27	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+27	30	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 244
+0	3	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 245
+3	6	1	1	KNOWN	名詞-数	\N	ゴ	ゴ	\N	\N	go
+# 246
+# 247
+# 248
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	1
+# 249
+1	2	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	1
+# 250
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+4	7	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+# 251
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+4	7	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+# 252
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+6	9	1	1	KNOWN	名詞-数	\N	ヒャク	ヒャク	\N	\N	hyaku
+# 253
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	垓
+# 254
+0	3	1	1	KNOWN	名詞-数	\N	ジュウ	ジュー	\N	\N	jū
+3	6	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	垓
+# 255
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	垓
+# 256
+0	3	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	キョウ	キョー	\N	\N	kyō
+# 257
+0	3	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+# 258
+0	3	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+3	6	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+6	9	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+9	12	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+12	15	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+15	18	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+18	21	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+21	24	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+24	27	1	1	KNOWN	名詞-数	\N	レイ	レイ	\N	\N	rei
+27	30	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+# 259
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+6	9	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+9	12	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+12	15	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+15	18	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+18	21	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+21	24	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+24	27	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+27	30	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+30	33	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+33	36	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+36	39	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+39	42	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+42	45	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+45	48	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+48	51	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+51	54	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+54	57	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+57	60	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+# 260
+0	25	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	9999999999999999999999999
+# 261
+0	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	0001
+# 262
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+7	10	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+10	13	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+13	16	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+# 263
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abc
+# 264
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ABC
+# 265
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	AbC
+# 266
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	abc
+3	6	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	123
+# 267
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	123
+3	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abc
+# 268
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abc
+4	7	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	def
+# 269
+0	10	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ÀÉÎÕÜ
+# 270
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ﬁ
+# 271
+0	7	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Straße
+# 272
+0	2	1	1	KNOWN	記号-アルファベット	\N	アルファ	アルファ	\N	\N	arufa
+2	4	1	1	KNOWN	記号-アルファベット	\N	ベータ	ベータ	\N	\N	beta
+4	6	1	1	KNOWN	記号-アルファベット	\N	ガンマ	ガンマ	\N	\N	gamma
+# 273
+0	2	1	1	KNOWN	記号-アルファベット	\N	アルファ	アルファ	\N	\N	arufa
+2	4	1	1	KNOWN	記号-アルファベット	\N	ベータ	ベータ	\N	\N	beta
+4	6	1	1	KNOWN	記号-アルファベット	\N	ガンマ	ガンマ	\N	\N	gamma
+# 274
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	абв
+# 275
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	АБВ
+# 276
+0	9	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	한국어
+# 277
+0	6	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	한글
+# 278
+0	9	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ㄱㄴㄷ
+# 279
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ƒ
+# 280
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ȶ
+# 281
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	Ⱥ
+# 282
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ɐ
+# 283
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ὐ
+# 284
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ϲ
+# 285
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	Ͱ
+# 286
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Ѐ
+# 287
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ӿ
+# 288
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Ԁ
+# 289
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ԏ
+# 290
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ԑ
+# 291
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ḁ
+# 292
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ẹ
+# 293
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ẻ
+# 294
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ȶ
+# 295
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ȷ
+# 296
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ʹ
+# 297
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ϻ
+# 298
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ϼ
+# 299
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ӹ
+# 300
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	Ӻ
+# 301
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Ԁ
+# 302
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ԏ
+# 303
+0	2	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	Ԑ
+# 304
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	a
+# 305
+0	3	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ゟ
+# 306
+# 307
+0	3	1	1	KNOWN	その他-間投	\N	ァ	ア	\N	\N	a
+# 308
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ヿ
+# 309
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ㇰ
+# 310
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ㇿ
+# 311
+# 312
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	o
+# 313
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	n
+# 314
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゙
+# 315
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	゚
+# 316
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	ﾠ
+# 317
+# 318
+# 319
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	⻴
+# 320
+# 321
+# 322
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	⿖
+# 323
+0	3	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 324
+0	3	1	1	KNOWN	記号-一般	\N	〆	〆	\N	\N	〆
+# 325
+0	3	1	1	KNOWN	記号-一般	\N	〇	〇	\N	\N	〇
+# 326
+# 327
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	㐀
+# 328
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	䶵
+# 329
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	䶶
+# 330
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+# 331
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	龥
+# 332
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	龦
+# 333
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	豈
+# 334
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	鶴
+# 335
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	郞
+# 336
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	侮
+# 337
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	頻
+# 338
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	恵
+# 339
+# 340
+# 341
+# 342
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	À
+# 343
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ÿ
+# 344
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Ā
+# 345
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ſ
+# 346
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ƀ
+# 347
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Ḁ
+# 348
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ỹ
+# 349
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	Ỻ
+# 350
+# 351
+# 352
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	⁰
+# 353
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	₟
+# 354
+# 355
+0	3	1	1	UNKNOWN	名詞-サ変接続	\N	\N	\N	\N	\N	⃏
+# 356
+0	3	1	1	UNKNOWN	名詞-サ変接続	\N	\N	\N	\N	\N	⃐
+# 357
+0	3	1	1	UNKNOWN	名詞-サ変接続	\N	\N	\N	\N	\N	⃿
+# 358
+# 359
+# 360
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	⅐
+# 361
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	↏
+# 362
+# 363
+# 364
+# 365
+# 366
+# 367
+# 368
+0	3	1	1	UNKNOWN	名詞-サ変接続	\N	\N	\N	\N	\N	①
+# 369
+0	3	1	1	UNKNOWN	名詞-サ変接続	\N	\N	\N	\N	\N	⓿
+# 370
+# 371
+# 372
+# 373
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Ð
+# 374
+# 375
+# 376
+# 377
+# 378
+# 379
+# 380
+# 381
+0	9	1	1	UNKNOWN	名詞-サ変接続	\N	\N	\N	\N	\N	①②③
+# 382
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	Ⅰ
+4	7	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	Ⅱ
+8	11	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	Ⅲ
+# 383
+# 384
+# 385
+# 386
+# 387
+# 388
+# 389
+# 390
+# 391
+# 392
+# 393
+# 394
+# 395
+# 396
+# 397
+# 398
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+# 399
+0	12	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀
+# 400
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𠀋
+# 401
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𩬅
+4	7	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	艱
+7	10	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	鍟
+10	13	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	䇹
+13	16	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	愯
+16	19	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	瀛
+# 402
+0	12	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𝒜𝒷𝒸
+# 403
+0	8	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	🇯🇵
+# 404
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	👨
+7	11	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	👩
+14	18	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	👧
+# 405
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+1	5	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+5	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	b
+# 406
+0	6	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+6	10	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+10	13	1	1	KNOWN	名詞-一般	\N	カタリ	カタリ	\N	\N	katari
+# 407
+0	11	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	﷐😀😀
+# 408
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	􏿿
+# 409
+# 410
+# 411
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	￿
+# 412
+0	3	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	￾
+# 413
+# 414
+# 415
+# 416
+# 417
+3	18	1	1	KNOWN	感動詞	\N	コンニチハ	コンニチワ	\N	\N	konnichiha
+# 418
+3	9	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+# 419
+3	9	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+# 420
+3	9	1	1	KNOWN	名詞-形容動詞語幹	\N	ジュウヨウ	ジューヨー	\N	\N	jūyō
+# 421
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 422
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 423
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 424
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 425
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 426
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+7	13	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 427
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+9	15	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+# 428
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	d
+1	3	1	1	KNOWN	記号-アルファベット	\N	イプシロン	イプシロン	\N	\N	ipushiron
+3	5	1	1	KNOWN	記号-アルファベット	\N	イプシロン	イプシロン	\N	\N	ipushiron
+7	19	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ϢϏΎϷΞͺ
+19	25	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ハタ	ハタ	\N	\N	hata
+# 429
+0	6	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ハタ	ハタ	\N	\N	hata
+9	15	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 430
+0	6	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ハタ	ハタ	\N	\N	hata
+11	17	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 431
+0	6	1	1	KNOWN	名詞-一般	\N	マジョ	マジョ	\N	\N	majo
+6	9	1	1	KNOWN	名詞-一般	\N	カリ	カリ	\N	\N	kari
+9	15	1	1	KNOWN	名詞-一般	\N	タイショウ	タイショー	\N	\N	taishō
+15	27	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	mashu
+30	45	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	hopukinsu
+# 432
+0	6	1	1	KNOWN	名詞-一般	\N	マジョ	マジョ	\N	\N	majo
+6	9	1	1	KNOWN	名詞-一般	\N	カリ	カリ	\N	\N	kari
+9	15	1	1	KNOWN	名詞-一般	\N	タイショウ	タイショー	\N	\N	taishō
+15	27	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	mashu
+30	45	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	hopukinsu
+49	55	1	1	KNOWN	名詞-一般	\N	マジョ	マジョ	\N	\N	majo
+55	58	1	1	KNOWN	名詞-一般	\N	カリ	カリ	\N	\N	kari
+58	64	1	1	KNOWN	名詞-一般	\N	タイショウ	タイショー	\N	\N	taishō
+64	76	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	mashu
+79	94	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	hopukinsu
+# 433
+0	12	1	1	KNOWN	名詞-一般	\N	スペース	スペース	\N	\N	supesu
+12	30	1	1	KNOWN	名詞-一般	\N	ステーション	ステーション	\N	\N	suteshon
+30	33	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+33	39	1	1	KNOWN	動詞-自立	行く	イキ	イキ	五段・カ行促音便	連用形	iki
+39	45	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+48	66	1	1	KNOWN	形容詞-自立	\N	ウタガワシイ	ウタガワシイ	形容詞・イ段	基本形	utagawashii
+# 434
+0	3	1	1	KNOWN	接頭詞-名詞接続	\N	コン	コン	\N	\N	kon
+3	18	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ノルウェー	ノルウェー	\N	\N	noruwe
+18	21	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+21	24	1	1	KNOWN	動詞-自立	いる	イ	イ	一段	連用形	i
+24	30	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+30	33	1	1	KNOWN	助詞-接続助詞	\N	ガ	ガ	\N	\N	ga
+36	42	1	1	KNOWN	名詞-副詞可能	\N	ライシュウ	ライシュー	\N	\N	raishū
+42	45	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+45	48	1	1	KNOWN	名詞-一般	\N	アタマ	アタマ	\N	\N	atama
+48	54	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+54	57	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+57	63	1	1	KNOWN	動詞-自立	戻る	モドリ	モドリ	五段・ラ行	連用形	modori
+63	69	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+72	81	1	1	KNOWN	名詞-一般	\N	タノシミ	タノシミ	\N	\N	tanoshimi
+81	84	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+84	87	1	1	KNOWN	動詞-自立	する	シ	シ	サ変・スル	連用形	shi
+87	90	1	1	KNOWN	助詞-接続助詞	\N	テ	テ	\N	\N	te
+90	93	1	1	KNOWN	動詞-非自立	いる	イ	イ	一段	連用形	i
+93	99	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+102	105	1	1	KNOWN	接頭詞-名詞接続	\N	オ	オ	\N	\N	o
+105	111	1	1	KNOWN	名詞-一般	\N	スシ	スシ	\N	\N	sushi
+111	114	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+114	120	1	1	KNOWN	動詞-自立	食べる	タベ	タベ	一段	連用形	tabe
+120	126	1	1	KNOWN	助動詞	\N	タイ	タイ	特殊・タイ	基本形	tai
+126	129	1	1	KNOWN	助詞-終助詞	\N	ナ	ナ	\N	\N	na
+# 435
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	test
+5	14	1	1	KNOWN	名詞-サ変接続	\N	テスト	テスト	\N	\N	tesuto
+# 436
+0	9	1	1	KNOWN	名詞-サ変接続	\N	テスト	テスト	\N	\N	tesuto
+# 437
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	c
+# 438
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	c
+3	8	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	world
+# 439
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	C
+# 440
+# 441
+# 442
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+2	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	b
+# 443
+0	3	1	1	KNOWN	記号-アルファベット	\N	シー	シー	\N	\N	shi
+# 444
+3	6	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	100
+7	11	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	0001
+# 445
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	TEL
+4	6	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	03
+7	11	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	1234
+12	16	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	5678
+# 446
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	http
+7	14	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	example
+15	18	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	com
+19	28	1	1	KNOWN	名詞-一般	\N	ニホンゴ	ニホンゴ	\N	\N	nihongo
+# 447
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	user
+5	12	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	example
+13	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	jp
+# 448
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	100
+# 449
+0	2	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	50
+5	11	1	1	KNOWN	名詞-接尾-一般	\N	ビキ	ビキ	\N	\N	biki
+# 450
+0	1	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	A
+1	2	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	4
+2	11	1	1	KNOWN	名詞-一般	\N	サイズ	サイズ	\N	\N	saizu
+# 451
+0	1	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	3
+1	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	D
+# 452
+0	3	1	1	KNOWN	記号-アルファベット	\N	エイ	エイ	\N	\N	ei
+3	6	1	1	KNOWN	記号-アルファベット	\N	アイ	アイ	\N	\N	ai
+# 453
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	iPhone
+# 454
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	Ⅲ
+3	6	1	1	KNOWN	名詞-接尾-助数詞	\N	セイ	セイ	\N	\N	sei
+# 455
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	カンサイ	カンサイ	\N	\N	kansai
+0	18	0	3	KNOWN	名詞-固有名詞-組織	\N	カンサイコクサイクウコウ	カンサイコクサイクーコー	\N	\N	kansaikokusaikuukō
+6	12	1	1	KNOWN	名詞-一般	\N	コクサイ	コクサイ	\N	\N	kokusai
+12	18	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+18	21	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+21	27	1	1	KNOWN	動詞-自立	行く	イッ	イッ	五段・カ行促音便	連用タ接続	i
+27	30	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 456
+0	6	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+0	18	0	3	KNOWN	名詞-固有名詞-組織	\N	ニホンケイザイシンブン	ニホンケイザイシンブン	\N	\N	nihonkeizaishimbun
+6	12	1	1	KNOWN	名詞-一般	\N	ケイザイ	ケイザイ	\N	\N	keizai
+12	18	1	1	KNOWN	名詞-一般	\N	シンブン	シンブン	\N	\N	shimbun
+18	21	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+21	27	1	1	KNOWN	動詞-自立	\N	ヨム	ヨム	五段・マ行	基本形	yomu
+# 457
+0	3	1	1	KNOWN	名詞-副詞可能	\N	アサ	アサ	\N	\N	asa
+3	9	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	セイリュウ	セイリュー	\N	\N	seiryū
+# 458
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abcd
+# 459
+0	7	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abcdefg
+# 460
+0	10	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abcdefghij
+# 461
+0	9	1	1	KNOWN	名詞-サ変接続	\N	テスト	テスト	\N	\N	tesuto
+10	19	1	1	KNOWN	名詞-サ変接続	\N	テスト	テスト	\N	\N	tesuto
+# 462
+0	6	1	1	KNOWN	名詞-サ変接続	\N	セイゲン	セイゲン	\N	\N	seigen
+6	18	1	1	KNOWN	名詞-一般	\N	スピード	スピード	\N	\N	supido
+# 463
+0	3	1	1	KNOWN	名詞-代名詞-一般	\N	ワタシ	ワタシ	\N	\N	watashi
+3	6	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+6	12	1	1	KNOWN	名詞-サ変接続	\N	セイゲン	セイゲン	\N	\N	seigen
+12	24	1	1	KNOWN	名詞-一般	\N	スピード	スピード	\N	\N	supido
+24	27	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+27	36	1	1	KNOWN	動詞-自立	\N	コエル	コエル	一段	基本形	koeru
+# 464
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+6	15	1	1	KNOWN	名詞-一般	\N	スカイ	スカイ	\N	\N	sukai
+15	24	1	1	KNOWN	名詞-一般	\N	ツリー	ツリー	\N	\N	tsuri
+24	27	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+27	33	1	1	KNOWN	動詞-自立	\N	ノボル	ノボル	五段・ラ行	基本形	noboru
+# 465
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+2	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	b
+# 466
+1	7	1	1	KNOWN	名詞-サ変接続	\N	インヨウ	インヨー	\N	\N	in'yō
+8	11	1	1	KNOWN	名詞-一般	\N	フ	フ	\N	\N	fu
+# 467
+0	6	1	1	KNOWN	名詞-サ変接続	\N	インヨウ	インヨー	\N	\N	in'yō
+6	9	1	1	KNOWN	名詞-一般	\N	フ	フ	\N	\N	fu
+# 468
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+8	11	1	1	KNOWN	名詞-一般	\N	ト	ト	\N	\N	to
+# 469
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+7	10	1	1	KNOWN	名詞-一般	\N	ト	ト	\N	\N	to
+# 470
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ヨコハマ	ヨコハマ	\N	\N	yokohama
+7	10	1	1	KNOWN	名詞-一般	\N	シ	シ	\N	\N	shi
+# 471
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+8	11	1	1	KNOWN	名詞-一般	\N	フ	フ	\N	\N	fu
+# 472
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	オオサカ	オーサカ	\N	\N	oosaka
+7	10	1	1	KNOWN	名詞-一般	\N	フ	フ	\N	\N	fu
+# 473
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナリタ	ナリタ	\N	\N	narita
+0	12	0	2	KNOWN	名詞-固有名詞-一般	\N	ナリタクウコウ	ナリタクーコー	\N	\N	naritakuukō
+6	12	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+12	15	1	1	KNOWN	接頭詞-数接続	\N	ダイ	ダイ	\N	\N	dai
+15	18	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+18	33	1	1	KNOWN	名詞-一般	\N	ターミナル	ターミナル	\N	\N	taminaru
+# 474
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナリタ	ナリタ	\N	\N	narita
+0	12	0	2	KNOWN	名詞-固有名詞-一般	\N	ナリタクウコウ	ナリタクーコー	\N	\N	naritakuukō
+6	12	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+12	15	1	1	KNOWN	接頭詞-数接続	\N	ダイ	ダイ	\N	\N	dai
+15	18	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+18	33	1	1	KNOWN	名詞-一般	\N	ターミナル	ターミナル	\N	\N	taminaru
+33	39	1	1	KNOWN	名詞-一般	\N	ビル	ビル	\N	\N	biru
+# 475
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+0	12	0	2	KNOWN	名詞-固有名詞-組織	\N	トウキョウダイガク	トーキョーダイガク	\N	\N	tōkyōdaigaku
+6	12	1	1	KNOWN	名詞-一般	\N	ダイガク	ダイガク	\N	\N	daigaku
+12	15	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+15	21	1	1	KNOWN	名詞-一般	\N	ガクセイ	ガクセイ	\N	\N	gakusei
+# 476
+0	18	1	1	KNOWN	名詞-一般	\N	ソフトウェア	ソフトウェア	\N	\N	sofutōea
+18	33	1	1	KNOWN	名詞-一般	\N	エンジニア	エンジニア	\N	\N	enjinia
+# 477
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	aiueo
+# 478
+0	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	aiueo
+# 479
+0	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Test
+# 480
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Test
+# 481
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Rust
+# 482
+0	4	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	rust
+# 483
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+4	7	1	1	KNOWN	名詞-一般	\N	カオ	カオ	\N	\N	kao
+# 484
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+4	7	1	1	KNOWN	名詞-一般	\N	カオ	カオ	\N	\N	kao
+7	11	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀
+# 485
+0	4	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	𠀋
+4	7	1	1	KNOWN	名詞-一般	\N	シャク	シャク	\N	\N	shaku
+# 486
+0	3	1	1	KNOWN	名詞-一般	\N	カニ	カニ	\N	\N	kani
+# 487
+0	3	1	1	KNOWN	名詞-一般	\N	カニ	カニ	\N	\N	kani
+3	6	1	1	KNOWN	名詞-接尾-一般	\N	ザ	ザ	\N	\N	za
+# 488
+0	3	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+3	6	1	1	KNOWN	名詞-数	\N	ニ	ニ	\N	\N	ni
+6	9	1	1	KNOWN	名詞-数	\N	サン	サン	\N	\N	san
+# 489
+0	3	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	123
+# 490
+0	3	1	1	KNOWN	記号-一般	\N	々	々	\N	\N	々
+# 491
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ナリタ	ナリタ	\N	\N	narita
+0	12	0	2	KNOWN	名詞-固有名詞-一般	\N	ナリタクウコウ	ナリタクーコー	\N	\N	naritakuukō
+6	12	1	1	KNOWN	名詞-一般	\N	クウコウ	クーコー	\N	\N	kuukō
+# 492
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+0	12	0	2	KNOWN	名詞-固有名詞-組織	\N	トウキョウダイガク	トーキョーダイガク	\N	\N	tōkyōdaigaku
+6	12	1	1	KNOWN	名詞-一般	\N	ダイガク	ダイガク	\N	\N	daigaku
+12	18	1	1	KNOWN	名詞-一般	\N	コウシキ	コーシキ	\N	\N	kōshiki
+18	24	1	1	KNOWN	名詞-一般	\N	ヤキュウ	ヤキュー	\N	\N	yakyū
+24	27	1	1	KNOWN	名詞-接尾-一般	\N	ブ	ブ	\N	\N	bu
+# 493
+0	6	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+0	21	0	4	KNOWN	名詞-固有名詞-組織	\N	ニホンケイザイシンブンシャ	ニホンケイザイシンブンシャ	\N	\N	nihonkeizaishimbunsha
+6	12	1	1	KNOWN	名詞-一般	\N	ケイザイ	ケイザイ	\N	\N	keizai
+12	18	1	1	KNOWN	名詞-一般	\N	シンブン	シンブン	\N	\N	shimbun
+18	21	1	1	KNOWN	名詞-接尾-一般	\N	シャ	シャ	\N	\N	sha
+# 494
+0	15	1	1	KNOWN	形容詞-自立	\N	ヤボッタイ	ヤボッタイ	形容詞・アウオ段	基本形	yabottai
+# 495
+0	15	1	1	KNOWN	動詞-自立	突き通す	ツキトオシャ	ツキトーシャ	五段・サ行	仮定縮約１	tsukitoosha
+# 496
+0	18	1	1	KNOWN	形容詞-自立	\N	ウタガワシイ	ウタガワシイ	形容詞・イ段	基本形	utagawashii
+# 497
+0	18	1	1	KNOWN	副詞-一般	\N	フニャフニャ	フニャフニャ	\N	\N	funyafunya
+# 498
+0	18	1	1	KNOWN	副詞-一般	\N	グニャグニャ	グニャグニャ	\N	\N	gunyagunya
+18	21	1	1	KNOWN	動詞-自立	する	シ	シ	サ変・スル	連用形	shi
+21	24	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 499
+0	6	1	1	KNOWN	動詞-自立	あく	アイ	アイ	五段・カ行イ音便	連用タ接続	ai
+6	9	1	1	KNOWN	助動詞	\N	ウ	ウ	不変化型	基本形	u
+9	12	1	1	KNOWN	フィラー	\N	エ	エ	\N	\N	e
+12	15	1	1	KNOWN	感動詞	\N	オ	オ	\N	\N	o
+# 500
+0	6	1	1	KNOWN	動詞-自立	あく	アイ	アイ	五段・カ行イ音便	連用タ接続	ai
+6	9	1	1	KNOWN	助動詞	\N	ウ	ウ	不変化型	基本形	u
+9	12	1	1	KNOWN	フィラー	\N	エ	エ	\N	\N	e
+12	21	1	1	KNOWN	名詞-一般	\N	オカキ	オカキ	\N	\N	okaki
+21	27	1	1	KNOWN	動詞-自立	くける	クケ	クケ	一段	連用形	kuke
+27	30	1	1	KNOWN	動詞-非自立	くる	コ	コ	カ変・クル	未然形	ko
+# 501
+0	9	1	1	KNOWN	感動詞	\N	ギャア	ギャー	\N	\N	gyaa
+9	12	1	1	KNOWN	フィラー	\N	ア	ア	\N	\N	a
+12	18	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+# 502
+0	3	1	1	KNOWN	名詞-非自立-一般	\N	ン	ン	\N	\N	n
+3	6	1	1	KNOWN	助動詞	\N	ン	ン	不変化型	基本形	n
+6	9	1	1	KNOWN	助詞-終助詞	\N	ン	ン	\N	\N	n
+# 503
+0	3	1	1	KNOWN	助詞-終助詞	\N	ン	ン	\N	\N	n
+# 504
+0	3	1	1	KNOWN	動詞-非自立	く	ッ	ッ	五段・カ行促音便	連用タ接続	
+# 505
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	
+# 506
+0	6	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	
+# 507
+0	3	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+3	6	1	1	KNOWN	記号-一般	\N	ゝ	ゝ	\N	\N	ゝ
+# 508
+0	3	1	1	KNOWN	動詞-自立	ひる	ヒ	ヒ	一段	連用形	hi
+3	6	1	1	KNOWN	名詞-接尾-一般	\N	ラ	ラ	\N	\N	ra
+6	9	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+9	12	1	1	KNOWN	助詞-終助詞	\N	ナ	ナ	\N	\N	na
+12	15	1	1	KNOWN	助詞-格助詞-引用	\N	ト	ト	\N	\N	to
+15	27	1	1	KNOWN	名詞-一般	\N	カタカナ	カタカナ	\N	\N	katakana
+27	30	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+30	36	1	1	KNOWN	名詞-一般	\N	カンジ	カンジ	\N	\N	kanji
+36	39	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+39	42	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	abc
+42	45	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+45	48	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	123
+# 509
+0	24	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	aaaaaaaa
+# 510
+0	12	1	1	KNOWN	名詞-一般	\N	カタカナ	カタカナ	\N	\N	katakana
+12	24	1	1	KNOWN	名詞-一般	\N	カタカナ	カタカナ	\N	\N	katakana
+# 511
+0	12	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ジャパン	ジャパン	\N	\N	japan
+# 512
+0	12	1	1	KNOWN	名詞-固有名詞-地域-国	\N	ニッポン	ニッポン	\N	\N	nippon
+# 513
+0	12	1	1	KNOWN	名詞-固有名詞-一般	\N	ニッポン	ニッポン	\N	\N	nippon
+# 514
+0	9	1	1	KNOWN	名詞-一般	\N	ニホンゴ	ニホンゴ	\N	\N	nihongo
+9	12	1	1	KNOWN	記号-一般	\N	ノ	ノ	\N	\N	no
+12	18	1	1	KNOWN	名詞-一般	\N	ブンショウ	ブンショー	\N	\N	bunshō
+# 515
+0	2048	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀
+2048	2400	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀
+# 516
+0	1	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	a
+1	2049	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀
+2049	2401	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀
+# 517
+0	2051	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	﷐😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀\u{d83d}
+2051	2403	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	\u{de00}😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀
+# 518
+0	2	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ab
+2	2050	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀😀
+2050	2082	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	😀😀😀😀😀😀😀😀
+# 519
+3	11	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Kuromoji
+14	17	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+17	21	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	Java
+21	24	1	1	KNOWN	名詞-接尾-一般	\N	セイ	セイ	\N	\N	sei
+24	27	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+27	36	1	1	KNOWN	名詞-一般	\N	ケイタイソ	ケイタイソ	\N	\N	keitaiso
+36	42	1	1	KNOWN	名詞-サ変接続	\N	カイセキ	カイセキ	\N	\N	kaiseki
+42	45	1	1	KNOWN	名詞-接尾-一般	\N	キ	キ	\N	\N	ki
+45	51	1	1	KNOWN	助動詞	\N	デス	デス	特殊・デス	基本形	desu
+54	60	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Apache
+61	67	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Lucene
+68	70	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	10
+71	72	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	4
+73	74	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	0
+74	77	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+77	80	1	1	KNOWN	接頭詞-名詞接続	\N	ドウ	ドー	\N	\N	dō
+80	83	1	1	KNOWN	名詞-一般	\N	コリ	コリ	\N	\N	kori
+83	86	1	1	KNOWN	動詞-自立	する	サ	サ	サ変・スル	未然レル接続	sa
+86	89	1	1	KNOWN	動詞-接尾	れる	レ	レ	一段	連用形	re
+89	92	1	1	KNOWN	助詞-接続助詞	\N	テ	テ	\N	\N	te
+92	98	1	1	KNOWN	動詞-非自立	おる	オリ	オリ	五段・ラ行	連用形	ori
+101	114	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Elasticsearch
+114	117	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+117	125	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	analysis
+126	134	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	kuromoji
+134	143	1	1	KNOWN	名詞-一般	\N	プラグ	プラグ	\N	\N	puragu
+143	149	1	1	KNOWN	名詞-一般	\N	イン	イン	\N	\N	in
+149	155	1	1	KNOWN	助詞-格助詞-一般	\N	カラ	カラ	\N	\N	kara
+155	161	1	1	KNOWN	名詞-サ変接続	\N	リヨウ	リヨー	\N	\N	riyō
+161	167	1	1	KNOWN	動詞-自立	できる	デキ	デキ	一段	連用形	deki
+167	173	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+# 520
+0	4	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	2024
+4	7	1	1	KNOWN	名詞-接尾-助数詞	\N	ネン	ネン	\N	\N	nen
+7	10	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+10	16	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+16	19	1	1	KNOWN	名詞-接尾-地域	\N	ト	ト	\N	\N	to
+16	25	0	2	KNOWN	名詞-一般	\N	トチジ	トチジ	\N	\N	tochiji
+19	25	1	1	KNOWN	名詞-一般	\N	チジ	チジ	\N	\N	chiji
+25	31	1	1	KNOWN	名詞-サ変接続	\N	センキョ	センキョ	\N	\N	senkyo
+31	34	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+34	35	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	7
+35	38	1	1	KNOWN	名詞-一般	\N	ツキ	ツキ	\N	\N	tsuki
+38	39	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	7
+39	42	1	1	KNOWN	名詞-接尾-助数詞	\N	ニチ	ニチ	\N	\N	nichi
+42	45	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+45	54	1	1	KNOWN	名詞-サ変接続	\N	トウカイヒョウ	トーカイヒョー	\N	\N	tōkaihyō
+54	57	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+57	63	1	1	KNOWN	動詞-自立	行う	オコナワ	オコナワ	五段・ワ行促音便	未然形	okonawa
+63	66	1	1	KNOWN	動詞-接尾	れる	レ	レ	一段	連用形	re
+69	75	1	1	KNOWN	名詞-一般	\N	ゲンショク	ゲンショク	\N	\N	genshoku
+75	78	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+78	84	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	コイケ	コイケ	\N	\N	koike
+84	93	1	1	KNOWN	名詞-固有名詞-人名-名	\N	ユリコ	ユリコ	\N	\N	yuriko
+93	96	1	1	KNOWN	名詞-接尾-人名	\N	シ	シ	\N	\N	shi
+96	99	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+99	100	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	3
+100	103	1	1	KNOWN	名詞-接尾-一般	\N	セン	セン	\N	\N	sen
+103	106	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+106	115	1	1	KNOWN	動詞-自立	果たす	ハタシ	ハタシ	五段・サ行	連用形	hatashi
+115	118	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+121	127	1	1	KNOWN	名詞-サ変接続	\N	トウヒョウ	トーヒョー	\N	\N	tōhyō
+127	130	1	1	KNOWN	名詞-接尾-一般	\N	リツ	リツ	\N	\N	ritsu
+130	133	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+133	135	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	60
+136	138	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	62
+139	145	1	1	KNOWN	助動詞	だ	ダッ	ダッ	特殊・ダ	連用タ接続	da
+145	148	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 521
+0	6	1	1	KNOWN	名詞-一般	\N	カカク	カカク	\N	\N	kakaku
+6	9	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+9	18	1	1	KNOWN	名詞-一般	\N	ゼイコミ	ゼイコミ	\N	\N	zeikomi
+18	21	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+24	27	1	1	KNOWN	名詞-数	\N	キュウ	キュー	\N	\N	kyū
+27	30	1	1	KNOWN	名詞-数	\N	ハチ	ハチ	\N	\N	hachi
+30	33	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+33	36	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+39	45	1	1	KNOWN	名詞-一般	\N	ホンタイ	ホンタイ	\N	\N	hontai
+45	51	1	1	KNOWN	名詞-一般	\N	カカク	カカク	\N	\N	kakaku
+51	54	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+57	60	1	1	KNOWN	名詞-数	\N	ハチ	ハチ	\N	\N	hachi
+60	63	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+63	66	1	1	KNOWN	名詞-数	\N	ゼロ	ゼロ	\N	\N	zero
+66	69	1	1	KNOWN	名詞-接尾-助数詞	\N	エン	エン	\N	\N	en
+72	78	1	1	KNOWN	助動詞	\N	デス	デス	特殊・デス	基本形	desu
+81	84	1	1	KNOWN	接頭詞-名詞接続	\N	ゴ	ゴ	\N	\N	go
+84	90	1	1	KNOWN	名詞-サ変接続	\N	チュウモン	チューモン	\N	\N	chūmon
+90	93	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+93	102	1	1	KNOWN	名詞-代名詞-一般	\N	コチラ	コチラ	\N	\N	kochira
+106	111	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	https
+114	121	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	example
+122	124	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	co
+125	127	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	jp
+128	132	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	shop
+133	135	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	id
+136	139	1	1	UNKNOWN	名詞-数	\N	\N	\N	\N	\N	123
+140	144	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	lang
+145	147	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	ja
+# 522
+0	15	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	ginkō
+15	21	1	1	KNOWN	名詞-サ変接続	\N	フリコミ	フリコミ	\N	\N	furikomi
+21	24	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+24	30	1	1	KNOWN	名詞-副詞可能	\N	バアイ	バアイ	\N	\N	baai
+33	42	1	1	KNOWN	名詞-一般	\N	テスウリョウ	テスーリョー	\N	\N	tesuuryō
+42	45	1	1	KNOWN	助詞-係助詞	\N	ハ	ワ	\N	\N	ha
+45	54	1	1	KNOWN	名詞-一般	\N	オキャクサマ	オキャクサマ	\N	\N	okyakusama
+54	60	1	1	KNOWN	名詞-サ変接続	\N	フタン	フタン	\N	\N	futan
+60	63	1	1	KNOWN	助詞-格助詞-一般	\N	ト	ト	\N	\N	to
+63	69	1	1	KNOWN	動詞-自立	なる	ナリ	ナリ	五段・ラ行	連用形	nari
+69	75	1	1	KNOWN	助動詞	\N	マス	マス	特殊・マス	基本形	masu
+78	96	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	furikomisaki
+99	126	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	mizuhoginkō
+129	153	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	tōkyōshiten
+# 523
+3	6	1	1	KNOWN	名詞-固有名詞-人名-名	\N	エミ	エミ	\N	\N	emi
+9	12	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	www
+15	18	1	1	KNOWN	名詞-一般	\N	クサ	クサ	\N	\N	kusa
+18	27	1	1	KNOWN	動詞-自立	\N	ハエル	ハエル	一段	基本形	haeru
+30	39	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	www
+42	51	1	1	UNKNOWN	名詞-一般	\N	\N	\N	\N	\N	pien
+51	55	1	1	UNKNOWN	記号-一般	\N	\N	\N	\N	\N	🥺
+58	64	1	1	KNOWN	形容詞-自立	やばい	ヤバ	ヤバ	形容詞・アウオ段	ガル接続	yaba
+64	67	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+67	70	1	1	KNOWN	助詞-格助詞-一般	\N	ニ	ニ	\N	\N	ni
+70	76	1	1	KNOWN	動詞-自立	えむ	エン	エン	五段・マ行	連用タ接続	en
+# 524
+0	3	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	The
+4	9	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	quick
+10	15	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	brown
+16	19	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	fox
+20	25	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	jumps
+26	30	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	over
+31	34	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	the
+35	39	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	lazy
+40	43	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	dog
+45	54	1	1	KNOWN	形容詞-自立	\N	スバヤイ	スバヤイ	形容詞・アウオ段	基本形	subayai
+54	60	1	1	KNOWN	名詞-一般	\N	チャイロ	チャイロ	\N	\N	chairo
+60	63	1	1	KNOWN	助詞-連体化	\N	ノ	ノ	\N	\N	no
+63	66	1	1	KNOWN	名詞-一般	\N	キツネ	キツネ	\N	\N	kitsune
+66	69	1	1	KNOWN	助詞-格助詞-一般	\N	ガ	ガ	\N	\N	ga
+69	78	1	1	KNOWN	名詞-形容動詞語幹	\N	ノロマ	ノロマ	\N	\N	noroma
+78	81	1	1	KNOWN	助動詞	だ	ナ	ナ	特殊・ダ	体言接続	na
+81	84	1	1	KNOWN	名詞-一般	\N	イヌ	イヌ	\N	\N	inu
+84	87	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+87	102	1	1	KNOWN	動詞-自立	\N	トビコエル	トビコエル	一段	基本形	tobikoeru
+# 525
+0	21	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Windows
+24	27	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+27	30	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+33	42	1	1	UNKNOWN	名詞-固有名詞-組織	\N	\N	\N	\N	\N	Pro
+45	48	1	1	KNOWN	名詞-数	\N	ロク	ロク	\N	\N	roku
+48	51	1	1	KNOWN	名詞-数	\N	ヨン	ヨン	\N	\N	yon
+51	60	1	1	KNOWN	名詞-接尾-助数詞	\N	ビット	ビット	\N	\N	bitto
+60	63	1	1	KNOWN	名詞-接尾-一般	\N	バン	バン	\N	\N	ban
+63	66	1	1	KNOWN	助詞-格助詞-一般	\N	ヲ	ヲ	\N	\N	o
+66	84	1	1	KNOWN	名詞-一般	\N	インストール	インストール	\N	\N	insutoru
+84	87	1	1	KNOWN	動詞-自立	する	シ	シ	サ変・スル	連用形	shi
+87	93	1	1	KNOWN	助動詞	ます	マシ	マシ	特殊・マス	連用形	mashi
+93	96	1	1	KNOWN	助動詞	\N	タ	タ	特殊・タ	基本形	ta
+# 526
+0	9	1	1	KNOWN	名詞-固有名詞-人名-姓	\N	ササキ	ササキ	\N	\N	sasaki
+9	15	1	1	KNOWN	名詞-接尾-人名	\N	サン	サン	\N	\N	san
+15	18	1	1	KNOWN	助詞-並立助詞	\N	ト	ト	\N	\N	to
+18	33	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	ヨヨギコウエン	ヨヨギコーエン	\N	\N	yoyogikōen
+33	36	1	1	KNOWN	助詞-格助詞-一般	\N	デ	デ	\N	\N	de
+36	42	1	1	KNOWN	副詞-一般	\N	トキドキ	トキドキ	\N	\N	tokidoki
+42	48	1	1	KNOWN	動詞-自立	\N	アウ	アウ	五段・ワ行促音便	基本形	au
+# 527
+0	6	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	トウキョウ	トーキョー	\N	\N	tōkyō
+6	9	1	1	KNOWN	名詞-接尾-地域	\N	ト	ト	\N	\N	to
+9	18	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	チヨダ	チヨダ	\N	\N	chiyoda
+18	21	1	1	KNOWN	名詞-接尾-地域	\N	ク	ク	\N	\N	ku
+21	30	1	1	KNOWN	名詞-固有名詞-地域-一般	\N	チヨダ	チヨダ	\N	\N	chiyoda
+30	33	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+36	39	1	1	KNOWN	名詞-数	\N	イチ	イチ	\N	\N	ichi
+# 528
+0	6	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+6	12	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+12	18	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+18	24	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+24	30	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+30	36	1	1	KNOWN	感動詞	\N	アア	アー	\N	\N	aa
+39	45	1	1	KNOWN	形容詞-自立	\N	イイ	イイ	形容詞・イイ	基本形	ii
+45	51	1	1	KNOWN	形容詞-自立	\N	イイ	イイ	形容詞・イイ	基本形	ii
+51	57	1	1	KNOWN	形容詞-自立	\N	イイ	イイ	形容詞・イイ	基本形	ii
+57	63	1	1	KNOWN	形容詞-自立	\N	イイ	イイ	形容詞・イイ	基本形	ii
+63	69	1	1	KNOWN	形容詞-自立	\N	イイ	イイ	形容詞・イイ	基本形	ii
+69	75	1	1	KNOWN	形容詞-自立	\N	イイ	イイ	形容詞・イイ	基本形	ii
+78	84	1	1	KNOWN	形容詞-自立	うい	ウウ	ウー	形容詞・アウオ段	連用ゴザイ接続	uu
+84	90	1	1	KNOWN	形容詞-自立	うい	ウウ	ウー	形容詞・アウオ段	連用ゴザイ接続	uu
+90	96	1	1	KNOWN	形容詞-自立	うい	ウウ	ウー	形容詞・アウオ段	連用ゴザイ接続	uu
+96	102	1	1	KNOWN	形容詞-自立	うい	ウウ	ウー	形容詞・アウオ段	連用ゴザイ接続	uu
+102	108	1	1	KNOWN	形容詞-自立	うい	ウウ	ウー	形容詞・アウオ段	連用ゴザイ接続	uu
+108	111	1	1	KNOWN	助動詞	\N	ウ	ウ	不変化型	基本形	u
+111	114	1	1	KNOWN	助動詞	\N	ウ	ウ	不変化型	基本形	u

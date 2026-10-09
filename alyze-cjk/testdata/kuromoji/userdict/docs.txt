@@ -1,0 +1,2 @@
+# The user dictionary from the Elasticsearch kuromoji_tokenizer documentation.
+東京スカイツリー,東京 スカイツリー,トウキョウ スカイツリー,カスタム名詞

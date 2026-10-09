@@ -1,0 +1,6 @@
+# Elasticsearch's testKuromojiAnalyzerDuplicateUserDictRule rules, in order: the duplicate is on
+# line 4 (comments count, blank lines don't).
+c++,c++,w,w
+#comment
+制限スピード,制限スピード,セイゲンスピード,テスト名詞
+制限スピード,制限スピード,セイゲンスピード,テスト名詞

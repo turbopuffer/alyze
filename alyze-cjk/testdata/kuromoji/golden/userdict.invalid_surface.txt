@@ -1,0 +1,1 @@
+error	RuntimeException: Illegal user dictionary entry 日経新聞 - the concatenated segmentation (日本経済新聞) does not match the surface form (日経新聞)

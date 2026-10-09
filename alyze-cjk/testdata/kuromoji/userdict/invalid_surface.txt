@@ -1,0 +1,2 @@
+# The joined segmentation must equal the surface form (TestUserDictionary.testReadInvalid1).
+日経新聞,日本 経済 新聞,ニホン ケイザイ シンブン,カスタム名詞
