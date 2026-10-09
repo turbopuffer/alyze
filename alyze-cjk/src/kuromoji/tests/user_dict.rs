@@ -226,10 +226,8 @@ fn duplicates_collapse() {
     .unwrap();
     let entries = dict.entries();
     assert_eq!(entries.len(), 2);
-    assert_eq!(
-        entries[0].segments,
-        vec!["東京".to_owned(), "都".to_owned()]
-    );
+    let tokyo = entries.iter().find(|e| e.surface == "東京都").unwrap();
+    assert_eq!(tokyo.segments, vec!["東京".to_owned(), "都".to_owned()]);
 }
 
 /// Lucene's `TestUserDictionary.testLookup`, `testReadings`, `testPartOfSpeech`, `testSharp`, on

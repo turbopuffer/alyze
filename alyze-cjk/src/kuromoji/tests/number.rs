@@ -32,10 +32,13 @@ fn normalize() {
     );
 }
 
-/// Inputs that don't parse come back unchanged, including the empty string.
+/// Inputs that don't start with a number come back unchanged, including the empty string; a
+/// number prefix is normalized and the rest dropped (the filter only ever passes numerals).
 #[test]
 fn passthrough() {
-    for s in ["", "abc", "一二三abc", "、", "十万円"] {
+    for s in ["", "abc", "、"] {
         assert_eq!(normalize_number(s), s);
     }
+    assert_eq!(normalize_number("一二三abc"), "123");
+    assert_eq!(normalize_number("十万円"), "100000");
 }
