@@ -9,7 +9,9 @@ use alyze::analyze::{
     StopwordRemoval, TokenizerOptions,
 };
 use alyze::uax29;
-use criterion::{Criterion, Throughput, criterion_group, criterion_main};
+use criterion::{
+    BenchmarkId, Criterion, SamplingMode, Throughput, criterion_group, criterion_main,
+};
 use parquet::{
     file::reader::{FileReader, SerializedFileReader},
     record::{Row, RowAccessor, reader::RowIter},
@@ -27,38 +29,50 @@ pub fn wikipedia_benchmark(c: &mut Criterion) {
 
     group.throughput(Throughput::Bytes(n_bytes));
     group.sample_size(16);
+    group.sampling_mode(SamplingMode::Flat);
+    group.measurement_time(std::time::Duration::from_secs(10));
 
-    group.bench_function("word break", |b| {
-        b.iter(|| {
-            let mut count = 0;
-            for text in &texts {
-                uax29::word::tokenize(text, uax29::word::Options::default(), |_, _| {
-                    count += 1;
-                    true
-                });
-            }
-            std::hint::black_box(&count);
-        })
-    });
-
-    // When `props` is unused, LLVM will optimize it away (which is amazing!), but we also want
-    // to benchmark the cost of computing and using this word-like property.
-    group.bench_function("word break + word_like", |b| {
-        b.iter(|| {
-            let mut count = 0;
-            let mut word_like = 0;
-            for text in &texts {
-                uax29::word::tokenize(text, uax29::word::Options::default(), |_, props| {
-                    count += 1;
-                    if props.is_word_like() {
-                        word_like += 1;
+    macro_rules! word_break_benches {
+        ($name:expr, $tokenize:path) => {
+            group.bench_function(BenchmarkId::new("word break", $name), |b| {
+                b.iter(|| {
+                    let mut count = 0;
+                    for text in &texts {
+                        $tokenize(text, uax29::word::Options::default(), |bp, _| {
+                            // `count += 1` over that loop is reducible to
+                            // `count += mask.count_ones()` — LLVM does exactly that, which skips
+                            // the per-token work.
+                            count += bp as u64;
+                            true
+                        });
                     }
-                    true
-                });
-            }
-            std::hint::black_box((&count, &word_like));
-        })
-    });
+                    std::hint::black_box(&count);
+                })
+            });
+
+            // When `props` is unused, LLVM will optimize it away (which is amazing!), but we also
+            // want to benchmark the cost of computing and using this word-like property.
+            group.bench_function(BenchmarkId::new("word break + word_like", $name), |b| {
+                b.iter(|| {
+                    let mut count = 0;
+                    let mut word_like = 0;
+                    for text in &texts {
+                        $tokenize(text, uax29::word::Options::default(), |bp, props| {
+                            count += bp as u64;
+                            if props.is_word_like() {
+                                word_like += bp as u64;
+                            }
+                            true
+                        });
+                    }
+                    std::hint::black_box((&count, &word_like));
+                })
+            });
+        };
+    }
+
+    word_break_benches!("dfa", uax29::word::tokenize);
+    word_break_benches!("windowed", uax29::word::tokenize_windowed);
 
     group.bench_function("sentence break", |b| {
         b.iter(|| {
@@ -84,6 +98,8 @@ pub fn analysis_benchmark(c: &mut Criterion) {
 
     group.throughput(Throughput::Bytes(n_bytes));
     group.sample_size(16);
+    group.sampling_mode(SamplingMode::Flat);
+    group.measurement_time(std::time::Duration::from_secs(10));
 
     let base = AnalysisOptions {
         tokenizer: TokenizerOptions::UAX29Word(uax29::word::Options::default()),
