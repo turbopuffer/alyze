@@ -1,0 +1,4 @@
+# Elasticsearch's test rules: plugins/analysis-kuromoji/src/test/resources/.../user_dict.txt and
+# the inline user_dictionary_rules of KuromojiAnalysisTests.testKuromojiAnalyzerUserDict.
+c++,c++,w,w
+制限スピード,制限スピード,セイゲンスピード,テスト名詞

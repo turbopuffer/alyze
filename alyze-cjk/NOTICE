@@ -3,8 +3,9 @@ Copyright 2026 turbopuffer
 
 This product includes software derived from Apache Lucene (https://lucene.apache.org/),
 Copyright The Apache Software Foundation, used under the Apache License, Version 2.0.
-Specifically, `src/smartcn/` is a port of Lucene's `lucene-analysis-smartcn` module and
-`src/nori/` of its `lucene-analysis-nori` module; `data/` is converted from their dictionaries.
+Specifically, `src/smartcn/` is a port of Lucene's `lucene-analysis-smartcn` module, `src/nori/`
+of its `lucene-analysis-nori` module and `src/kuromoji/` of its `lucene-analysis-kuromoji`
+module; `data/` is converted from their dictionaries.
 From Lucene's NOTICE:
 
     The SmartChineseAnalyzer source code (smartcn) was
@@ -15,3 +16,14 @@ Lucene under the Apache License 2.0.
 
 The nori dictionaries are built from mecab-ko-dic 2.1.1 (https://bitbucket.org/eunjeon/mecab-ko-dic),
 Copyright Yongwoon Lee and Yungho Yu, used under the Apache License, Version 2.0.
+
+The kuromoji dictionaries are built from mecab-ipadic 2.7.0-20070801, Copyright 2000, 2001, 2002,
+2003 Nara Institute of Science and Technology (NAIST), used under its BSD-style license (reproduced in
+`LICENSE-mecab-ipadic`; NAIST's disclaimer and the ICOT Free Software conditions it carries
+apply to the dictionary data). From Lucene's NOTICE:
+
+    Kuromoji Japanese Morphological Analyzer - Apache Lucene Integration
+
+    This software includes a binary and/or source version of data from
+
+      mecab-ipadic-2.7.0-20070801

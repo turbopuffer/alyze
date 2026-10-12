@@ -14,10 +14,11 @@ exclude = ["testdata/", "benches/"]
 publish = false
 
 # Pulled into `alyze` as an optional dependency behind its `cjk` feature. Kept as a separate crate
-# so the dictionaries (`data/`: smartcn ~4.7 MB, nori ~26 MB uncompressed) don't inflate `alyze`
+# so the dictionaries (`data/`: smartcn ~4.7 MB, nori ~26 MB, kuromoji ~13 MB uncompressed) don't inflate `alyze`
 # for users who don't need them, and because unlike the MIT-licensed `alyze` it derives from Apache
 # Lucene (see NOTICE).
-# TODO(size): compress the nori dictionaries before publishing; crates.io caps a crate at 10 MB.
+# TODO(size): compress the nori and kuromoji dictionaries before publishing; crates.io caps a
+# crate at 10 MB.
 
 [dependencies]
 fst = "0.4.7"
@@ -34,4 +35,8 @@ harness = false
 
 [[bench]]
 name = "wikipedia_ko"
+harness = false
+
+[[bench]]
+name = "wikipedia_ja"
 harness = false

@@ -14,7 +14,9 @@
 use std::ops::Range;
 use std::sync::OnceLock;
 
-use fst::raw::{Fst, Node, Output};
+use fst::raw::Fst;
+
+pub(crate) use crate::morph::term_index::TermIndex;
 
 use super::Morpheme;
 use super::char_def::CharClass;
@@ -60,66 +62,6 @@ const RECORD_LEN: usize = 8;
 /// Flags in a record's right-id word: the word has a reading / has morphemes in the extras.
 const HAS_READING: u16 = 1 << 14;
 const HAS_MORPHEMES: u16 = 1 << 15;
-
-/// An `fst::Map` keyed by UTF-16BE surface forms; shared by the system and user dictionaries.
-pub(crate) struct TermIndex<D: AsRef<[u8]>> {
-    fst: Fst<D>,
-}
-
-impl<D: AsRef<[u8]>> TermIndex<D> {
-    pub fn new(fst: Fst<D>) -> Self {
-        TermIndex { fst }
-    }
-
-    /// Calls `f(length, ordinal)` for every term that is a prefix of `text`, shortest first.
-    /// Returns whether any term matched. Walks two FST transitions per code unit.
-    pub fn for_each_prefix(&self, text: &[u16], mut f: impl FnMut(usize, u64)) -> bool {
-        let fst = &self.fst;
-        let mut node: Node<'_> = fst.root();
-        let mut out = Output::zero();
-        let mut any = false;
-        for (i, unit) in text.iter().enumerate() {
-            for byte in unit.to_be_bytes() {
-                let Some(idx) = node.find_input(byte) else {
-                    return any;
-                };
-                let t = node.transition(idx);
-                out = out.cat(t.out);
-                node = fst.node(t.addr);
-            }
-            if node.is_final() {
-                any = true;
-                f(i + 1, out.cat(node.final_output()).value());
-            }
-        }
-        any
-    }
-
-    /// The ordinal of `text` if it is a term.
-    #[cfg(test)]
-    pub fn lookup(&self, text: &[u16]) -> Option<u64> {
-        let mut found = None;
-        self.for_each_prefix(text, |len, ord| {
-            if len == text.len() {
-                found = Some(ord);
-            }
-        });
-        found
-    }
-
-    /// Every (term, ordinal) in order.
-    #[cfg(test)]
-    pub fn for_each_term(&self, mut f: impl FnMut(&[u16], u64)) {
-        use fst::Streamer;
-        let mut stream = self.fst.stream();
-        let mut units = Vec::new();
-        while let Some((key, out)) = stream.next() {
-            units.clear();
-            units.extend(key.chunks(2).map(|c| u16::from_be_bytes([c[0], c[1]])));
-            f(&units, out.value());
-        }
-    }
-}
 
 pub(crate) struct TokenInfoDict {
     terms: TermIndex<&'static [u8]>,

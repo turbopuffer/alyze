@@ -1,0 +1,7 @@
+# Java separator semantics: a line of only vertical tabs is blank, lines may end in a lone CR,
+# a form feed is whitespace for trim but not a separator for the segmentation split, and tabs are
+# trimmed at the ends only.
+
+東京,東京,トウキョウ,カスタム名詞大阪,大阪,オオサカ,カスタム名詞
+	京都,京都,キョウト,カスタム名詞		
+神戸市,神戸市,コウベシ,カスタム名詞
