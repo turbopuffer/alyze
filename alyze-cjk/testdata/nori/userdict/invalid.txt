@@ -1,0 +1,2 @@
+# Segmentation longer than the surface form is an error.
+세종시 세종 시청

@@ -1,0 +1,34 @@
+# Combined user dictionary for the golden runs: Lucene's and Elasticsearch's test dictionaries
+# plus entries that exercise UserDictionary.open's corners. No duplicate surface forms (Lucene
+# would silently drop them; the port rejects them unless lenient, see userdict/dups.txt).
+c++
+C샤프
+C쁠쁠
+세종
+세종시 세종 시   # inline comment after an entry
+대한민국날씨
+대한민국
+날씨
+21세기대한민국
+세기
+# Compound whose segmentation covers only part of the surface form (allowed: shorter is fine).
+서울특별시 서울 시
+# Entry ending in a Hangul syllable without a coda (rightId F) and with a coda (rightId T).
+트위터
+인스타그램 인스타 그램
+# Entry ending in a non-Hangul character (rightId for non-Hangul).
+G마켓
+A4용지
+2PM
+아이폰15
+# Mixed script and a supplementary character.
+😀데이
+알파벳abc
+# Single syllable, and a word that is also a system-dictionary word with a different analysis.
+앱
+가락지나물 가락지 나물
+# A user word that overlaps system words (longest user match wins over system matches).
+보험계약대출
+# Jamo and Hanja entries.
+ㅋㅋㅋ
+鄕歌文學

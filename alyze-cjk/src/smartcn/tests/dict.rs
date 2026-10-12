@@ -3,17 +3,7 @@
 
 use super::{read_testdata, unescape};
 use crate::smartcn::dict::{BigramDict, CoreDict};
-
-const FNV_OFFSET: u64 = 0xcbf29ce484222325;
-const FNV_PRIME: u64 = 0x100000001b3;
-
-fn fnv1a(mut hash: u64, bytes: &[u8]) -> u64 {
-    for &b in bytes {
-        hash ^= b as u64;
-        hash = hash.wrapping_mul(FNV_PRIME);
-    }
-    hash
-}
+use crate::testutil::{FNV_OFFSET, fnv1a};
 
 struct Golden {
     core_entries: usize,

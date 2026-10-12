@@ -1,0 +1,1 @@
+error	Illegal user dictionary entry 세종시 세종 시청 - the segmentation is bigger than the surface form (세종시)

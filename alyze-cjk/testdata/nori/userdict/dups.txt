@@ -1,0 +1,7 @@
+# Duplicate surface forms: Lucene keeps the first, Elasticsearch (8.13+) rejects them unless lenient.
+c++
+C쁠쁠
+세종
+세종
+세종시 세종 시
+세종시 세종 시

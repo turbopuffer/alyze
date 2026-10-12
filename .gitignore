@@ -1,3 +1,4 @@
 /target
 .cache/
 /alyze-cjk/testdata/smartcn/build/
+/alyze-cjk/testdata/nori/build/

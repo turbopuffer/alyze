@@ -1,0 +1,9 @@
+# Java separator semantics: NBSP is not whitespace, a form feed is, lines may end in a lone CR,
+# a line of only vertical tabs is blank, trailing tabs are dropped.
+ 
+서울 특별시
+
+xya
+b
+c++		
+세종시 세종시
