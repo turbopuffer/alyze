@@ -131,5 +131,8 @@ test('Analyzer case sensitivity', () => {
 test('Analyzer validation throws', () => {
   assert.throws(() => new Analyzer({ stemming: true, caseSensitive: true }))
   assert.throws(() => new Analyzer({ stemming: true, language: 'klingon' }))
+  assert.throws(() => new Analyzer({ removeStopwords: true, caseSensitive: true }))
+  assert.throws(() => new Analyzer({ removeStopwords: true, language: 'tamil' })) // tamil stems, but has no stopword list
   assert.throws(() => new Analyzer({ maxTokenLength: 0 }))
+  assert.throws(() => new Analyzer({ maxTokenLength: 256 }))
 })
