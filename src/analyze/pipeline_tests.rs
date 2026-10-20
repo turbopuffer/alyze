@@ -37,6 +37,7 @@ fn collect(
 fn analyzers() -> Vec<(Analyzer<'static>, &'static str)> {
     vec![
         (Analyzer::new(super::tests::opts()), "Hello world"),
+        (Analyzer::new(whitespace_options()), "Hello, world!"),
         #[cfg(feature = "smartcn")]
         (
             Analyzer::smartcn(Default::default()),
@@ -284,4 +285,108 @@ fn cjk_input_boundaries_follow_emitted_tokens() {
         .map(|token| (token.text.as_str(), token.position, token.input_index))
         .collect();
     assert_eq!(actual, [("run", 0, 0), ("jump", 1, 3)]);
+}
+
+fn whitespace_options() -> AnalysisOptions {
+    AnalysisOptions {
+        tokenizer: TokenizerOptions::Whitespace,
+        ..super::tests::opts()
+    }
+}
+
+#[test]
+fn whitespace_character_set_is_stable() {
+    let whitespace = CodePointSetData::new::<WhiteSpace>();
+    let actual: Vec<_> = ('\0'..=char::MAX)
+        .filter(|&c| whitespace.contains(c))
+        .collect();
+    assert_eq!(
+        actual,
+        [
+            '\u{0009}', '\u{000a}', '\u{000b}', '\u{000c}', '\u{000d}', '\u{0020}', '\u{0085}',
+            '\u{00a0}', '\u{1680}', '\u{2000}', '\u{2001}', '\u{2002}', '\u{2003}', '\u{2004}',
+            '\u{2005}', '\u{2006}', '\u{2007}', '\u{2008}', '\u{2009}', '\u{200a}', '\u{2028}',
+            '\u{2029}', '\u{202f}', '\u{205f}', '\u{3000}',
+        ]
+    );
+}
+
+#[test]
+fn whitespace_preserves_punctuation_and_source_ranges() {
+    let inputs = [
+        "",
+        " \t\n",
+        "Hello,  WORLD!\tfoo-bar",
+        "\u{a0}CAFÉ\u{2003}!!!\r\n",
+    ];
+    let tokens = collect(
+        Analyzer::new(whitespace_options()),
+        &inputs,
+        &mut ReusableBuffer::new(),
+    );
+    let expected = [
+        ("hello,", "Hello,", 2),
+        ("world!", "WORLD!", 2),
+        ("foo-bar", "foo-bar", 2),
+        ("café", "CAFÉ", 3),
+        ("!!!", "!!!", 3),
+    ];
+    assert_eq!(tokens.len(), expected.len());
+    for (position, (token, (text, raw, input_index))) in tokens.iter().zip(expected).enumerate() {
+        assert_eq!(token.text, text);
+        assert_eq!(token.position, position);
+        assert_eq!(token.position_length, 1);
+        assert_eq!(token.input_index, input_index);
+        assert_eq!(&inputs[input_index][token.byte_range.clone()], raw);
+    }
+}
+
+#[test]
+fn whitespace_normalization_and_length_limit() {
+    for (case_sensitive, ascii_folding, expected) in [
+        (true, false, vec!["CAFÉ", "OK!"]),
+        (false, false, vec!["café", "ok!"]),
+        (true, true, vec!["CAFE", "OK!"]),
+        (false, true, vec!["cafe", "ok!"]),
+    ] {
+        let options = AnalysisOptions {
+            case_sensitive,
+            ascii_folding,
+            maximum_token_length: Some(4),
+            ..whitespace_options()
+        };
+        let tokens = collect(
+            Analyzer::new(options),
+            &["CAFÉ longer OK!"],
+            &mut ReusableBuffer::new(),
+        );
+        assert_eq!(
+            tokens.iter().map(|t| t.text.as_str()).collect::<Vec<_>>(),
+            expected
+        );
+        assert_eq!(
+            tokens.iter().map(|t| t.position).collect::<Vec<_>>(),
+            [0, 2]
+        );
+    }
+}
+
+#[test]
+fn whitespace_rejects_language_filters() {
+    let options = whitespace_options();
+    assert!(options.valid());
+    assert!(
+        !AnalysisOptions {
+            stemming: Some(StemmingLanguage::English),
+            ..options
+        }
+        .valid()
+    );
+    assert!(
+        !AnalysisOptions {
+            stopword_removal: Some(StopwordRemoval::ForLanguage(LanguageWithStopwords::English)),
+            ..options
+        }
+        .valid()
+    );
 }
