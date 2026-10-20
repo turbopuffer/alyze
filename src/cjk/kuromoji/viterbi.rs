@@ -153,6 +153,7 @@ impl<'a> Viterbi<'a> {
             pending,
             lattice,
         } = scratch;
+        // TODO: Fill UTF-16 and byte-offset buffers incrementally to bound memory on long inputs.
         units.clear();
         units.extend(input.encode_utf16());
         byte_at.clear();
@@ -233,6 +234,8 @@ impl<'a> Viterbi<'a> {
     }
 
     /// Runs the whole input through the search, appending the tokens to `out`.
+    // TODO: Expose committed batches so analyzers can filter and emit before advancing again,
+    // preserving position gaps across batches and allowing cancellation during tokenization.
     pub fn run(&mut self, out: &mut Tokens) {
         while !self.end {
             self.forward(out);

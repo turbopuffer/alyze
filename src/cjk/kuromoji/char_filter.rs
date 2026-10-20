@@ -293,6 +293,7 @@ pub(crate) fn normalize_width(ch: u16) -> u16 {
 /// first): folds fullwidth ASCII variants to ASCII and halfwidth katakana to katakana, combining
 /// a halfwidth voiced or semi-voiced sound mark into the preceding kana where a precomposed
 /// character exists (ﾊﾟ → パ), and otherwise mapping it to the combining mark (U+3099/U+309A).
+// TODO: Normalize width incrementally, retaining offset corrections only for the live input window.
 pub fn cjk_width(text: &str) -> Filtered {
     let input: Vec<u16> = text.encode_utf16().collect();
     let mut out: Vec<u16> = Vec::with_capacity(input.len());

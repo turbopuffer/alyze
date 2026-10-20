@@ -32,3 +32,11 @@ jobs:
       - run: cargo package -p alyze --all-features --locked
         env:
           ALYZE_CJK_DICTIONARIES: ${{ github.workspace }}/target/dictionaries
+
+  msrv:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - run: rustup toolchain install 1.88.0 --profile minimal
+      - run: cargo +1.88.0 check -p alyze --lib --locked
+      - run: cargo +1.88.0 check -p alyze --lib --all-features --locked
