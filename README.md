@@ -41,7 +41,7 @@ use `cjk` to enable all three. All are disabled by default.
 
 ```toml
 [dependencies]
-alyze = { version = "0.1.5", features = ["nori"] }
+alyze = { version = "0.2.0", features = ["nori"] }
 ```
 
 Enabled analyzers are available under `alyze::cjk`, for example `alyze::cjk::nori`.
