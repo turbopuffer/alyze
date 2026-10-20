@@ -1,5 +1,12 @@
 use std::ops::Range;
 
+#[cfg(feature = "kuromoji")]
+use crate::cjk::kuromoji;
+#[cfg(feature = "nori")]
+use crate::cjk::nori;
+#[cfg(feature = "smartcn")]
+use crate::cjk::smartcn;
+
 use crate::{
     analyze::stemming_cache::{CachedToken, StemmingCache, StemmingCacheEntry},
     uax29,
@@ -9,6 +16,9 @@ mod filters;
 pub mod stemming_cache;
 mod stopwords;
 mod u17_to_lower;
+
+#[cfg(test)]
+mod pipeline_tests;
 
 #[derive(Clone, Copy, Debug)]
 pub struct AnalysisOptions {
@@ -111,11 +121,15 @@ impl Into<rust_stemmers::Algorithm> for StemmingLanguage {
 /// A buffer that should be reused across multiple analyze() invocations
 /// to avoid unnecessary allocations. Contents are opaque and internal to
 /// the implementation.
-#[derive(Debug, Clone)]
+#[derive(Debug)]
 pub struct ReusableBuffer {
     a: String,
     b: String,
     stemming_cache: StemmingCache,
+    #[cfg(feature = "nori")]
+    nori: Option<Box<nori::Tokens>>,
+    #[cfg(feature = "kuromoji")]
+    kuromoji: Option<Box<kuromoji::Tokens>>,
 }
 
 impl ReusableBuffer {
@@ -124,6 +138,10 @@ impl ReusableBuffer {
             a: String::new(),
             b: String::new(),
             stemming_cache: StemmingCache::new_with_capacity(32_000),
+            #[cfg(feature = "nori")]
+            nori: None,
+            #[cfg(feature = "kuromoji")]
+            kuromoji: None,
         }
     }
 
@@ -134,25 +152,81 @@ impl ReusableBuffer {
     pub fn reset_keep_stemming_cache(&mut self) {
         self.a.clear();
         self.b.clear();
+        #[cfg(feature = "nori")]
+        if let Some(tokens) = &mut self.nori {
+            tokens.clear();
+        }
+        #[cfg(feature = "kuromoji")]
+        if let Some(tokens) = &mut self.kuromoji {
+            tokens.clear();
+        }
+    }
+}
+
+impl Clone for ReusableBuffer {
+    fn clone(&self) -> Self {
+        Self {
+            a: self.a.clone(),
+            b: self.b.clone(),
+            stemming_cache: self.stemming_cache.clone(),
+            #[cfg(feature = "nori")]
+            nori: None,
+            #[cfg(feature = "kuromoji")]
+            kuromoji: None,
+        }
     }
 }
 
 #[derive(Clone, Copy)]
-pub struct Analyzer {
-    options: AnalysisOptions,
+pub struct Analyzer<'a> {
+    pipeline: Pipeline<'a>,
 }
 
-impl Analyzer {
+#[derive(Clone, Copy)]
+enum Pipeline<'a> {
+    Standard(AnalysisOptions, std::marker::PhantomData<&'a ()>),
+    #[cfg(feature = "smartcn")]
+    SmartCn(smartcn::Options),
+    #[cfg(feature = "nori")]
+    Nori(nori::AnalyzerOptions<'a>),
+    #[cfg(feature = "kuromoji")]
+    Kuromoji(kuromoji::AnalyzerOptions<'a>),
+}
+
+impl<'a> Analyzer<'a> {
     pub fn new(options: AnalysisOptions) -> Self {
         assert!(options.valid(), "options are invalid");
-        Self { options }
+        Self {
+            pipeline: Pipeline::Standard(options, std::marker::PhantomData),
+        }
+    }
+
+    #[cfg(feature = "smartcn")]
+    pub fn smartcn(options: smartcn::Options) -> Self {
+        Self {
+            pipeline: Pipeline::SmartCn(options),
+        }
+    }
+
+    #[cfg(feature = "nori")]
+    pub fn nori(options: nori::AnalyzerOptions<'a>) -> Self {
+        Self {
+            pipeline: Pipeline::Nori(options),
+        }
+    }
+
+    #[cfg(feature = "kuromoji")]
+    pub fn kuromoji(options: kuromoji::AnalyzerOptions<'a>) -> Self {
+        Self {
+            pipeline: Pipeline::Kuromoji(options),
+        }
     }
 
     /// Analyzes a single input string, invoking the callback for each token.
     /// Returning false from the callback will stop analysis early.
-    pub fn analyze<'a>(
+    pub fn analyze(
         &self,
-        input: &'a str,
+        input: &str,
         buffer: &mut ReusableBuffer,
         callback: impl FnMut(Token<'_>) -> bool,
     ) {
@@ -161,9 +235,88 @@ impl Analyzer {
 
     /// Analyzes a sequence of input strings, invoking the callback for each token.
     /// Returning false from the callback will stop analysis early.
-    pub fn analyze_inputs<'a>(
+    pub fn analyze_inputs<'input>(
         &self,
-        inputs: impl Iterator<Item = &'a str>,
+        inputs: impl Iterator<Item = &'input str>,
+        buffer: &mut ReusableBuffer,
+        callback: impl FnMut(Token<'_>) -> bool,
+    ) {
+        match self.pipeline {
+            Pipeline::Standard(options, _) => {
+                Self::analyze_standard(options, inputs, buffer, callback);
+            }
+            #[cfg(any(feature = "smartcn", feature = "nori", feature = "kuromoji"))]
+            pipeline => {
+                let mut callback = callback;
+                let mut next_position = 0;
+                for (input_index, input) in inputs.enumerate() {
+                    let base = next_position;
+                    let mut keep_going = true;
+                    let mut emit = |mut token: Token<'_>| {
+                        token.position += base;
+                        token.input_index = input_index;
+                        next_position = next_position.max(token.position + token.position_length);
+                        keep_going = callback(token);
+                        keep_going
+                    };
+                    match pipeline {
+                        #[cfg(feature = "smartcn")]
+                        Pipeline::SmartCn(options) => {
+                            smartcn::analyze(input, options, &mut buffer.a, |token| {
+                                emit(Token {
+                                    text: token.text,
+                                    position: token.position,
+                                    position_length: 1,
+                                    byte_range: token.byte_range,
+                                    input_index,
+                                })
+                            });
+                        }
+                        #[cfg(feature = "nori")]
+                        Pipeline::Nori(options) => {
+                            let tokens = buffer.nori.get_or_insert_with(Default::default);
+                            nori::analyze(input, options, tokens);
+                            emit_morph_tokens(
+                                tokens.iter().map(|token| {
+                                    (
+                                        token.text,
+                                        token.byte_range,
+                                        token.position_increment,
+                                        token.position_length,
+                                    )
+                                }),
+                                &mut emit,
+                            );
+                        }
+                        #[cfg(feature = "kuromoji")]
+                        Pipeline::Kuromoji(options) => {
+                            let tokens = buffer.kuromoji.get_or_insert_with(Default::default);
+                            kuromoji::analyze(input, options, tokens);
+                            emit_morph_tokens(
+                                tokens.iter().map(|token| {
+                                    (
+                                        token.text,
+                                        token.byte_range,
+                                        token.position_increment,
+                                        token.position_length,
+                                    )
+                                }),
+                                &mut emit,
+                            );
+                        }
+                        Pipeline::Standard(..) => unreachable!(),
+                    }
+                    if !keep_going {
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    fn analyze_standard<'input>(
+        options: AnalysisOptions,
+        inputs: impl Iterator<Item = &'input str>,
         buffer: &mut ReusableBuffer,
         mut callback: impl FnMut(Token<'_>) -> bool,
     ) {
@@ -171,9 +324,10 @@ impl Analyzer {
             a: buffer_a,
             b: buffer_b,
             stemming_cache,
+            ..
         } = buffer;
 
-        let stemmer = self.options.stemming.map(|stemming_language| {
+        let stemmer = options.stemming.map(|stemming_language| {
             let algorithm = stemming_language.into();
             rust_stemmers::Stemmer::create(algorithm)
         });
@@ -185,8 +339,9 @@ impl Analyzer {
         // TODO configurable gap between inputs
         let mut next_position = 0;
 
-        let TokenizerOptions::UAX29Word(tokenizer_opts) = self.options.tokenizer;
+        let TokenizerOptions::UAX29Word(tokenizer_opts) = options.tokenizer;
 
+        let mut keep_going = true;
         for (input_index, input) in inputs.enumerate() {
             let mut prev = None;
             let input_as_bytes = input.as_bytes();
@@ -211,16 +366,16 @@ impl Analyzer {
                 };
 
                 // Token length
-                if let Some(max_token_length) = self.options.maximum_token_length
+                if let Some(max_token_length) = options.maximum_token_length
                     && !filters::within_token_length_limit(token_text.as_str(), max_token_length)
                 {
                     return true;
                 }
 
                 // Lowercasing
-                if !self.options.case_sensitive && (!props.is_ascii() || props.has_ascii_upper()) {
+                if !options.case_sensitive && (!props.is_ascii() || props.has_ascii_upper()) {
                     token_text.lowercase_in_place(props.is_ascii());
-                } else if !self.options.case_sensitive {
+                } else if !options.case_sensitive {
                     // Skipped because props said all-lowercase ASCII; verify that holds.
                     debug_assert!(
                         !token_text.as_str().bytes().any(|b| b.is_ascii_uppercase()),
@@ -229,7 +384,7 @@ impl Analyzer {
                 }
 
                 // Stopword removal
-                if let Some(StopwordRemoval::ForLanguage(language)) = self.options.stopword_removal
+                if let Some(StopwordRemoval::ForLanguage(language)) = options.stopword_removal
                     && filters::is_stopword_in_language(language, token_text.as_str())
                 {
                     return true;
@@ -242,12 +397,12 @@ impl Analyzer {
 
                 // ASCII folding
                 // Note: Not needed if token is already ASCII
-                if self.options.ascii_folding && !props.is_ascii() {
+                if options.ascii_folding && !props.is_ascii() {
                     token_text.ascii_fold_in_place(buffer_b);
 
                     // ASCII folding can produce uppercase ASCII characters,
                     // so we'll lowercase again if case folding is enabled.
-                    if !self.options.case_sensitive {
+                    if !options.case_sensitive {
                         let is_ascii = token_text.as_str().is_ascii();
                         token_text.lowercase_in_place(is_ascii);
                     }
@@ -256,11 +411,36 @@ impl Analyzer {
                 let token = Token {
                     text: token_text.as_str(),
                     position,
+                    position_length: 1,
                     byte_range: prev..bp,
                     input_index,
                 };
-                callback(token)
+                keep_going = callback(token);
+                keep_going
             });
+            if !keep_going {
+                return;
+            }
+        }
+    }
+}
+
+#[cfg(any(feature = "nori", feature = "kuromoji"))]
+fn emit_morph_tokens<'a>(
+    tokens: impl Iterator<Item = (&'a str, Range<usize>, u32, u32)>,
+    mut callback: impl FnMut(Token<'_>) -> bool,
+) {
+    let mut position = 0;
+    for (text, byte_range, increment, length) in tokens {
+        position += increment as usize;
+        if !callback(Token {
+            text,
+            position: position - 1,
+            position_length: length as usize,
+            byte_range,
+            input_index: 0,
+        }) {
+            return;
         }
     }
 }
@@ -272,9 +452,12 @@ pub struct Token<'a> {
     pub text: &'a str,
 
     /// Position of the token in the sequence of tokens. If `analyze_inputs` is used,
-    /// token positions are threaded monotonically across all input strings. Every word-like
-    /// token consumes one position, even if filtered out (e.g. by stopword removal, etc).
+    /// token positions are threaded monotonically across all input strings. Overlapping tokens
+    /// can share a position; removed tokens can leave gaps.
     pub position: usize,
+
+    /// Number of positions spanned by this token: usually 1, but compounds can span more.
+    pub position_length: usize,
 
     /// Byte range of the token's raw substring within its input (not into `text`, which may be
     /// normalized). Recover with `&inputs[input_index][byte_range]`. Always on UTF-8 boundaries.
@@ -493,7 +676,7 @@ mod tests {
         collect_inputs(opts, std::iter::once(input))
     }
 
-    fn opts() -> AnalysisOptions {
+    pub(super) fn opts() -> AnalysisOptions {
         AnalysisOptions {
             tokenizer: TokenizerOptions::UAX29Word(Default::default()),
             maximum_token_length: None,

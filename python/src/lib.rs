@@ -59,7 +59,7 @@ fn default_options() -> AnalysisOptions {
 /// `alyze-features` crate's reference semantics exactly.
 #[pyclass(frozen)]
 pub struct Analyzer {
-    analyzer: AlyzeAnalyzer,
+    analyzer: AlyzeAnalyzer<'static>,
     // Reused across `analyze` calls to avoid re-allocating per call; guarded for thread-safety.
     buffer: Mutex<ReusableBuffer>,
 }
