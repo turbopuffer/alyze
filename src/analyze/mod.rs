@@ -1,5 +1,7 @@
 use std::ops::Range;
 
+use tpuf_icu_properties_211::{CodePointSetData, props::WhiteSpace};
+
 #[cfg(feature = "kuromoji")]
 use crate::cjk::kuromoji;
 #[cfg(feature = "nori")]
@@ -40,6 +42,11 @@ impl AnalysisOptions {
         if self.stopword_removal.is_some() && self.case_sensitive {
             return false; // stopword removal requires case insensitivity
         }
+        if matches!(self.tokenizer, TokenizerOptions::Whitespace)
+            && (self.stemming.is_some() || self.stopword_removal.is_some())
+        {
+            return false;
+        }
         true
     }
 }
@@ -47,6 +54,7 @@ impl AnalysisOptions {
 #[derive(Clone, Copy, Debug)]
 pub enum TokenizerOptions {
     UAX29Word(uax29::word::Options),
+    Whitespace,
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -195,6 +203,7 @@ enum Pipeline<'a> {
 
 impl<'a> Analyzer<'a> {
     pub fn new(options: AnalysisOptions) -> Self {
+        // TODO: Return descriptive errors for invalid options instead of panicking.
         assert!(options.valid(), "options are invalid");
         Self {
             pipeline: Pipeline::Standard(options, std::marker::PhantomData),
@@ -339,29 +348,18 @@ impl<'a> Analyzer<'a> {
         // TODO configurable gap between inputs
         let mut next_position = 0;
 
-        let TokenizerOptions::UAX29Word(tokenizer_opts) = options.tokenizer;
-
         let mut keep_going = true;
         for (input_index, input) in inputs.enumerate() {
-            let mut prev = None;
             let input_as_bytes = input.as_bytes();
-            uax29::word::tokenize(input, tokenizer_opts, |bp, props| {
-                let Some(prev) = std::mem::replace(&mut prev, Some(bp)) else {
-                    return true; // don't emit token on first breakpoint
-                };
-                if !props.is_word_like() {
-                    return true; // skip non-word tokens
-                }
-
-                // Advance position after each word-like token.
+            let mut emit = |byte_range: Range<usize>, is_ascii: bool, has_ascii_upper: bool| {
                 let position = next_position;
                 next_position += 1;
 
-                // SAFETY: tokenize guarentees that breakpoints are on valid UTF-8 boundaries,
-                // thus slicing input by the breakpoint will always produce valid UTF-8.
                 buffer_a.clear();
                 let mut token_text = InputRefOrBuffered::InputRef {
-                    input: unsafe { std::str::from_utf8_unchecked(&input_as_bytes[prev..bp]) },
+                    input: unsafe {
+                        std::str::from_utf8_unchecked(&input_as_bytes[byte_range.clone()])
+                    },
                     buffer_if_needed: buffer_a,
                 };
 
@@ -373,8 +371,8 @@ impl<'a> Analyzer<'a> {
                 }
 
                 // Lowercasing
-                if !options.case_sensitive && (!props.is_ascii() || props.has_ascii_upper()) {
-                    token_text.lowercase_in_place(props.is_ascii());
+                if !options.case_sensitive && (!is_ascii || has_ascii_upper) {
+                    token_text.lowercase_in_place(is_ascii);
                 } else if !options.case_sensitive {
                     // Skipped because props said all-lowercase ASCII; verify that holds.
                     debug_assert!(
@@ -397,7 +395,7 @@ impl<'a> Analyzer<'a> {
 
                 // ASCII folding
                 // Note: Not needed if token is already ASCII
-                if options.ascii_folding && !props.is_ascii() {
+                if options.ascii_folding && !is_ascii {
                     token_text.ascii_fold_in_place(buffer_b);
 
                     // ASCII folding can produce uppercase ASCII characters,
@@ -412,12 +410,41 @@ impl<'a> Analyzer<'a> {
                     text: token_text.as_str(),
                     position,
                     position_length: 1,
-                    byte_range: prev..bp,
+                    byte_range,
                     input_index,
                 };
                 keep_going = callback(token);
                 keep_going
-            });
+            };
+            match options.tokenizer {
+                TokenizerOptions::UAX29Word(tokenizer_opts) => {
+                    let mut prev = None;
+                    uax29::word::tokenize(input, tokenizer_opts, |bp, props| {
+                        let Some(start) = prev.replace(bp) else {
+                            return true;
+                        };
+                        !props.is_word_like()
+                            || emit(start..bp, props.is_ascii(), props.has_ascii_upper())
+                    });
+                }
+                TokenizerOptions::Whitespace => {
+                    // Use versioned Unicode data so Rust upgrades cannot change token boundaries.
+                    let whitespace = CodePointSetData::new::<WhiteSpace>();
+                    for text in input
+                        .split(|c| whitespace.contains(c))
+                        .filter(|text| !text.is_empty())
+                    {
+                        let start = text.as_ptr() as usize - input.as_ptr() as usize;
+                        if !emit(
+                            start..start + text.len(),
+                            text.is_ascii(),
+                            text.bytes().any(|b| b.is_ascii_uppercase()),
+                        ) {
+                            break;
+                        }
+                    }
+                }
+            }
             if !keep_going {
                 return;
             }
