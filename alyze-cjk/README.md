@@ -1,8 +1,11 @@
 # alyze-cjk
 
-CJK (Chinese, Japanese, Korean) text analysis for [`alyze`](../), enabled through its `cjk`
-feature and re-exported as `alyze::cjk`. Kept as a separate crate so the dictionaries (`data/`,
-about 4.7 MB) don't inflate `alyze` for users who don't need them.
+CJK (Chinese, Japanese, Korean) text analysis for [`alyze`](../), enabled through its
+`smartcn`, `nori`, and `kuromoji` features, or `cjk` for all three, and re-exported as
+`alyze::cjk`. Only enabled analyzers and their dictionaries are compiled.
+
+When depending on `alyze-cjk` directly, all three features are enabled by default. Use
+`default-features = false` with the desired features to select individual analyzers.
 
 Provides:
 

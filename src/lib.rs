@@ -14,6 +14,6 @@
 pub mod analyze;
 pub mod uax29;
 
-/// CJK (Chinese, Japanese, Korean) analysis. Requires the `cjk` feature.
-#[cfg(feature = "cjk")]
+/// CJK (Chinese, Japanese, Korean) analysis. Requires `smartcn`, `nori`, or `kuromoji` (or `cjk` for all three).
+#[cfg(any(feature = "smartcn", feature = "nori", feature = "kuromoji"))]
 pub use alyze_cjk as cjk;

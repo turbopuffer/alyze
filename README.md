@@ -34,6 +34,36 @@ so the deltas approximate each filter's marginal cost:
 Reproduce with `cargo bench --bench wikipedia` (first run downloads the Wikipedia dataset into
 `.cache/`).
 
+### CJK analyzers
+
+Enable `smartcn` (Chinese), `nori` (Korean), or `kuromoji` (Japanese) independently, or
+use `cjk` to enable all three. All are disabled by default.
+
+```toml
+[dependencies]
+alyze = { version = "0.1.5", features = ["nori"] }
+```
+
+Enabled analyzers are available under `alyze::cjk`, for example `alyze::cjk::nori`.
+Only enabled analyzers and their dictionaries are compiled.
+
+Use the common analyzer API with any enabled CJK pipeline:
+
+```rust
+use alyze::analyze::{Analyzer, ReusableBuffer};
+
+let analyzer = Analyzer::nori(Default::default());
+let mut buffer = ReusableBuffer::new();
+analyzer.analyze("한국어를 분석합니다", &mut buffer, |token| {
+    println!("{}: {}", token.position, token.text);
+    true
+});
+```
+
+Use `Analyzer::smartcn`, `Analyzer::nori`, or `Analyzer::kuromoji` with the corresponding
+options from `alyze::cjk`. Reuse the buffer across calls; keep any borrowed user dictionaries
+or stop lists alive for as long as the analyzer.
+
 ### Text-match features
 
 The companion [`alyze-features`](alyze-features/) crate computes query/document text-match signals

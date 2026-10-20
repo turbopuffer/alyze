@@ -7,6 +7,7 @@ use ahash::AHashMap;
 #[derive(Debug, Clone)]
 pub struct StemmingCache {
     cache: AHashMap<CachedToken, StemmingCacheEntry>,
+    initial_capacity: usize,
 }
 
 #[derive(Debug, Clone)]
@@ -32,7 +33,8 @@ pub type CachedToken = ShortToken<10>;
 impl StemmingCache {
     pub fn new_with_capacity(capacity: usize) -> Self {
         Self {
-            cache: AHashMap::with_capacity(capacity),
+            cache: AHashMap::new(),
+            initial_capacity: capacity,
         }
     }
 
@@ -41,7 +43,7 @@ impl StemmingCache {
     }
 
     pub fn has_remaining_capacity(&self) -> bool {
-        self.cache.len() < self.cache.capacity()
+        self.cache.len() < self.cache.capacity().max(self.initial_capacity)
     }
 
     pub fn insert_no_clobber_assume_capacity(
@@ -53,6 +55,9 @@ impl StemmingCache {
             self.has_remaining_capacity(),
             "should only insert when there is remaining capacity"
         );
+        if self.cache.capacity() == 0 {
+            self.cache.reserve(self.initial_capacity);
+        }
         let clobbered = self.cache.insert(key, entry);
         debug_assert!(
             clobbered.is_none(),

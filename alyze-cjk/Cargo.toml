@@ -20,10 +20,16 @@ publish = false
 # TODO(size): compress the nori and kuromoji dictionaries before publishing; crates.io caps a
 # crate at 10 MB.
 
+[features]
+default = ["smartcn", "nori", "kuromoji"]
+smartcn = ["dep:rust-stemmers", "dep:tpuf_icu_properties_211"]
+nori = ["dep:fst", "dep:tpuf_icu_properties_211"]
+kuromoji = ["dep:fst", "dep:tpuf_icu_properties_211"]
+
 [dependencies]
-fst = "0.4.7"
-rust-stemmers = "1.2.0"
-tpuf_icu_properties_211 = "7"
+fst = { version = "0.4.7", optional = true }
+rust-stemmers = { version = "1.2.0", optional = true }
+tpuf_icu_properties_211 = { version = "7", optional = true }
 
 [dev-dependencies]
 criterion = "0.8.2"
@@ -32,11 +38,58 @@ parquet = "57.3.0"
 [[bench]]
 name = "wikipedia_zh"
 harness = false
+required-features = ["smartcn"]
 
 [[bench]]
 name = "wikipedia_ko"
 harness = false
+required-features = ["nori"]
 
 [[bench]]
 name = "wikipedia_ja"
 harness = false
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_convert_dict"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_gen_fuzz"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_profile"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_wiki_sample"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "nori_convert_dict"
+required-features = ["nori"]
+
+[[example]]
+name = "nori_gen_fuzz"
+required-features = ["nori"]
+
+[[example]]
+name = "nori_profile"
+required-features = ["nori"]
+
+[[example]]
+name = "nori_wiki_sample"
+required-features = ["nori"]
+
+[[example]]
+name = "smartcn_convert_dicts"
+required-features = ["smartcn"]
+
+[[example]]
+name = "smartcn_gen_fuzz"
+required-features = ["smartcn"]
+
+[[example]]
+name = "smartcn_wiki_sample"
+required-features = ["smartcn"]
