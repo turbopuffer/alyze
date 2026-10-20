@@ -42,7 +42,6 @@ pub(crate) fn props(code_unit: u16) -> CodeUnitProps {
 
 /// The general category of one code unit (`Character.getType`).
 #[inline]
-#[cfg(feature = "kuromoji")]
 pub(crate) fn category(code_unit: u16) -> GeneralCategory {
     props(code_unit).category
 }

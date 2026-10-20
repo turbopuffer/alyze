@@ -13,6 +13,7 @@
 #[cfg(feature = "kuromoji")]
 pub mod kuromoji;
 #[cfg(any(feature = "nori", feature = "kuromoji"))]
+#[allow(dead_code)]
 pub(crate) mod morph;
 #[cfg(feature = "nori")]
 pub mod nori;
@@ -29,4 +30,5 @@ pub mod smartcn;
 mod unicode_lower;
 
 #[cfg(all(test, any(feature = "smartcn", feature = "nori", feature = "kuromoji")))]
+#[allow(dead_code)]
 pub(crate) mod testutil;

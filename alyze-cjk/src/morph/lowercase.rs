@@ -15,7 +15,6 @@ pub(crate) fn is_lowercase_ascii(text: &str) -> bool {
     text.is_ascii() && !text.bytes().any(|b| b.is_ascii_uppercase())
 }
 
-#[cfg(any(feature = "kuromoji", test))]
 pub(crate) fn lowercase_text(text: &str) -> String {
     let mut out = String::with_capacity(text.len());
     lowercase_into(text, &mut out);

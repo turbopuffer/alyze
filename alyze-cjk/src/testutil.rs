@@ -53,7 +53,6 @@ pub(crate) fn unescape_allowing_lone_surrogate(line: &str) -> (String, Option<u1
 }
 
 /// Unescapes a line that may contain lone surrogates anywhere, as UTF-16 code units.
-#[cfg(any(feature = "nori", feature = "kuromoji"))]
 pub(crate) fn unescape_utf16(line: &str) -> Vec<u16> {
     let mut out: Vec<u16> = Vec::with_capacity(line.len());
     let mut chars = line.chars();

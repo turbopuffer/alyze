@@ -28,7 +28,6 @@ pub(crate) fn is_space(c: char) -> bool {
 }
 
 /// `String.trim`: strips characters at or below U+0020 from both ends.
-#[cfg(feature = "kuromoji")]
 pub(crate) fn trim(s: &str) -> &str {
     s.trim_matches(|c| c <= ' ')
 }
