@@ -96,13 +96,8 @@ fn every_code_unit() {
     );
 }
 
-/// The port lowercases with alyze's pinned full Unicode mapping, Lucene with Java's simple
-/// mapping. They are allowed to differ only where the full mapping expands to several code points
-/// (U+0130 is the only unconditional case in Unicode's SpecialCasing); everywhere else they must
-/// agree, so that analyzer output matches Elasticsearch for all ordinary text.
 #[test]
-fn lowercase_matches_java_except_expansions() {
-    const ALLOWED: &[u32] = &[0x0130];
+fn lowercase_matches_java() {
     let mut differing = Vec::new();
     for cp in 0..=0x10FFFFu32 {
         let Some(c) = char::from_u32(cp) else {
@@ -110,7 +105,7 @@ fn lowercase_matches_java_except_expansions() {
         };
         let java = super::java_simple_lowercase(c).to_string();
         let port = crate::cjk::kuromoji::filter::lowercase_text(&c.to_string());
-        if java != port && !ALLOWED.contains(&cp) {
+        if java != port {
             differing.push(format!("U+{cp:04X}: java {java:?}, port {port:?}"));
         }
     }

@@ -198,8 +198,7 @@ pub struct StopWords {
 }
 
 impl StopWords {
-    /// With `ignore_case`, words are compared lowercased (alyze's mapping; Lucene lowercases per
-    /// code point with Java's simple mapping).
+    /// With `ignore_case`, words are compared using Lucene-compatible simple lowercasing.
     pub fn new<S: Into<String>>(
         words: impl IntoIterator<Item = S>,
         ignore_case: bool,
@@ -645,8 +644,7 @@ pub fn cjk_width(tokens: &mut Tokens) {
     }
 }
 
-/// Lowercases every token's text, with alyze's pinned Unicode lowercase mapping (Lucene's
-/// `LowerCaseFilter` uses Java's simple mapping; see the module docs for the difference).
+/// Lowercases every token's text using Lucene-compatible simple lowercasing.
 pub fn lowercase(tokens: &mut Tokens) {
     let mut lowered = String::new();
     for i in 0..tokens.items.len() {

@@ -205,13 +205,8 @@ golden_tests! { chained:
     chain_fuzz_recommended = ("fuzz", "recommended"),
 }
 
-/// The goldens of lowercasing stages are compared against the port's unlowercased text through
-/// Java's simple lowercase mapping; this pins down the other half: the analyzers' real output is
-/// exactly the unlowercased pipeline through the port's own lowercase filter, and the two
-/// lowercase mappings agree wherever the input has no code point from the documented exception
-/// list (checked exhaustively in `unicode::lowercase_matches_java_except_expansions`).
 #[test]
-fn lowercase_is_the_only_difference() {
+fn analyzer_lowercase_matches_filter() {
     for case in ["upstream", "edge"] {
         for input in cases(case) {
             for name in ["default", "userdict", "stopwords"] {

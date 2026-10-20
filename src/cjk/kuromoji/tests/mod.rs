@@ -724,7 +724,7 @@ pub(super) struct Compare {
     pub attributes: bool,
     /// The stage ends with Lucene's `LowerCaseFilter`, which the port's run leaves out: the
     /// golden text must equal Java's simple lowercase of the port's (unlowercased) text. The
-    /// port's own lowercasing is checked separately (`golden::lowercase_is_the_only_difference`).
+    /// port's own lowercasing is checked separately (`golden::analyzer_lowercase_matches_filter`).
     pub lowercases: bool,
 }
 

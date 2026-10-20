@@ -119,9 +119,8 @@ port emits (whole code points), see `golden_to_toks`.
 Goldens of stages that end with Lucene's `LowerCaseFilter` (the analyzers, the `lowercase` and
 `recommended` chains) are compared against the port's pipeline *without* its lowercase filter,
 through Java's simple lowercase mapping (`golden/lowercase.txt`); the port's own lowercasing is
-checked separately (`golden::lowercase_is_the_only_difference`, `unicode::lowercase_matches_java
-_except_expansions`). This keeps the one intended difference (alyze's full Unicode mapping) out
-of the differential comparison without hiding anything else.
+checked separately (`golden::analyzer_lowercase_matches_filter`,
+`unicode::lowercase_matches_java`). The latter checks every Unicode scalar against Java's mapping.
 
 `charfilter.*.txt` has, per input, `text\t<filtered text>` and `map\t<fb>:<ob>...`: the original
 byte offset (`correctOffset`) of every code-point boundary of the filtered text, including its

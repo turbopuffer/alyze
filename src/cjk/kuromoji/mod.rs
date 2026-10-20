@@ -23,9 +23,6 @@
 //! - Lucene caps unknown words at 1024 UTF-16 code units, so a run of supplementary characters
 //!   can be cut inside a surrogate pair, yielding half-code-point junk at the cut; the port keeps
 //!   code points whole, attaching the pair to the token that holds its first half.
-//! - [`filter::lowercase`] (the last stage of both analyzers) uses alyze's pinned Unicode
-//!   lowercase mapping, where Lucene's `LowerCaseFilter` uses Java's simple one-to-one mapping;
-//!   the two differ for a handful of code points (e.g. U+0130).
 //! - Filters are applied one at a time to a token buffer, so Lucene's attribute leaks between
 //!   filters (the number filter's merged token taking a discarded token's attributes) are not
 //!   reproduced.

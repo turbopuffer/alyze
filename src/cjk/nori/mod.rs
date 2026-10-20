@@ -12,14 +12,11 @@
 //! a Hangul reading.
 //!
 //! Parity contract: [`tokenize`] and the filters match Lucene token for token (text, offsets,
-//! position increments and lengths, part of speech, reading), with two deliberate exceptions:
+//! position increments and lengths, part of speech, reading), with one deliberate exception:
 //!
 //! - Lucene caps unknown words at 1024 UTF-16 code units, so a run of supplementary characters
 //!   (emoji, say) can be cut inside a surrogate pair, yielding half-code-point junk at the cut;
 //!   the port keeps code points whole, attaching the pair to the token that holds its first half.
-//! - [`filter::lowercase`] (the last stage of the `nori` analyzer) uses alyze's pinned Unicode
-//!   lowercase mapping, where Lucene's `LowerCaseFilter` uses Java's simple one-to-one mapping;
-//!   the two differ for a handful of code points (e.g. U+0130).
 //!
 //! All of this is checked against golden files produced by the Java implementation, see
 //! `testdata/nori/README.md`.

@@ -35,8 +35,7 @@ pub fn reading_form(tokens: &mut Tokens) {
     }
 }
 
-/// Lowercases every token's text, with alyze's pinned Unicode lowercase mapping (Lucene's
-/// `LowerCaseFilter` uses Java's simple mapping; see the module docs for the difference).
+/// Lowercases every token's text using Lucene-compatible simple lowercasing.
 pub fn lowercase(tokens: &mut Tokens) {
     let mut lowered = String::new();
     for i in 0..tokens.items.len() {

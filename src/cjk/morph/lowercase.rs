@@ -1,10 +1,12 @@
-//! The lowercasing the analyzers end with: alyze's pinned Unicode mapping (Lucene's
-//! `LowerCaseFilter` uses Java's simple one-to-one mapping; the two differ only where the full
-//! mapping expands, e.g. U+0130).
+//! Lucene-compatible simple lowercasing using alyze's pinned Unicode mapping.
 
 pub(crate) fn lowercase_into(text: &str, out: &mut String) {
     for c in text.chars() {
-        out.extend(crate::analyze::u17_to_lower::unicode_v17_char_to_lower(c));
+        if c == '\u{0130}' {
+            out.push('i');
+        } else {
+            out.extend(crate::analyze::u17_to_lower::unicode_v17_char_to_lower(c));
+        }
     }
 }
 

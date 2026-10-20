@@ -14,9 +14,8 @@ Provides:
 - `nori`: a port of Lucene's `nori` analyzer, the MeCab-style Korean morphological
   analyzer behind Elasticsearch's `nori` analyzer, `nori_tokenizer`, `nori_part_of_speech`,
   `nori_readingform` and `nori_number`, with mecab-ko-dic as its dictionary. Checked token for
-  token against Lucene (see `testdata/nori/README.md`); the only intended differences are how a
-  surrogate pair split by Lucene's 1024-unit unknown-word cap is reported and the lowercase
-  mapping the analyzer ends with.
+  token against Lucene (see `testdata/nori/README.md`); the only intended difference is how a
+  surrogate pair split by Lucene's 1024-unit unknown-word cap is reported.
 - `kuromoji`: a port of Lucene's `kuromoji` analyzer, the
   MeCab-style Japanese morphological analyzer behind Elasticsearch's `kuromoji` and
   `kuromoji_completion` analyzers, `kuromoji_tokenizer` and the `kuromoji_*`, `ja_stop`,
