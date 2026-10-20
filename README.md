@@ -45,7 +45,8 @@ alyze = { version = "0.1.5", features = ["nori"] }
 ```
 
 Enabled analyzers are available under `alyze::cjk`, for example `alyze::cjk::nori`.
-Only enabled analyzers and their dictionaries are compiled.
+Only enabled analyzers and their dictionaries are compiled. Published packages download
+and verify dictionaries at build time; see [offline build instructions](src/cjk/README.md#dictionary-builds).
 
 Use the common analyzer API with any enabled CJK pipeline:
 
@@ -75,9 +76,10 @@ workspace.
 
 ### License
 
-`alyze` is MIT licensed. The separate `alyze-features` crate is Apache-2.0 (its features are derived
-from [Vespa](https://github.com/vespa-engine/vespa), Copyright Vespa.ai) — see
-[`alyze-features/`](alyze-features/) for details. With gratitude to the Vespa team for their
-excellent, well-documented work. The separate `alyze-cjk` crate (the optional `cjk` feature) is
-also Apache-2.0: its `smartcn` analyzer and dictionaries are derived from
-[Apache Lucene](https://lucene.apache.org/) — see [`alyze-cjk/`](alyze-cjk/) for details.
+`alyze` contains MIT-licensed code and Apache-2.0-licensed CJK implementations derived from
+[Apache Lucene](https://lucene.apache.org/). See [LICENSE](LICENSE),
+[LICENSE-APACHE](LICENSE-APACHE), [NOTICE](NOTICE), and the
+[CJK documentation](src/cjk/README.md) for dictionary attribution and licensing.
+
+The separate `alyze-features` crate is Apache-2.0; its features derive from
+[Vespa](https://github.com/vespa-engine/vespa), Copyright Vespa.ai.

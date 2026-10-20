@@ -4,31 +4,36 @@ version = "0.1.5"
 edition = "2024"
 rust-version = "1.85"
 description = "High-performance text analysis for full-text search"
-license = "MIT"
+license = "MIT AND Apache-2.0"
 repository = "https://github.com/turbopuffer/alyze"
 keywords = ["tokenizer", "unicode", "segmentation", "analysis", "nlp"]
 categories = ["text-processing", "internationalization"]
-exclude = ["testdata/", "benches/"]
+exclude = ["data/", "testdata/", "benches/", "scripts/"]
 
-# `alyze-features` is a separate, Apache-2.0 crate (the rest of `alyze` is MIT). It is a workspace
-# member, lives in this repo, and is not published.
-# `alyze-cjk` is a separate, Apache-2.0 crate pulled into `alyze` as an optional dependency.
 [workspace]
-members = ["wasm", "alyze-features", "alyze-cjk"]
+members = ["wasm", "alyze-features"]
 
 [features]
-# CJK (Chinese, Japanese, Korean) analysis, re-exported as `alyze::cjk`.
-smartcn = ["dep:alyze-cjk", "alyze-cjk/smartcn"]
-nori = ["dep:alyze-cjk", "alyze-cjk/nori"]
-kuromoji = ["dep:alyze-cjk", "alyze-cjk/kuromoji"]
+smartcn = ["dep:flate2", "dep:sha2", "dep:tar", "dep:ureq"]
+nori = ["dep:fst", "dep:flate2", "dep:sha2", "dep:tar", "dep:ureq"]
+kuromoji = ["dep:fst", "dep:flate2", "dep:sha2", "dep:tar", "dep:ureq"]
 cjk = ["smartcn", "nori", "kuromoji"]
 
 [dependencies]
 ahash = "0.8.12"
-alyze-cjk = { path = "alyze-cjk", version = "0.1.0", optional = true, default-features = false }
+fst = { version = "0.4.7", optional = true }
 phf = { version = "0.13.1", features = ["macros"] }
 rust-stemmers = "1.2.0"
 tpuf_icu_properties_211 = "7"
+
+[package.metadata.docs.rs]
+all-features = true
+
+[build-dependencies]
+flate2 = { version = "1", optional = true }
+sha2 = { version = "0.10", optional = true }
+tar = { version = "0.4", optional = true }
+ureq = { version = "3.2", optional = true }
 
 [dev-dependencies]
 criterion = "0.8.2"
@@ -40,3 +45,62 @@ ureq = "3.2.0"
 [[bench]]
 name = "wikipedia"
 harness = false
+
+[[bench]]
+name = "wikipedia_zh"
+harness = false
+required-features = ["smartcn"]
+
+[[bench]]
+name = "wikipedia_ko"
+harness = false
+required-features = ["nori"]
+
+[[bench]]
+name = "wikipedia_ja"
+harness = false
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_convert_dict"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_gen_fuzz"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_profile"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "kuromoji_wiki_sample"
+required-features = ["kuromoji"]
+
+[[example]]
+name = "nori_convert_dict"
+required-features = ["nori"]
+
+[[example]]
+name = "nori_gen_fuzz"
+required-features = ["nori"]
+
+[[example]]
+name = "nori_profile"
+required-features = ["nori"]
+
+[[example]]
+name = "nori_wiki_sample"
+required-features = ["nori"]
+
+[[example]]
+name = "smartcn_convert_dicts"
+required-features = ["smartcn"]
+
+[[example]]
+name = "smartcn_gen_fuzz"
+required-features = ["smartcn"]
+
+[[example]]
+name = "smartcn_wiki_sample"
+required-features = ["smartcn"]
