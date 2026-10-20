@@ -17,7 +17,7 @@ use crate::{
 mod filters;
 pub mod stemming_cache;
 mod stopwords;
-mod u17_to_lower;
+pub(crate) mod u17_to_lower;
 
 #[cfg(test)]
 mod pipeline_tests;
