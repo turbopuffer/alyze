@@ -34,6 +34,19 @@ so the deltas approximate each filter's marginal cost:
 Reproduce with `cargo bench --bench wikipedia` (first run downloads the Wikipedia dataset into
 `.cache/`).
 
+### CJK analyzers
+
+Enable `smartcn` (Chinese), `nori` (Korean), or `kuromoji` (Japanese) independently, or
+use `cjk` to enable all three. All are disabled by default.
+
+```toml
+[dependencies]
+alyze = { version = "0.1.5", features = ["nori"] }
+```
+
+Enabled analyzers are available under `alyze::cjk`, for example `alyze::cjk::nori`.
+Only enabled analyzers and their dictionaries are compiled.
+
 ### Text-match features
 
 The companion [`alyze-features`](alyze-features/) crate computes query/document text-match signals

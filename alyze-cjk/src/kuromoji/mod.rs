@@ -7,7 +7,7 @@
 //! `NOTICE`), whose dictionaries are built from mecab-ipadic 2.7.0-20070801 (BSD-style licence,
 //! see `NOTICE`).
 //!
-//! Kuromoji is a MeCab-style analyzer, a sibling of [`crate::nori`]: per input it builds a
+//! Kuromoji is a MeCab-style analyzer, a sibling of `nori`: per input it builds a
 //! lattice of candidate words (every dictionary word starting at each position, the longest
 //! user-dictionary word, and heuristically grouped unknown words), scores paths with per-word
 //! costs plus a connection-cost matrix, and emits the cheapest path. In [`Mode::Search`] (the
