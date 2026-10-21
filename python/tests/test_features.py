@@ -147,4 +147,10 @@ def test_analyzer_validation():
     with pytest.raises(ValueError):
         af.Analyzer(stemming=True, language="klingon")
     with pytest.raises(ValueError):
+        af.Analyzer(remove_stopwords=True, case_sensitive=True)
+    with pytest.raises(ValueError):
+        af.Analyzer(remove_stopwords=True, language="tamil")  # tamil stems, but has no stopword list
+    with pytest.raises(ValueError):
         af.Analyzer(max_token_length=0)
+    with pytest.raises(ValueError):
+        af.Analyzer(max_token_length=256)
