@@ -2,7 +2,7 @@
 name = "alyze-features"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.88"
 description = "Text-match ranking features (proximity, completeness, similarity) for second-stage re-ranking"
 license = "Apache-2.0"
 repository = "https://github.com/turbopuffer/alyze"

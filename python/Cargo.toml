@@ -2,7 +2,7 @@
 name = "alyze-features-python"
 version = "0.1.0"
 edition = "2024"
-rust-version = "1.85"
+rust-version = "1.88"
 description = "Python bindings for the alyze-features text-match ranking features"
 license = "Apache-2.0"
 repository = "https://github.com/turbopuffer/alyze"
