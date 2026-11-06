@@ -338,6 +338,7 @@ impl<'a> Analyzer<'a> {
 
         let stemmer = options.stemming.map(|stemming_language| {
             let algorithm = stemming_language.into();
+            stemming_cache.set_algorithm(algorithm);
             rust_stemmers::Stemmer::create(algorithm)
         });
 

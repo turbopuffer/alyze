@@ -86,6 +86,136 @@ fn buffers_can_be_reused_reset_and_cloned_across_pipelines() {
     }
 }
 
+// Begin stemming test helpers.
+fn stemming_analyzer(language: StemmingLanguage) -> Analyzer<'static> {
+    Analyzer::new(AnalysisOptions {
+        stemming: Some(language),
+        ..super::tests::opts()
+    })
+}
+// End stemming test helpers.
+
+#[test]
+fn stemming_cache_reuse_across_languages() {
+    use StemmingLanguage::{English, French, German};
+
+    for (first, second, word, first_stem, second_stem) in [
+        (English, French, "manger", "manger", "mang"),
+        (French, English, "manger", "mang", "manger"),
+        (English, German, "häuser", "häuser", "haus"),
+        (German, English, "häuser", "haus", "häuser"),
+    ] {
+        let uppercase = word.to_uppercase();
+        let inputs = [word, "", uppercase.as_str()];
+        let mut buffer = ReusableBuffer::new();
+        for (language, stem) in [
+            (first, first_stem),
+            (second, second_stem),
+            (first, first_stem),
+        ] {
+            let analyzer = stemming_analyzer(language);
+            let expected = collect(analyzer, &inputs, &mut ReusableBuffer::new());
+            assert_eq!(expected.len(), 2);
+            for (i, token) in expected.iter().enumerate() {
+                assert_eq!(token.text, stem);
+                assert_eq!(token.position, i);
+                assert_eq!(token.position_length, 1);
+                assert_eq!(token.input_index, i * 2);
+                assert_eq!(token.byte_range, 0..inputs[i * 2].len());
+            }
+            assert_eq!(collect(analyzer, &inputs, &mut buffer), expected);
+            buffer.reset_keep_stemming_cache();
+            assert_eq!(collect(analyzer, &inputs, &mut buffer), expected);
+        }
+    }
+}
+
+#[test]
+fn stemming_cache_cloned_buffers_can_change_languages() {
+    use StemmingLanguage::{English, French};
+
+    for (first, second) in [(English, French), (French, English)] {
+        let mut buffer = ReusableBuffer::new();
+        collect(stemming_analyzer(first), &["manger"], &mut buffer);
+        let analyzer = stemming_analyzer(second);
+        assert_eq!(
+            collect(analyzer, &["manger"], &mut buffer.clone()),
+            collect(analyzer, &["manger"], &mut ReusableBuffer::new())
+        );
+    }
+}
+
+#[test]
+fn stemming_cache_transfers_carry_language_context() {
+    use StemmingLanguage::{English, French};
+
+    for (first, second) in [(English, French), (French, English)] {
+        for clone_cache in [false, true] {
+            let mut source = ReusableBuffer::new();
+            collect(stemming_analyzer(first), &["manger"], &mut source);
+            let mut destination = ReusableBuffer::new();
+            let analyzer = stemming_analyzer(second);
+            let expected = collect(analyzer, &["manger"], &mut destination);
+            *destination.stemming_cache() = if clone_cache {
+                source.stemming_cache().clone()
+            } else {
+                std::mem::replace(source.stemming_cache(), StemmingCache::new_with_capacity(8))
+            };
+            assert_eq!(collect(analyzer, &["manger"], &mut destination), expected);
+        }
+    }
+}
+
+#[test]
+fn stemming_cache_survives_no_stemming_interlude() {
+    use StemmingLanguage::{English, French};
+
+    let mut buffer = ReusableBuffer::new();
+    let french = stemming_analyzer(French);
+    let expected = collect(french, &["manger"], &mut buffer);
+    let plain = Analyzer::new(super::tests::opts());
+    assert_eq!(
+        collect(plain, &["manger"], &mut buffer),
+        collect(plain, &["manger"], &mut ReusableBuffer::new())
+    );
+    let key = CachedToken::new_from_str("manger").unwrap();
+    assert!(matches!(
+        buffer.stemming_cache().lookup(&key),
+        Some(StemmingCacheEntry::Stemmed(stem)) if stem.as_str() == "mang"
+    ));
+    buffer.reset_keep_stemming_cache();
+    assert_eq!(collect(french, &["manger"], &mut buffer), expected);
+    let english = stemming_analyzer(English);
+    assert_eq!(
+        collect(english, &["manger"], &mut buffer),
+        collect(english, &["manger"], &mut ReusableBuffer::new())
+    );
+}
+
+#[test]
+fn stemming_cache_language_switch_preserves_cancellation() {
+    let mut buffer = ReusableBuffer::new();
+    collect(
+        stemming_analyzer(StemmingLanguage::English),
+        &["manger"],
+        &mut buffer,
+    );
+    let french = stemming_analyzer(StemmingLanguage::French);
+    let inputs = std::iter::once("manger manger").chain(std::iter::once_with(|| {
+        panic!("read another input after cancellation")
+    }));
+    let mut tokens = Vec::new();
+    french.analyze_inputs(inputs, &mut buffer, |token| {
+        tokens.push(OwnedToken::from(token));
+        false
+    });
+    assert_eq!(
+        tokens,
+        collect(french, &["manger"], &mut ReusableBuffer::new())
+    );
+    assert_eq!(collect(french, &["manger"], &mut buffer), tokens);
+}
+
 #[cfg(feature = "smartcn")]
 #[test]
 fn smartcn_preserves_stemming_offsets_and_position_gaps() {
