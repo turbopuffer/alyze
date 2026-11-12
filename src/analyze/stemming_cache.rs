@@ -4,10 +4,14 @@ use ahash::AHashMap;
 
 /// Keep a small cache of stemmed tokens to avoid repeated stemming of common tokens.
 /// Can yield ~2x throughput improvement for stemmed analysis.
+///
+/// Entries are only valid for the algorithm that produced them, so the cache is
+/// cleared whenever it's used with a different stemming algorithm.
 #[derive(Debug, Clone)]
 pub struct StemmingCache {
     cache: AHashMap<CachedToken, StemmingCacheEntry>,
     initial_capacity: usize,
+    algorithm: Option<rust_stemmers::Algorithm>,
 }
 
 #[derive(Debug, Clone)]
@@ -35,6 +39,15 @@ impl StemmingCache {
         Self {
             cache: AHashMap::new(),
             initial_capacity: capacity,
+            algorithm: None,
+        }
+    }
+
+    /// Clears the cache (keeping its allocation) if the algorithm changed.
+    pub(super) fn set_algorithm(&mut self, algorithm: rust_stemmers::Algorithm) {
+        if self.algorithm != Some(algorithm) {
+            self.cache.clear();
+            self.algorithm = Some(algorithm);
         }
     }
 

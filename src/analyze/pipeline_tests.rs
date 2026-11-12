@@ -86,6 +86,25 @@ fn buffers_can_be_reused_reset_and_cloned_across_pipelines() {
     }
 }
 
+#[test]
+fn stemming_cache_is_scoped_to_language() {
+    use StemmingLanguage::{English, French};
+
+    let mut buffer = ReusableBuffer::new();
+    for (language, stem) in [(English, "manger"), (French, "mang"), (English, "manger")] {
+        let analyzer = Analyzer::new(AnalysisOptions {
+            stemming: Some(language),
+            ..super::tests::opts()
+        });
+        // The second pass is served from the cache.
+        for _ in 0..2 {
+            let tokens = collect(analyzer, &["manger"], &mut buffer);
+            assert_eq!(tokens.len(), 1);
+            assert_eq!(tokens[0].text, stem);
+        }
+    }
+}
+
 #[cfg(feature = "smartcn")]
 #[test]
 fn smartcn_preserves_stemming_offsets_and_position_gaps() {
