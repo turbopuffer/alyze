@@ -113,7 +113,7 @@ impl Analyzer {
 }
 
 /// Translate the user-facing options into validated [`AnalysisOptions`], applying the same
-/// validation rules as the turbopuffer API (mirrors the `wasm` bindings' `build_options`).
+/// validation rules as the turbopuffer API.
 fn build_options(
     case_sensitive: bool,
     ascii_folding: bool,
